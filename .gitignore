@@ -1,0 +1,19 @@
+**/node_modules/
+**/dist/
+**/.DS_Store
+**/Thumbs.db
+
+# Secrets / local env
+**/.env
+**/.env.local
+**/.env.*.local
+
+# Python / virtualenv
+.venv/
+**/__pycache__/
+**/*.pyc
+
+# IDE / tooling
+.cursor/
+.vscode/
+

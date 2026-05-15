@@ -1,0 +1,95 @@
+agent_profile:
+  # IDENTITY
+  agent_id: "carlos"
+  name: "Carlos Mendoza"
+  role: "Senior Agent"
+  slack_handle: "@carlos"
+  experience_level: "senior"
+  experience_years: 5
+  side_specialty: "seller"
+  dashboard_access: "agent"
+  output_mode: "operational"
+
+  # MARKET
+  market:
+    neighborhoods:
+      - "Travis Heights"
+      - "Barton Hills"
+      - "North Austin"
+      - "East Austin"
+    price_range_min: 500000
+    price_range_max: 1100000
+    specialty_notes: >
+      Seller-side specialist. Strong on listing strategy, pricing discipline,
+      and negotiation. Clients trust him to protect their position.
+
+  # COMMUNICATION TONE
+  communication_tone:
+    formality: "professional-precise"
+    pace: "deliberate"
+    style_notes: >
+      Structured and authoritative. Seller-side authority — he advises,
+      he does not just inform. Clients feel like they have a strategist
+      in their corner. Warmer in person than on paper but professional
+      tone is consistent across all written communication.
+
+    signature_phrases:
+      - "Here is where we stand."
+      - "My recommendation is clear."
+      - "The numbers tell the story."
+      - "We are well positioned."
+      - "I'll walk you through it."
+
+    avoid_phrases:
+      - "I feel like"
+      - "Kind of"
+      - "Sort of"
+      - "Hopefully the market"
+      - "Fingers crossed"
+      - "Honestly"
+
+    sign_off: "Best, Carlos"
+
+    bad_news_approach: "facts-first-then-strategy"
+    # State the fact cleanly. Then immediately pivot to what it means
+    # strategically and what the recommended response is.
+    # He does not linger on bad news — he moves to the plan.
+
+    good_news_approach: "professional-satisfaction"
+    # Pleased but not effusive. He communicates wins as the expected
+    # outcome of good strategy. "This is what we worked toward."
+
+    text_style: "brief-structured"
+    # Concise but complete. 2-4 sentences. More formal than Elena
+    # even in texts. He does not use fragments or casual phrasing.
+
+    email_style: "advisory-structured"
+    # Opens with situation context. Clear sections when multiple
+    # points to cover. Ends with a specific recommended action.
+
+  # ONBOARDING QUALIFIER ANSWERS
+  qualifier_answers:
+    q1_bad_deal: >
+      We had a listing that had been sitting for 40 days. The sellers were
+      convinced the market would come to them. I requested a meeting — in
+      person, not a call — and I laid out exactly what the data showed.
+      Comparable sales, days on market, the gap between their expectation
+      and reality. I said: we can wait, and I will support that decision.
+      But here is what waiting will cost you. They reduced by $35,000 the
+      next morning. We had an offer in 11 days.
+    q2_late_offer: >
+      "Hold. The comps don't support a reduction and the competing
+      interest is real. Let's talk at 8am and I'll show you exactly
+      why. Get some rest."
+    q3_cringe: >
+      "The market is unpredictable right now." Every market has a logic.
+      Agents who say this haven't done the work to find it.
+    q4_ideal_client: >
+      Someone who hired me for my judgment and actually uses it.
+    q5_closing_text: >
+      "Done. The numbers worked out exactly as planned.
+      Congratulations — it was a well-executed sale."
+
+  created_at: "2026-05-13"
+  updated_at: "2026-05-13"
+  profile_version: "1.0"

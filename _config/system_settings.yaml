@@ -1,0 +1,148 @@
+system_settings:
+  # SYSTEM IDENTITY
+  firm_name: "Diana Castellano Real Estate"
+  principal: "diana"
+  city: "Austin"
+  state: "TX"
+  timezone: "America/Chicago"
+  system_version: "1.0"
+  created_at: "2026-05-13"
+
+  # MARKET CONFIGURATION
+  market:
+    primary_zones:
+      - "travis_heights"
+      - "east_austin"
+      - "barton_hills"
+      - "north_austin"
+    price_range_min: 300000
+    price_range_max: 1200000
+    transaction_target_annual: 70          # 60-80 per brief
+    active_deal_capacity: 20              # max concurrent active deals
+
+  # SLACK CONFIGURATION
+  slack:
+    workspace: "diana-castellano-re"
+    bot_name: "Agency Bot"
+    team_channels:
+      general: "#team-general"
+      alerts: "#team-alerts"
+      listings: "#listings"
+      diana: "#diana-dashboard"
+    deal_channel_format: "#[deal_id]-[side]"   # e.g. #412-buyer
+    listing_tag_format: "#listing-[property_id]" # e.g. #listing-ATX-002
+    vault_tag_format: "#vault-[deal_id]"         # e.g. #vault-412-buyer
+
+  # OUTPUT MODE DEFAULTS
+  output_modes:
+    new_agent_default: "guided"
+    senior_agent_default: "operational"
+    principal_default: "operational"
+    # Individual overrides in agent profiles
+
+  # AUTOMATIC TRIGGERS
+  automation:
+    weekly_digest:
+      enabled: true
+      day: "monday"
+      time: "08:00"
+      timezone: "America/Chicago"
+
+    follow_up_intervals:
+      first_followup_days: 3
+      second_followup_days: 7
+      third_followup_days: 14
+      reengagement_days: 30
+      cold_check_days: 90
+
+    deadline_alerts:
+      warning_48hr: true
+      warning_24hr: true
+      escalation_to_diana_hours: 2       # hours after risk flag before Diana notified
+      missed_deadline_escalation_minutes: 5
+
+    listing_monitoring:
+      dom_price_review_trigger: 21       # days on market before price review suggested
+      dom_flag_threshold: 30             # days before TC flags to Diana
+      dom_expired_threshold: 180         # days before listing marked expired
+
+    monthly_catalog_report:
+      enabled: true
+      day_of_month: 1
+      time: "08:00"
+
+  # CONFIRMATION GATES
+  confirmation_gates:
+    deal_record_creation: true           # always — never bypass
+    document_generation: true            # always — never bypass
+    client_communication: true           # always — never bypass
+    stage_transition: true               # always — never bypass
+    listing_publication: true            # always — Diana only
+    price_change: true                   # always — Diana approves
+
+  # DOCUMENT SETTINGS
+  documents:
+    template_path: "04_transaction_coordinator/templates/_legaldocs"
+    checklist_path: "04_transaction_coordinator/templates/_checklists"
+    vault_path: "vault/[deal_id]/docs"
+    lead_paint_year_threshold: 1978      # properties built before this require disclosure
+    wire_fraud_advisory_required: true   # always generated with first documents
+
+  # DATABASE SETTINGS
+  database:
+    deal_record_path: "_database/deals"
+    schema_path: "_database/schema.json"
+    write_protocol: "orchestrator_only"
+    event_log: "append_only"
+
+  # WEBSITE SETTINGS
+  website:
+    style: "editorial"                   # editorial | grid
+    min_photos_required: 3
+    hero_image_required: true
+    diana_approval_required: true        # always before publish
+    approval_reminder_hours: 48          # remind Diana if pending approval
+    neighborhood_data_source: "_catalog/neighborhoods"
+
+  # SECURITY SETTINGS
+  security:
+    bottom_line_price_access:
+      - "diana"
+      - "assigned_seller_agent"          # only the agent on that specific deal
+    dev_command_access:
+      - "diana"
+    principal_only_commands:
+      - "dev"
+      - "diana"
+      - "pipeline all"
+    sara_review_required: true           # until 3 deals closed
+    sara_deals_to_graduate: 3
+
+  # REPORTING
+  reporting:
+    monthly_report_enabled: true
+    metrics_tracked:
+      - "deals_closed_by_month"
+      - "average_days_to_close"
+      - "list_to_sale_ratio"
+      - "lead_source_conversion"
+      - "agent_performance"
+      - "neighborhood_volume"
+      - "pipeline_value"
+      - "dom_averages"
+
+  # NEIGHBORHOOD DATA
+  neighborhood_data:
+    update_frequency: "monthly"
+    update_process: "gemini_deep_research"
+    last_updated: "2026-05-13"
+    next_update_due: "2026-06-01"
+    files:
+      - "_catalog/neighborhoods/general_austin_market.md"
+      - "_catalog/neighborhoods/travis_heights.md"
+      - "_catalog/neighborhoods/east_austin.md"
+      - "_catalog/neighborhoods/barton_hills.md"
+      - "_catalog/neighborhoods/north_austin.md"
+
+  updated_at: "2026-05-13"
+  updated_by: "diana"

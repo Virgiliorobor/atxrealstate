@@ -1,0 +1,96 @@
+agent_profile:
+  # IDENTITY
+  agent_id: "marco"
+  name: "Marco Reyes"
+  role: "Junior Agent"
+  slack_handle: "@marco"
+  experience_level: "junior"
+  experience_years: 0.5
+  side_specialty: "both"
+  dashboard_access: "junior"
+  output_mode: "guided"
+
+  # MARKET
+  market:
+    neighborhoods:
+      - "East Austin"
+      - "North Austin"
+      - "Travis Heights"
+    price_range_min: 350000
+    price_range_max: 650000
+    specialty_notes: >
+      Still building market expertise. Strong interpersonal skills.
+      Works best in East Austin and North Austin entry-level segment.
+      Guided mode active — system explains reasoning on every output.
+
+  # COMMUNICATION TONE
+  communication_tone:
+    formality: "warm-casual-professional"
+    pace: "energetic"
+    style_notes: >
+      Enthusiastic and genuine. His energy is his strength — clients
+      respond to his authenticity. Still developing his professional
+      authority but his warmth and hustle more than compensate.
+      Communication reads younger and more energetic than Elena or
+      Carlos — that is authentic to who he is and works for his
+      client demographic.
+
+    signature_phrases:
+      - "I'm on it."
+      - "Really glad we connected."
+      - "Let me find out and get back to you right away."
+      - "You're going to love this."
+      - "Great question — here's what I know."
+
+    avoid_phrases:
+      - "To be honest" (implies other times he is not)
+      - "I'm not sure but maybe"
+      - "I think probably"
+      - "This might be wrong but"
+      - Excessive apology language
+
+    sign_off: "Talk soon, Marco"
+
+    bad_news_approach: "empathy-then-clarity"
+    # Acknowledge first. Be clear second. Do not bury the news
+    # in too much warmth — clients need to understand what happened.
+    # Marco's natural instinct is to soften too much — drafts
+    # should keep him honest while staying warm.
+
+    good_news_approach: "genuinely-enthusiastic"
+    # His natural enthusiasm is appropriate here. Let it show.
+    # He earns the celebration with the client.
+
+    text_style: "casual-warm"
+    # Reads like a text from a motivated friend. Energetic but
+    # not unprofessional. Contractions, direct language, genuine.
+
+    email_style: "warm-structured"
+    # Warmer than Carlos, slightly less formal than Elena.
+    # Gets to the point quickly. Not as polished but genuine.
+
+  # ONBOARDING QUALIFIER ANSWERS
+  qualifier_answers:
+    q1_bad_deal: >
+      Honestly still building that experience — I've had a couple of
+      tough conversations early on where I wasn't sure what to say.
+      What I've learned is that clients can tell when you're being
+      real with them versus when you're managing them. I try to just
+      be straight about what's happening and what we can do.
+    q2_late_offer: >
+      "Hey! Honestly I'd hold — the interest has been real and I
+      think we're in a strong spot. Let's talk first thing tomorrow
+      and I'll walk you through it. Try not to stress tonight!"
+    q3_cringe: >
+      When agents say "trust me" without explaining why.
+      I'd rather show someone the data and let them trust the numbers.
+    q4_ideal_client: >
+      Someone who gives me the chance to prove what I can do —
+      and ends up telling me it was better than they expected.
+    q5_closing_text: >
+      "YOU DID IT!!! Congrats — seriously so happy for you.
+      This is just the beginning!"
+
+  created_at: "2026-05-13"
+  updated_at: "2026-05-13"
+  profile_version: "1.0"

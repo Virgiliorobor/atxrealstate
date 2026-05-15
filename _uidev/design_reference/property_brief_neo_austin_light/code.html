@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Property Brief - NEO-ATX</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&amp;family=Geist:wght@100..900&amp;family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-bright": "#f9f9f9",
+                      "on-background": "#1a1c1c",
+                      "on-error": "#ffffff",
+                      "inverse-surface": "#2f3131",
+                      "on-primary-container": "#00725c",
+                      "on-secondary-container": "#5b6900",
+                      "surface-variant": "#e2e2e2",
+                      "surface-container-high": "#e8e8e8",
+                      "on-surface-variant": "#3a4a44",
+                      "on-error-container": "#93000a",
+                      "secondary-fixed": "#d2f000",
+                      "primary-fixed": "#15ffd1",
+                      "on-primary-fixed-variant": "#005141",
+                      "surface-container-lowest": "#ffffff",
+                      "outline": "#6a7b74",
+                      "on-surface": "#1a1c1c",
+                      "surface-container-low": "#f3f3f4",
+                      "surface-dim": "#dadada",
+                      "primary-container": "#00ffd1",
+                      "primary": "#006b57",
+                      "inverse-on-surface": "#f0f1f1",
+                      "on-tertiary-container": "#656463",
+                      "tertiary-container": "#e4e1e1",
+                      "inverse-primary": "#00e0b7",
+                      "tertiary": "#5f5e5e",
+                      "surface": "#f9f9f9",
+                      "error": "#ba1a1a",
+                      "primary-fixed-dim": "#00e0b7",
+                      "surface-container": "#eeeeee",
+                      "surface-container-highest": "#e2e2e2",
+                      "on-primary-fixed": "#002019",
+                      "outline-variant": "#b9cbc3",
+                      "tertiary-fixed-dim": "#c9c6c5",
+                      "secondary-container": "#d0ed00",
+                      "error-container": "#ffdad6",
+                      "on-tertiary-fixed-variant": "#474646",
+                      "on-secondary-fixed-variant": "#414c00",
+                      "on-primary": "#ffffff",
+                      "tertiary-fixed": "#e5e2e1",
+                      "on-secondary": "#ffffff",
+                      "background": "#f9f9f9",
+                      "secondary-fixed-dim": "#b8d300",
+                      "on-tertiary-fixed": "#1c1b1b",
+                      "on-tertiary": "#ffffff",
+                      "secondary": "#576500",
+                      "on-secondary-fixed": "#191e00",
+                      "surface-tint": "#006b57"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "24px",
+                      "unit": "8px",
+                      "container-max": "1440px",
+                      "margin-desktop": "64px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "label-mono-sm": [
+                              "Geist"
+                      ],
+                      "headline-md": [
+                              "Bodoni Moda"
+                      ],
+                      "headline-lg-mobile": [
+                              "Bodoni Moda"
+                      ],
+                      "display-lg": [
+                              "Bodoni Moda"
+                      ],
+                      "label-mono-md": [
+                              "Geist"
+                      ],
+                      "body-lg": [
+                              "Manrope"
+                      ],
+                      "headline-lg": [
+                              "Bodoni Moda"
+                      ],
+                      "body-md": [
+                              "Manrope"
+                      ]
+              },
+              "fontSize": {
+                      "label-mono-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "letterSpacing": "0.1em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "36px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "80px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "letterSpacing": "-0.04em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-mono-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md text-body-md antialiased overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="bg-surface-container-lowest text-primary docked full-width top-0 border-b-2 border-outline flat no shadows z-50">
+<div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-24 w-full max-w-container-max mx-auto">
+<div class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg tracking-tighter text-on-surface">NEO-ATX</div>
+<div class="hidden md:flex gap-8 items-center h-full">
+<a class="text-primary border-b-2 border-primary pb-1 font-label-mono-md text-label-mono-md hover:text-secondary transition-colors duration-100 flex items-center h-full pt-1" href="#">Listings</a>
+<a class="text-on-surface-variant font-label-mono-md text-label-mono-md hover:text-secondary transition-colors duration-100 flex items-center h-full pt-1" href="#">Gallery</a>
+<a class="text-on-surface-variant font-label-mono-md text-label-mono-md hover:text-secondary transition-colors duration-100 flex items-center h-full pt-1" href="#">Architects</a>
+<a class="text-on-surface-variant font-label-mono-md text-label-mono-md hover:text-secondary transition-colors duration-100 flex items-center h-full pt-1" href="#">Market</a>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface cursor-pointer hover:text-secondary transition-colors duration-100">search</span>
+<button class="hidden md:block bg-primary text-on-primary font-label-mono-md text-label-mono-md px-6 py-3 border-2 border-tertiary hover:bg-secondary-container hover:text-on-secondary-container transition-none uppercase">Inquire</button>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="w-full max-w-container-max mx-auto pb-margin-desktop">
+<!-- Hero Section -->
+<section class="w-full h-[614px] md:h-[819px] relative border-b-2 border-tertiary">
+<img alt="Hero Property Image" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" data-alt="A striking architectural photograph of a brutalist luxury home exterior at dusk. The building features aggressive geometric angles, massive concrete planes, and expansive floor-to-ceiling glass windows that glow warmly from within. The composition is highly editorial, emphasizing the contrast between the cold, raw materials and the vibrant twilight sky. The setting is vaguely Austin-inspired, set amidst stark, minimalist landscaping. The overall aesthetic is premium, high-contrast, and deeply modernist." src="https://lh3.googleusercontent.com/aida-public/AB6AXuByodYR7Nnmdnwzm1K8iMn9FvT4K2kikE7M4l__t0bc0TwhZlDMmrJhQ6PMh2UDG-HSEivGJCH8zZKV_M__k9QUIXhyrTiQ2xynYkGA661tbNtTYxez-jSF116QIDB5mUxW1De7KGu4rsrJ-yHuemUXo4srzgMfZGzsNzVnw_azHobV-vkT0TrXl3jGDjccDRMzDATJxahy_IXhSrShW95d3TPFNpP952CGTtnuLXsQ5vyJPGC8jPT-7LB1nw43Gd-CMuEODPzto9uq"/>
+<div class="absolute bottom-0 left-0 w-full bg-surface-container-lowest/90 backdrop-blur-sm border-t-2 border-tertiary p-margin-mobile md:p-margin-desktop grid grid-cols-2 md:grid-cols-4 gap-gutter">
+<div class="col-span-2 md:col-span-1 border-r-0 md:border-r-2 border-tertiary pr-gutter">
+<p class="font-label-mono-sm text-label-mono-sm text-tertiary uppercase mb-2">Asking Price</p>
+<p class="font-headline-md text-headline-md text-primary">$4,250,000</p>
+</div>
+<div class="border-r-2 border-tertiary px-gutter hidden md:block">
+<p class="font-label-mono-sm text-label-mono-sm text-tertiary uppercase mb-2">Interior Space</p>
+<p class="font-headline-md text-headline-md text-on-surface">5,420 <span class="font-label-mono-md text-label-mono-md text-primary align-top">SQFT</span></p>
+</div>
+<div class="border-r-2 border-tertiary px-gutter hidden md:block">
+<p class="font-label-mono-sm text-label-mono-sm text-tertiary uppercase mb-2">Configuration</p>
+<p class="font-headline-md text-headline-md text-on-surface">4<span class="font-label-mono-md text-label-mono-md text-primary align-top">BD</span> / 5<span class="font-label-mono-md text-label-mono-md text-primary align-top">BA</span></p>
+</div>
+<div class="col-span-2 md:col-span-1 pl-0 md:pl-gutter flex items-center justify-start md:justify-end">
+<span class="bg-secondary-container text-on-secondary-container font-label-mono-md text-label-mono-md px-4 py-2 border-2 border-tertiary uppercase inline-block">Status: Active</span>
+</div>
+</div>
+</section>
+<!-- The Narrative & Specs -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-gutter px-margin-mobile md:px-margin-desktop py-margin-desktop">
+<!-- Specs Sidebar -->
+<aside class="col-span-1 md:col-span-4 flex flex-col gap-8 order-2 md:order-1">
+<div class="border-2 border-tertiary bg-surface-container-lowest p-6 relative">
+<div class="absolute -top-3 left-4 bg-primary text-on-primary font-label-mono-sm text-label-mono-sm px-2 uppercase border-2 border-tertiary">Vital Stats</div>
+<ul class="flex flex-col gap-4 mt-4">
+<li class="flex justify-between border-b border-outline-variant pb-2">
+<span class="font-label-mono-md text-label-mono-md text-on-surface-variant">Year Built</span>
+<span class="font-label-mono-md text-label-mono-md text-on-surface">2023</span>
+</li>
+<li class="flex justify-between border-b border-outline-variant pb-2">
+<span class="font-label-mono-md text-label-mono-md text-on-surface-variant">Lot Size</span>
+<span class="font-label-mono-md text-label-mono-md text-on-surface">0.45 Acres</span>
+</li>
+<li class="flex justify-between border-b border-outline-variant pb-2">
+<span class="font-label-mono-md text-label-mono-md text-on-surface-variant">Architecture</span>
+<span class="font-label-mono-md text-label-mono-md text-on-surface">Brutalist / Modern</span>
+</li>
+<li class="flex justify-between border-b border-outline-variant pb-2">
+<span class="font-label-mono-md text-label-mono-md text-on-surface-variant">Heating/Cooling</span>
+<span class="font-label-mono-md text-label-mono-md text-on-surface">Geothermal</span>
+</li>
+</ul>
+</div>
+<div class="border-2 border-tertiary bg-surface-container-lowest p-6">
+<p class="font-label-mono-sm text-label-mono-sm text-tertiary uppercase mb-4">Location</p>
+<p class="font-headline-md text-headline-md text-on-surface leading-tight mb-4">78704 <br/> Bouldin Creek</p>
+<div class="w-full h-48 bg-surface-variant border border-outline relative overflow-hidden group">
+<img alt="Map View" class="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300" data-location="Austin" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuB3ThH3kbRVUvFrSl45UR9jgJ70-CIXce6ywBsvUnBn39daGA29biFUHFEvK73d-FvOx42i4eCzaLF2XCMIDvnbYzfMaycZqjla78JTUdIYNxJPy9yD0Y9za2lJqwZ2xsGCY2vlbGdxCset_vzbi0DCYviVJdGYwzgDnPBrBO3DHsTh1WjGnykA0ENSjriT18cv1RqmbBmJkOjLGDiWe2NDfWX7hi0zB-vkrLfKPOedf3m3wZZ9xElr8L2O1qP48E5rZpzWrZeH1o"/>
+<div class="absolute inset-0 border-2 border-primary m-2 pointer-events-none"></div>
+</div>
+</div>
+</aside>
+<!-- The Narrative -->
+<article class="col-span-1 md:col-span-8 order-1 md:order-2 pl-0 md:pl-margin-desktop">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-8 border-l-4 border-primary pl-4">The Narrative.</h2>
+<div class="font-body-lg text-body-lg text-on-surface-variant flex flex-col gap-6">
+<p>
+                        A monolithic intervention in the heart of Bouldin Creek. This residence is not merely constructed; it is instantiated. Rejecting the vernacular of faux-farmhouse gentrification, Project 04 presents an uncompromising facade of board-formed concrete and structural steel, a brutalist anchor point in an evolving neighborhood.
+                    </p>
+<p>
+                        The interior volume is defined by aggressive, light-filled voids. A central atrium, spanning three stories, organizes the programmatic spaces, ensuring that every living zone is flooded with indirect northern light. The material palette is intentionally austere: polished concrete floors, blackened steel casework, and expansive planes of white gallery-grade drywall designed to showcase large-format contemporary art.
+                    </p>
+<blockquote class="border-l-2 border-tertiary pl-6 my-6 font-headline-md text-headline-md text-primary italic">
+                        "It forces a pause. It is a machine for living that demands your full attention."
+                    </blockquote>
+<p>
+                        Technological integration is seamless but subordinate to the architecture. Climate control, illumination, and security are managed via an invisible, locally-hosted neural network, completely decoupled from external cloud dependencies. This is a fortress of privacy, an analog sanctuary with a digital nervous system.
+                    </p>
+</div>
+</article>
+</section>
+<!-- Secondary Image Grid -->
+<section class="px-margin-mobile md:px-margin-desktop py-margin-desktop border-t-2 border-tertiary">
+<div class="flex justify-between items-end mb-8">
+<h3 class="font-label-mono-md text-label-mono-md text-on-surface uppercase tracking-widest">Visual Evidence</h3>
+<span class="font-label-mono-sm text-label-mono-sm text-tertiary">04 PLATES</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<div class="col-span-1 md:col-span-8 h-96 border-2 border-tertiary relative group overflow-hidden">
+<img alt="Interior Living Room" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A highly stylized interior photograph of a brutalist luxury living room. The space is vast and double-height, characterized by raw, board-formed concrete walls and polished concrete floors. A massive, monolithic fireplace made of blackened steel dominates one wall. The furniture is sparse and strictly geometric—low-profile leather sofas in deep ink tones. High-contrast natural light floods in through massive industrial floor-to-ceiling windows, casting sharp, dramatic shadows across the minimal space. The aesthetic is stark, premium, and sophisticated." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3Xz_4Tfs3fUImZxw88GENdQWT039Pmhx1HrR0hjUEIuiaMwVusEO8jOzM6Zolk2WAcpKV3hWL9VhMJeuiN4WxJiUhAFaazefaNtxnNPe-XcnXnDIc8hhx-mE88DPvHTYVllu0vxxCwJD8oGVJErKUYcUbUgyEXpero53pWKz0MsnklrjqJWTF_oSkxQFlTmb6VNCzs8Xlr2126yvJNxbANhk6lC1URKvkjfH084-mfGv4lIjyDhhoRXhbaYm20Uzv9SigcdB1ZfGZ"/>
+<div class="absolute bottom-4 left-4 bg-surface-container-lowest px-3 py-1 border border-tertiary font-label-mono-sm text-label-mono-sm">PLATE 01 // MAIN VOLUME</div>
+</div>
+<div class="col-span-1 md:col-span-4 h-96 border-2 border-tertiary relative group overflow-hidden">
+<img alt="Kitchen Detail" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A detailed interior photograph focusing on a severe, minimalist luxury kitchen. The cabinetry is completely flush, handle-less, and finished in a matte, deep ink black. The countertops are a stark, bright white engineered stone with zero veining. A single, aggressive fluorescent teal accent—perhaps a futuristic faucet or a sharp line of under-cabinet LED lighting—cuts through the monochrome palette. The lighting is harsh and clinical, emphasizing the clean lines and technical precision of the space. The mood is functionalist and hyper-modern." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDtDe2pTGvLYbbPS6fuYk_4kfU-aKgNaRbWWhMaEXNdDkaxeMcIxDFRe93QsDPM0H070Rww2FcGFyC4TSzxREwyKDkcTcqFmlp5Ig0ZSrGIuqIWTNCgKkC3eytsAdIj061yRMhiMWTUqJXdO26cCFRSIsWlsJYIpflUY_RQj-e2scwvpjTRNy0Vh8s_yHCxSa6n5tLrjmcD9pzink4l9YOgZBN3OI-awt0yscQTOK9NfUkte5yrgrxvbBPGlm6Xc_AZLTCdu4gO_1F"/>
+<div class="absolute bottom-4 left-4 bg-surface-container-lowest px-3 py-1 border border-tertiary font-label-mono-sm text-label-mono-sm">PLATE 02 // GALLEY</div>
+</div>
+<div class="col-span-1 md:col-span-5 h-96 border-2 border-tertiary relative group overflow-hidden">
+<img alt="Primary Bathroom" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A striking interior photograph of an avant-garde luxury bathroom. The room is a study in texture, featuring a massive, monolithic soaking tub carved from a single block of dark, raw stone. The walls are clad in large-format, unpolished concrete tiles. A single, razor-thin slit window allows a beam of intense white daylight to slice across the room, creating dramatic, angular shadows. The hardware is brushed stainless steel, strictly utilitarian in design. The overall aesthetic is cold, serene, and rigidly geometric." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCmJp9rXz5x3qhAjLAAasZ-D0wsfktsL6RIO1pPaxnyNRqP05-ySGeFVgWTRP5c5Or7QEMoA3eL9AQNHaZxQiZhMbY7WxBcaqidCtSQkDkptaOVv8ihsI8X-sFMg3JY4TcHdOgFU1XWjYs_QV4FOEuiS-xINlH20DF34wtJwJoN7P778AWl6vVAaUxR0x8jEa4GWkDBJ_-DQBUXJYsnb33hNvHsU3SYanBXDOvyn1e3hWxeNqRrm492sNMy5G0-5S8zZo5oKx6MUT8"/>
+<div class="absolute bottom-4 left-4 bg-surface-container-lowest px-3 py-1 border border-tertiary font-label-mono-sm text-label-mono-sm">PLATE 03 // SANCTUARY</div>
+</div>
+<div class="col-span-1 md:col-span-7 h-96 border-2 border-tertiary relative group overflow-hidden">
+<img alt="Exterior Detail" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="An architectural detail photograph of a brutalist luxury home exterior. The image focuses tightly on the intersection of three materials: raw board-formed concrete, a rusted Cor-Ten steel panel, and a massive pane of structural glass reflecting the harsh Texas sun. The composition is highly asymmetric, breaking traditional framing rules. A solitary, xeriscaped agave plant sits in the foreground, sharp and aggressive. The lighting is high-key and bright, emphasizing the severe geometry and lack of ornamentation. The vibe is stark and uncompromising." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDl4yNY8EWLW3pRqN00xUy8jclIO3VBjwWU--xmjE8MZz3gNDiNXfN0ow5JCeS_OJ1jrybCE6q7T0r_eIXvgGRmha4vVNxm6x2TMXemL5nuOKtKYOGoQcLdA3WxthtWqGQHuRFb4uJP9NGdBk0HyZwLuZhj5QJdu5nh17_UyAjHABCK1xT9Qjzz9dlByeRQN63wJngfQ2T4F7_L7eq7wcIoFn787fgP4-x7a1H8I8BTuDyikkNZcxvstpHEyczT69qacwOlawFCggRS"/>
+<div class="absolute bottom-4 left-4 bg-surface-container-lowest px-3 py-1 border border-tertiary font-label-mono-sm text-label-mono-sm">PLATE 04 // EXTERIOR MASSING</div>
+</div>
+</div>
+</section>
+<!-- Agent Contact & CTA -->
+<section class="px-margin-mobile md:px-margin-desktop py-margin-desktop mt-margin-desktop border-t-4 border-tertiary bg-surface-container-low">
+<div class="flex flex-col md:flex-row justify-between items-center gap-12">
+<div class="flex items-center gap-6 w-full md:w-auto">
+<div class="w-24 h-24 border-2 border-tertiary relative overflow-hidden shrink-0">
+<img alt="Agent Portrait" class="w-full h-full object-cover grayscale" data-alt="A stark, high-contrast black and white portrait of a professional real estate agent. The agent is styled in a minimalist, avant-garde dark suit with a sharp silhouette. The background is a pure, unblemished white wall. The lighting is dramatic and edgy, casting deep shadows that emphasize facial structure, avoiding typical soft corporate portraiture. The expression is serious, intense, and confident. The aesthetic is distinctly editorial and high-fashion, aligning with a premium, brutalist brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDM3PPza14C2qvS5EyB0Xslx5BAwwdLfz3PqFh6COAz3OYv1w8MSRZKznxihh1MbE8bg8oy2amOxMEGJt-b6doOTINHS9zuR2RsuvOBWtPz7PXUjmvJjy3UA-2qiaZSrdyJzUEwJcGDKfmYblTjJTdPagVj2ooEbBgLrILhW3Bx0GA1OF44dgyFW6qhHWxjcqSdJZ1_6y9Nc2GCuYEcVPuWJfdqE8Bq5VmfHz7A4ueNLP0B7jnzuvd2H-0ehffiHckolNMPj7Pr62Pn"/>
+</div>
+<div>
+<p class="font-headline-md text-headline-md text-on-surface mb-1">E. Vance</p>
+<p class="font-label-mono-sm text-label-mono-sm text-primary uppercase tracking-widest mb-3">Senior Broker // Operations</p>
+<div class="flex gap-4">
+<span class="font-label-mono-md text-label-mono-md text-tertiary hover:text-on-surface cursor-pointer">512.555.0199</span>
+<span class="font-label-mono-md text-label-mono-md text-tertiary hover:text-on-surface cursor-pointer">evance@neo-atx.com</span>
+</div>
+</div>
+</div>
+<div class="w-full md:w-auto relative group">
+<div class="absolute inset-0 bg-primary translate-x-1 translate-y-1 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform duration-150 border-2 border-tertiary pointer-events-none"></div>
+<button class="relative w-full md:w-auto bg-surface-container-lowest text-on-surface font-label-mono-md text-label-mono-md px-12 py-6 border-2 border-tertiary hover:bg-secondary-container hover:text-on-secondary-container uppercase tracking-widest transition-none flex items-center justify-center gap-3">
+                        Schedule a Private Tour
+                        <span class="material-symbols-outlined text-primary group-hover:text-on-secondary-container">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest text-primary full-width bottom border-t-2 border-outline flat no shadows w-full px-margin-mobile md:px-margin-desktop py-margin-desktop mt-gutter flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="font-label-mono-md text-label-mono-md font-bold">NEO-ATX</div>
+<div class="font-label-mono-sm text-label-mono-sm uppercase tracking-wider text-center md:text-left">
+            © 2024 NEO-AUSTIN REALTY. METROPOLITAN RIGOR. CREATIVE IRREVERENCE.
+        </div>
+<div class="flex gap-6 font-label-mono-sm text-label-mono-sm uppercase tracking-wider text-tertiary">
+<a class="hover:text-secondary transition-colors duration-100" href="#">Privacy</a>
+<a class="hover:text-secondary transition-colors duration-100" href="#">Terms</a>
+<a class="hover:text-secondary transition-colors duration-100" href="#">Accessibility</a>
+<a class="hover:text-secondary transition-colors duration-100" href="#">Data Protection</a>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,192 @@
+{
+  "_schema_version": "1.0",
+  "_created": "2026-05-13",
+  "deal": {
+    "_id": {
+      "deal_id": "327",
+      "side": "seller",
+      "slack_channel": "#327-seller",
+      "file_name": "327-seller.json"
+    },
+    "meta": {
+      "stage": "active",
+      "stage_history": [
+        {
+          "stage": "draft",
+          "entered_at": "2026-04-10T10:00:00",
+          "exited_at": "2026-04-12T14:00:00"
+        },
+        {
+          "stage": "active",
+          "entered_at": "2026-04-12T14:00:00",
+          "exited_at": null
+        }
+      ],
+      "created_at": "2026-04-10T10:00:00",
+      "updated_at": "2026-05-14T12:00:00",
+      "closed_at": null,
+      "cold_at": null,
+      "cold_reason": null,
+      "sop": {
+        "active_sop": "sop_05_listing_live",
+        "current_step": 2,
+        "total_steps": 8,
+        "current_step_description": "Listing live on MLS — monitoring showings",
+        "sop_started_at": "2026-04-12T14:00:00",
+        "sop_completed_at": null,
+        "sop_history": []
+      }
+    },
+    "agent": {
+      "agent_id": "carlos",
+      "name": "Carlos Mendoza",
+      "slack_handle": "@carlos",
+      "role": "Senior Agent",
+      "output_mode": "operational",
+      "side_specialty": "seller",
+      "review_required": false
+    },
+    "client": {
+      "name": "Patricia & James Hoffman",
+      "email": "hoffman.home@email.com",
+      "phone": "512-555-0199",
+      "type": "seller",
+      "origin": "sphere",
+      "referred_by": null,
+      "relocation": false,
+      "relocation_from": null,
+      "preferred_contact": "phone",
+      "best_time_to_reach": "mornings"
+    },
+    "buyer_profile": {
+      "pre_approved": false,
+      "pre_approval_amount": null,
+      "lender_name": "",
+      "lender_contact": "",
+      "lender_phone": "",
+      "budget_min": null,
+      "budget_max": null,
+      "target_neighborhoods": [],
+      "timeline_days": null,
+      "must_haves": [],
+      "deal_breakers": [],
+      "properties_viewed": [],
+      "properties_interested": []
+    },
+    "seller_profile": {
+      "property_id": "ATX-014",
+      "target_price": 825000,
+      "bottom_line_price": "SECURE — NEVER SURFACED IN ANY OUTPUT",
+      "motivation": "downsizing to condo downtown",
+      "timeline": "60 days",
+      "repairs_completed": [
+        "interior paint",
+        "landscape tidy"
+      ],
+      "disclosures_ready": true
+    },
+    "property": {
+      "property_id": "ATX-014",
+      "mls_number": "2988123",
+      "address": {
+        "street": "1842 Rivercrest Drive",
+        "city": "Austin",
+        "state": "TX",
+        "zip": "78746",
+        "neighborhood": "Westlake",
+        "zone": "other"
+      },
+      "status_at_deal_creation": "active",
+      "list_price_at_deal_creation": 849000,
+      "attributes": {
+        "property_type": "Single Family Residence",
+        "year_built": 1995,
+        "square_feet": 2840,
+        "acres": 0.22,
+        "stories": 2,
+        "bedrooms": 4,
+        "bathrooms_full": 3,
+        "bathrooms_half": 1,
+        "garages": 2,
+        "hoa_monthly": 120
+      },
+      "features": {
+        "interior": [
+          "chef kitchen",
+          "primary suite",
+          "office"
+        ],
+        "exterior": [
+          "pool",
+          "hill country views"
+        ]
+      },
+      "pre_1978": false,
+      "lead_paint_disclosure_required": false
+    },
+    "transaction": {
+      "contract_date": null,
+      "offer_price": null,
+      "final_sale_price": null,
+      "earnest_money": null,
+      "earnest_money_due": null,
+      "earnest_money_status": null,
+      "down_payment": null,
+      "down_payment_percentage": null,
+      "financing_type": null,
+      "closing_date": null,
+      "possession_date": null,
+      "escrow_company": "",
+      "escrow_officer": "",
+      "escrow_phone": "",
+      "title_company": "",
+      "title_officer": "",
+      "title_phone": "",
+      "cooperating_agent": "",
+      "cooperating_agent_phone": "",
+      "cooperating_brokerage": "",
+      "special_provisions": "",
+      "inclusions": "",
+      "exclusions": ""
+    },
+    "contingencies": {
+      "inspection": {
+        "active": false,
+        "deadline": null,
+        "status": null,
+        "resolution": null,
+        "credit_offered": null,
+        "credit_accepted": null,
+        "repairs_requested": [],
+        "alert_48hr_sent": false,
+        "alert_24hr_sent": false
+      },
+      "appraisal": {
+        "active": false,
+        "deadline": null,
+        "status": null,
+        "appraised_value": null,
+        "appraised_at": null
+      }
+    },
+    "deadlines": [],
+    "documents": [],
+    "communications": [],
+    "risk_flags": [],
+    "research": [],
+    "reporting": {},
+    "events": [
+      {
+        "event_id": "EVT-327-001",
+        "timestamp": "2026-04-12T14:00:00",
+        "actor_type": "human",
+        "actor_id": "carlos",
+        "agent_id": "carlos",
+        "action": "listing_activated",
+        "detail": "MLS active. List $849k. DOM counter started.",
+        "outcome": "success",
+        "next_triggered": null
+      }
+    ]
+  }
+}

@@ -1,0 +1,421 @@
+{
+  "_catalog_version": "1.0",
+  "_last_updated": "2026-05-14",
+  "_total_listings": 16,
+  "_zones": [
+    "travis_heights",
+    "east_austin",
+    "barton_hills",
+    "north_austin"
+  ],
+  "listings": [
+    {
+      "property_id": "ATX-001",
+      "status": "active",
+      "zone": "travis_heights",
+      "neighborhood": "Travis Heights",
+      "address": "1105 Kenwood Ave, Austin TX 78704",
+      "list_price": 1350000,
+      "price_per_sqft": 675,
+      "square_feet": 2000,
+      "headline": "1930s Bungalow in Travis Heights",
+      "narrative": "Restored historic bungalow with original hardwoods and mature oaks.",
+      "hero_image": "/Images/properties/ATX-001_hero.png",
+      "gallery": [
+        "/Images/properties/ATX-001_kitchen.png",
+        "/Images/properties/ATX-001_living.png",
+        "/Images/properties/ATX-001_suite.png",
+        "/Images/properties/ATX-001_outdoor.png"
+      ],
+      "listing_agent": "carlos",
+      "date_listed": "2026-05-13",
+      "days_on_market": 1
+    },
+    {
+      "property_id": "ATX-002",
+      "status": "active",
+      "zone": "travis_heights",
+      "neighborhood": "Travis Heights",
+      "address": "1810 Alta Vista Ave, Austin TX 78704",
+      "list_price": 2450000,
+      "price_per_sqft": 765,
+      "square_feet": 3200,
+      "headline": "Modern Masterpiece in Travis Heights",
+      "narrative": "Glass-walled luxury home with infinity pool and city views.",
+      "hero_image": "/Images/properties/ATX-002_hero.png",
+      "gallery": [
+        "/Images/properties/ATX-002_kitchen.png",
+        "/Images/properties/ATX-002_living.png",
+        "/Images/properties/ATX-002_suite.png",
+        "/Images/properties/ATX-002_outdoor.png"
+      ],
+      "listing_agent": "carlos",
+      "date_listed": "2026-05-13",
+      "days_on_market": 1
+    },
+    {
+      "property_id": "ATX-003",
+      "status": "active",
+      "zone": "travis_heights",
+      "neighborhood": "Travis Heights",
+      "address": "802 E Live Oak St, Austin TX 78704",
+      "list_price": 1125000,
+      "price_per_sqft": 625,
+      "square_feet": 1800,
+      "headline": "Mid-Century Cottage in Travis Heights",
+      "narrative": "Charming 1950s cottage with wide open floor plan.",
+      "hero_image": "/Images/properties/ATX-003_hero.png",
+      "gallery": [
+        "/Images/properties/ATX-003_kitchen.png",
+        "/Images/properties/ATX-003_living.png",
+        "/Images/properties/ATX-003_suite.png",
+        "/Images/properties/ATX-003_outdoor.png"
+      ],
+      "listing_agent": "carlos",
+      "date_listed": "2026-05-13",
+      "days_on_market": 1
+    },
+    {
+      "property_id": "ATX-004",
+      "status": "active",
+      "zone": "east_austin",
+      "neighborhood": "East Austin",
+      "address": "2102 E 3rd St, Austin TX 78702",
+      "list_price": 895000,
+      "price_per_sqft": 596,
+      "square_feet": 1500,
+      "headline": "Modern Urban in East Austin",
+      "narrative": "Sleek vertical living with steel siding and concrete floors.",
+      "hero_image": "/Images/properties/ATX-004_hero.png",
+      "gallery": [
+        "/Images/properties/ATX-004_kitchen.png",
+        "/Images/properties/ATX-004_living.png",
+        "/Images/properties/ATX-004_suite.png",
+        "/Images/properties/ATX-004_outdoor.png"
+      ],
+      "listing_agent": "elena",
+      "date_listed": "2026-05-13",
+      "days_on_market": 1
+    },
+    {
+      "property_id": "ATX-005",
+      "status": "active",
+      "zone": "east_austin",
+      "neighborhood": "East Austin",
+      "address": "1405 Chicon St #302, Austin TX 78702",
+      "list_price": 725000,
+      "price_per_sqft": 659,
+      "square_feet": 1100,
+      "headline": "Industrial Loft in East Austin",
+      "narrative": "Exposed brick and industrial finishes in a vibrant condo.",
+      "hero_image": "/Images/properties/ATX-005_hero.png",
+      "gallery": [
+        "/Images/properties/ATX-005_kitchen.png",
+        "/Images/properties/ATX-005_living.png",
+        "/Images/properties/ATX-005_suite.png",
+        "/Images/properties/ATX-005_outdoor.png"
+      ],
+      "listing_agent": "elena",
+      "date_listed": "2026-05-13",
+      "days_on_market": 1
+    },
+    {
+      "property_id": "ATX-006",
+      "status": "active",
+      "zone": "east_austin",
+      "neighborhood": "East Austin",
+      "address": "2800 E 12th St, Austin TX 78702",
+      "list_price": 850000,
+      "price_per_sqft": 607,
+      "square_feet": 1400,
+      "headline": "Renovated Classic in East Austin",
+      "narrative": "Fully updated 1940s home with a high-end chef's kitchen.",
+      "hero_image": "/Images/properties/ATX-006_hero.png",
+      "gallery": [
+        "/Images/properties/ATX-006_kitchen.png",
+        "/Images/properties/ATX-006_living.png",
+        "/Images/properties/ATX-006_suite.png",
+        "/Images/properties/ATX-006_outdoor.png"
+      ],
+      "listing_agent": "elena",
+      "date_listed": "2026-05-13",
+      "days_on_market": 1
+    },
+    {
+      "property_id": "ATX-007",
+      "status": "active",
+      "zone": "east_austin",
+      "neighborhood": "East Austin",
+      "address": "1612 Willow St, Austin TX 78702",
+      "list_price": 1100000,
+      "price_per_sqft": 647,
+      "square_feet": 1700,
+      "headline": "Contemporary Oasis in East Austin",
+      "narrative": "Modern design with vaulted ceilings and outdoor shower.",
+      "hero_image": "/Images/properties/ATX-007_hero.png",
+      "gallery": [
+        "/Images/properties/ATX-007_kitchen.png",
+        "/Images/properties/ATX-007_living.png",
+        "/Images/properties/ATX-007_suite.png",
+        "/Images/properties/ATX-007_outdoor.png"
+      ],
+      "listing_agent": "elena",
+      "date_listed": "2026-05-13",
+      "days_on_market": 1
+    },
+    {
+      "property_id": "ATX-008",
+      "status": "active",
+      "zone": "barton_hills",
+      "neighborhood": "Barton Hills",
+      "address": "2405 Barton Hills Dr, Austin TX 78704",
+      "list_price": 1350000,
+      "price_per_sqft": 540,
+      "square_feet": 2500,
+      "headline": "Classic Ranch in Barton Hills",
+      "narrative": "Original 1970s ranch backing to the Barton Creek greenbelt.",
+      "hero_image": "/Images/properties/ATX-008_hero.png",
+      "gallery": [
+        "/Images/properties/ATX-008_kitchen.png",
+        "/Images/properties/ATX-008_living.png",
+        "/Images/properties/ATX-008_suite.png",
+        "/Images/properties/ATX-008_outdoor.png"
+      ],
+      "listing_agent": "carlos",
+      "date_listed": "2026-05-13",
+      "days_on_market": 1
+    },
+    {
+      "property_id": "ATX-009",
+      "status": "active",
+      "zone": "barton_hills",
+      "neighborhood": "Barton Hills",
+      "address": "1902 Homedale Dr, Austin TX 78704",
+      "list_price": 1100000,
+      "price_per_sqft": 611,
+      "square_feet": 1800,
+      "headline": "Sun-Drenched Mid-Century in Barton Hills",
+      "narrative": "Bright family home walking distance to Zilker Park.",
+      "hero_image": "/Images/properties/ATX-009_hero.png",
+      "gallery": [
+        "/Images/properties/ATX-009_kitchen.png",
+        "/Images/properties/ATX-009_living.png",
+        "/Images/properties/ATX-009_suite.png",
+        "/Images/properties/ATX-009_outdoor.png"
+      ],
+      "listing_agent": "carlos",
+      "date_listed": "2026-05-13",
+      "days_on_market": 1
+    },
+    {
+      "property_id": "ATX-010",
+      "status": "active",
+      "zone": "barton_hills",
+      "neighborhood": "Barton Hills",
+      "address": "2205 Rabb Glen St, Austin TX 78704",
+      "list_price": 1950000,
+      "price_per_sqft": 650,
+      "square_feet": 3000,
+      "headline": "New Build Estate in Barton Hills",
+      "narrative": "Luxurious new construction with panoramic hill country views.",
+      "hero_image": "/Images/properties/ATX-010_hero.png",
+      "gallery": [
+        "/Images/properties/ATX-010_kitchen.png",
+        "/Images/properties/ATX-010_living.png",
+        "/Images/properties/ATX-010_suite.png",
+        "/Images/properties/ATX-010_outdoor.png"
+      ],
+      "listing_agent": "carlos",
+      "date_listed": "2026-05-13",
+      "days_on_market": 1
+    },
+    {
+      "property_id": "ATX-011",
+      "status": "active",
+      "zone": "barton_hills",
+      "neighborhood": "Barton Hills",
+      "address": "2600 Barton Springs Rd, Austin TX 78704",
+      "list_price": 1450000,
+      "price_per_sqft": 580,
+      "square_feet": 2500,
+      "headline": "Multi-Level Family in Barton Hills",
+      "narrative": "Spacious multi-level home directly across from the park.",
+      "hero_image": "/Images/properties/ATX-011_hero.png",
+      "gallery": [
+        "/Images/properties/ATX-011_kitchen.png",
+        "/Images/properties/ATX-011_living.png",
+        "/Images/properties/ATX-011_suite.png",
+        "/Images/properties/ATX-011_outdoor.png"
+      ],
+      "listing_agent": "carlos",
+      "date_listed": "2026-05-13",
+      "days_on_market": 1
+    },
+    {
+      "property_id": "ATX-012",
+      "status": "active",
+      "zone": "north_austin",
+      "neighborhood": "Parmer Village",
+      "address": "13513 Oystercatcher Dr, Austin TX 78729",
+      "list_price": 480000,
+      "price_per_sqft": 198,
+      "square_feet": 2416,
+      "headline": "Suburban 4BR in North Austin",
+      "narrative": "Established two-story home in Parmer Village with covered patio.",
+      "hero_image": "/Images/properties/ATX-012_hero.png",
+      "gallery": [
+        "/Images/properties/ATX-012_kitchen.png",
+        "/Images/properties/ATX-012_living.png",
+        "/Images/properties/ATX-012_suite.png",
+        "/Images/properties/ATX-012_outdoor.png"
+      ],
+      "listing_agent": "marco",
+      "date_listed": "2026-05-13",
+      "days_on_market": 1
+    },
+    {
+      "property_id": "ATX-013",
+      "status": "active",
+      "zone": "north_austin",
+      "neighborhood": "North Austin",
+      "address": "11000 Grackle Dr, Austin TX 78758",
+      "list_price": 650000,
+      "price_per_sqft": 371,
+      "square_feet": 1750,
+      "headline": "Traditional Ranch in North Austin",
+      "narrative": "Classic North Austin ranch near The Domain shopping district.",
+      "hero_image": "/Images/properties/ATX-013_hero.png",
+      "gallery": [
+        "/Images/properties/ATX-013_kitchen.png",
+        "/Images/properties/ATX-013_living.png",
+        "/Images/properties/ATX-013_suite.png",
+        "/Images/properties/ATX-013_outdoor.png"
+      ],
+      "listing_agent": "marco",
+      "date_listed": "2026-05-13",
+      "days_on_market": 1
+    },
+    {
+      "property_id": "ATX-014",
+      "status": "active",
+      "zone": "north_austin",
+      "neighborhood": "North Austin",
+      "address": "12500 Metric Blvd #14, Austin TX 78758",
+      "list_price": 590000,
+      "price_per_sqft": 310,
+      "square_feet": 1900,
+      "headline": "Modern Townhome in North Austin",
+      "narrative": "Three-story townhome with granite counters and gated access.",
+      "hero_image": "/Images/properties/ATX-014_hero.png",
+      "gallery": [
+        "/Images/properties/ATX-014_kitchen.png",
+        "/Images/properties/ATX-014_living.png",
+        "/Images/properties/ATX-014_suite.png",
+        "/Images/properties/ATX-014_outdoor.png"
+      ],
+      "listing_agent": "marco",
+      "date_listed": "2026-05-13",
+      "days_on_market": 1
+    },
+    {
+      "property_id": "ATX-015",
+      "status": "active",
+      "zone": "north_austin",
+      "neighborhood": "North Austin",
+      "address": "8900 Spice Lane, Austin TX 78758",
+      "list_price": 745000,
+      "price_per_sqft": 338,
+      "square_feet": 2200,
+      "headline": "Family 2-Story in North Austin",
+      "narrative": "Quiet street home with large pantry and basketball hoop.",
+      "hero_image": "/Images/properties/ATX-015_hero.png",
+      "gallery": [
+        "/Images/properties/ATX-015_kitchen.png",
+        "/Images/properties/ATX-015_living.png",
+        "/Images/properties/ATX-015_suite.png",
+        "/Images/properties/ATX-015_outdoor.png"
+      ],
+      "listing_agent": "marco",
+      "date_listed": "2026-05-13",
+      "days_on_market": 1
+    },
+    {
+      "property_id": "ATX-016",
+      "status": "under_contract",
+      "zone": "travis_heights",
+      "neighborhood": "Travis Heights",
+      "address": "2219 Bluebonnet Lane, Austin TX 78704",
+      "list_price": 629000,
+      "price_per_sqft": 416,
+      "square_feet": 1510,
+      "headline": "Character Bungalow on Bluebonnet Lane",
+      "narrative": "Updated 1968 bungalow with original hardwood floors, renovated kitchen, fenced yard, and mature oak trees. One-car garage. No HOA. Walking distance to South Congress.",
+      "hero_image": "/Images/properties/ATX-016_hero.png",
+      "gallery": [
+        "/Images/properties/ATX-016_kitchen.png",
+        "/Images/properties/ATX-016_living.png",
+        "/Images/properties/ATX-016_suite.png",
+        "/Images/properties/ATX-016_outdoor.png"
+      ],
+      "listing_agent": "elena",
+      "date_listed": "2026-04-09",
+      "days_on_market": 34,
+      "price_history": [
+        {
+          "date": "2026-04-09",
+          "price": 649000,
+          "event": "listed"
+        },
+        {
+          "date": "2026-05-01",
+          "price": 629000,
+          "event": "reduced"
+        }
+      ],
+      "deal_id": "412",
+      "note": "Under contract \u2014 Chen deal #412-buyer. Demo property."
+    }
+  ],
+  "summary": {
+    "travis_heights": {
+      "count": 4,
+      "price_range": "$629,000 \u2014 $2,450,000",
+      "listings": [
+        "ATX-001",
+        "ATX-002",
+        "ATX-003",
+        "ATX-016"
+      ]
+    },
+    "east_austin": {
+      "count": 4,
+      "price_range": "$725,000 \u2014 $1,100,000",
+      "listings": [
+        "ATX-004",
+        "ATX-005",
+        "ATX-006",
+        "ATX-007"
+      ]
+    },
+    "barton_hills": {
+      "count": 4,
+      "price_range": "$1,100,000 \u2014 $1,950,000",
+      "listings": [
+        "ATX-008",
+        "ATX-009",
+        "ATX-010",
+        "ATX-011"
+      ]
+    },
+    "north_austin": {
+      "count": 4,
+      "price_range": "$480,000 \u2014 $745,000",
+      "listings": [
+        "ATX-012",
+        "ATX-013",
+        "ATX-014",
+        "ATX-015"
+      ]
+    }
+  }
+}

@@ -1,0 +1,83 @@
+agent_profile:
+  # IDENTITY
+  agent_id: "elena"
+  name: "Elena Reyes"
+  role: "Senior Agent"
+  slack_handle: "@elena"
+  experience_level: "senior"
+  experience_years: 5
+  side_specialty: "buyer"
+  dashboard_access: "agent"
+  output_mode: "operational"
+
+  # MARKET
+  market:
+    neighborhoods:
+      - "Travis Heights"
+      - "South Congress"
+      - "East Austin"
+      - "Barton Hills"
+    price_range_min: 400000
+    price_range_max: 900000
+    specialty_notes: "Buyer-side specialist. Strong with relocating clients and first-time buyers."
+
+  # COMMUNICATION TONE
+  communication_tone:
+    formality: "warm-professional"
+    pace: "measured"
+    style_notes: "Relationship-first. Clients feel guided, not pushed. Confident without being cold."
+
+    signature_phrases:
+      - "Let me know if you have any questions — I'm always reachable."
+      - "We're in good shape here."
+      - "Let's talk through it together."
+      - "I've got you covered on this."
+
+    avoid_phrases:
+      - "Per my last email"
+      - "As previously stated"
+      - "Please advise"
+      - "At your earliest convenience"
+      - "I wanted to reach out"
+
+    sign_off: "Talk soon, Elena"
+
+    bad_news_approach: "empathy-first"
+    # Acknowledge the moment. Then facts. Then options.
+
+    good_news_approach: "warm-celebratory"
+    # Genuine warmth. Personal detail when possible. Not over the top.
+
+    text_style: "conversational-professional"
+    # 2-4 sentences. Direct but warm. Reads like a friend who happens to be an expert.
+
+    email_style: "structured-warm"
+    # Opens with relationship acknowledgment or situation context.
+    # Organized but not clinical. Ends with an open door.
+
+  # ONBOARDING QUALIFIER ANSWERS
+  qualifier_answers:
+    q1_bad_deal: >
+      We had buyers ready to walk after a tough inspection on a home they
+      absolutely loved. I called them that evening — not to talk them into
+      anything, but just to listen. Once they felt heard I walked them through
+      the numbers and what realistic repair costs looked like. By the end of
+      the call they felt like they were making the decision, not being pushed
+      into one. We closed two weeks later.
+    q2_late_offer: >
+      "Hey — good question. Short answer: I wouldn't lower it yet.
+      Let's talk in the morning and I'll walk you through my thinking."
+    q3_cringe: >
+      "This one won't last long." Feels manipulative. If a home is right
+      for someone I want them to feel confident, not pressured.
+    q4_ideal_client: >
+      Someone who feels genuinely taken care of from the first call to
+      the day they get their keys — and calls me first when their friend
+      needs an agent.
+    q5_closing_text: >
+      "You're officially a homeowner. So happy for you both —
+      this one was worth every step."
+
+  created_at: "2026-05-13"
+  updated_at: "2026-05-13"
+  profile_version: "1.0"

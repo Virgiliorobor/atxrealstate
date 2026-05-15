@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Diana Estates - NEO-ATX Property Portfolio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&amp;family=Geist:wght@100..900&amp;family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-container": "#00725c",
+                        "inverse-primary": "#00e0b7",
+                        "on-primary-fixed-variant": "#005141",
+                        "surface-container-highest": "#e2e2e2",
+                        "outline-variant": "#b9cbc3",
+                        "background": "#f9f9f9",
+                        "tertiary-container": "#e4e1e1",
+                        "outline": "#6a7b74",
+                        "primary-container": "#00ffd1",
+                        "inverse-on-surface": "#f0f1f1",
+                        "tertiary-fixed": "#e5e2e1",
+                        "surface-bright": "#f9f9f9",
+                        "on-primary-fixed": "#002019",
+                        "error-container": "#ffdad6",
+                        "secondary": "#576500",
+                        "surface-container-high": "#e8e8e8",
+                        "secondary-fixed": "#d2f000",
+                        "inverse-surface": "#2f3131",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#c9c6c5",
+                        "secondary-fixed-dim": "#b8d300",
+                        "surface-dim": "#dadada",
+                        "surface": "#f9f9f9",
+                        "on-secondary-container": "#5b6900",
+                        "on-surface": "#1a1c1c",
+                        "surface-container-low": "#f3f3f4",
+                        "surface-variant": "#e2e2e2",
+                        "surface-container": "#eeeeee",
+                        "on-secondary-fixed": "#191e00",
+                        "secondary-container": "#d0ed00",
+                        "primary": "#006b57",
+                        "primary-fixed": "#15ffd1",
+                        "on-secondary-fixed-variant": "#414c00",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-container": "#656463",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "primary-fixed-dim": "#00e0b7",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#3a4a44",
+                        "tertiary": "#5f5e5e",
+                        "on-background": "#1a1c1c",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#006b57",
+                        "on-tertiary-fixed-variant": "#474646"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "margin-mobile": "24px",
+                        "margin-desktop": "64px",
+                        "container-max": "1440px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Bodoni Moda"],
+                        "label-mono-sm": ["Geist"],
+                        "headline-md": ["Bodoni Moda"],
+                        "headline-lg-mobile": ["Bodoni Moda"],
+                        "label-mono-md": ["Geist"],
+                        "headline-lg": ["Bodoni Moda"],
+                        "body-lg": ["Manrope"],
+                        "body-md": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["80px", {"lineHeight": "1.0", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                        "label-mono-sm": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                        "headline-md": ["32px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["36px", {"lineHeight": "1.1", "fontWeight": "600"}],
+                        "label-mono-md": ["14px", {"lineHeight": "1.0", "fontWeight": "600"}],
+                        "headline-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<nav class="bg-surface-container-lowest dark:bg-inverse-surface border-b-2 border-outline dark:border-outline-variant full-width top-0 z-50 sticky">
+<div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-24 w-full max-w-container-max mx-auto">
+<div class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg tracking-tighter text-on-surface dark:text-inverse-on-surface">
+                NEO-ATX
+            </div>
+<div class="hidden md:flex gap-8 items-center font-label-mono-md text-label-mono-md">
+<a class="text-primary dark:text-inverse-primary border-b-2 border-primary pb-1 hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-100 scale-95 snap-digital" href="#">Listings</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-100" href="#">Gallery</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-100" href="#">Architects</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-100" href="#">Market</a>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary hover:text-secondary cursor-pointer transition-colors duration-100">search</span>
+<button class="hidden md:block bg-primary text-on-primary font-label-mono-md text-label-mono-md px-6 py-3 border-2 border-tertiary hover:bg-secondary-container hover:text-on-secondary-container transition-none">
+                    Inquire
+                </button>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-16 md:py-24">
+<!-- Header Section -->
+<header class="mb-24 md:grid md:grid-cols-12 gap-gutter items-end">
+<div class="md:col-span-8 mb-8 md:mb-0">
+<p class="font-label-mono-md text-label-mono-md text-tertiary uppercase tracking-widest mb-4">Portfolio / Q3 2024</p>
+<h1 class="font-display-lg text-display-lg text-on-surface">Diana Estates.</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-6 max-w-2xl">
+                    Curated properties defining the next era of Austin living. A synthesis of brutalist architecture and sophisticated interior landscapes.
+                </p>
+</div>
+<div class="md:col-span-4 flex md:justify-end">
+<div class="bg-secondary-container p-6 border-2 border-tertiary inline-block">
+<p class="font-label-mono-md text-label-mono-md text-on-secondary-container mb-2">Market Velocity</p>
+<p class="font-headline-md text-headline-md text-on-secondary-container">+14.2% YTD</p>
+</div>
+</div>
+</header>
+<!-- Bento Grid Portfolio -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Listing 1: The Onyx Residence (Featured - Spans full or most width) -->
+<article class="md:col-span-12 relative border-2 border-tertiary bg-surface-container-lowest group cursor-pointer hover:border-primary transition-colors duration-100 mb-gutter">
+<div class="absolute top-4 left-4 z-10 bg-secondary-container px-3 py-1 font-label-mono-sm text-label-mono-sm text-on-secondary-container border border-tertiary">
+                    AVAILABLE
+                </div>
+<div class="grid md:grid-cols-12 h-full">
+<div class="md:col-span-8 h-96 md:h-[600px] border-b-2 md:border-b-0 md:border-r-2 border-tertiary relative overflow-hidden">
+<img alt="The Onyx Residence" class="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-500" data-alt="A striking modern brutalist mansion exterior in Austin, Texas. The architecture features stark, geometric concrete forms interspersed with large expanses of floor-to-ceiling glass. The scene is illuminated by crisp, bright daylight, highlighting the high-contrast textures of the raw concrete against a pristine blue sky. Landscaping is minimal, featuring architectural agave plants and sharp-edged reflecting pools. The overall aesthetic is editorial, luxurious, and distinctly 'Neo-Austin', blending technological precision with raw materiality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXPVoa3pjNfTlitBOaifnFGjcNKUTXkPMo_A_xD6AQQU4IV7N6dEeb4gKGaKHkC70XJpqNPdS6wsgbF3TECWJPSuMvbb-pUWVyjCoV7aD_d9XXohxl59e5oD2N8vuEi3A2l-89pfWKf4OeDHKdaco_0LFIzzdAI9SnDwOW4rEwDECjk0hngxdEYNP6L92aQlVpOaU_zubhSpwT1L8LXkKTnjlePPy3TLQcpQ94ZrT-XNZ-3mdBj-tJpBxxRiyUtc9KAILg4eZ_VWiY"/>
+</div>
+<div class="md:col-span-4 p-8 flex flex-col justify-between bg-surface-container-lowest">
+<div>
+<p class="font-label-mono-sm text-label-mono-sm text-tertiary mb-2">01 — Westlake Hills</p>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-6">The Onyx Residence</h2>
+<ul class="font-label-mono-md text-label-mono-md text-on-surface-variant space-y-4 mb-8">
+<li class="flex justify-between border-b border-outline-variant pb-2">
+<span>Price</span>
+<span class="text-on-surface">$8,450,000</span>
+</li>
+<li class="flex justify-between border-b border-outline-variant pb-2">
+<span>Interior</span>
+<span class="text-on-surface">8,200 SQFT</span>
+</li>
+<li class="flex justify-between border-b border-outline-variant pb-2">
+<span>Lot</span>
+<span class="text-on-surface">1.2 ACRES</span>
+</li>
+<li class="flex justify-between border-b border-outline-variant pb-2">
+<span>Architect</span>
+<span class="text-on-surface">Vanguard Studio</span>
+</li>
+</ul>
+</div>
+<div class="flex items-center gap-4 mt-8">
+<button class="bg-primary text-on-primary font-label-mono-md text-label-mono-md px-6 py-4 border-2 border-tertiary w-full hover:bg-secondary-container hover:text-on-secondary-container transition-none flex justify-center items-center gap-2">
+                                View Details <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Offset Drop Shadow Effect -->
+<div class="absolute -bottom-2 -right-2 w-full h-full bg-primary -z-10 border-2 border-tertiary"></div>
+</article>
+<!-- Listing 2: Villa Nova -->
+<article class="md:col-span-7 relative border-2 border-tertiary bg-surface-container-lowest group cursor-pointer hover:border-primary transition-colors duration-100 flex flex-col">
+<div class="h-80 border-b-2 border-tertiary relative overflow-hidden">
+<img alt="Villa Nova" class="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-500" data-alt="Interior shot of a high-end luxury minimalist living room. The space is defined by an aggressive white canvas, sharp geometric furniture, and fluorescent teal and acid yellow accent decor pieces. Floor-to-ceiling windows look out onto a stark, arid landscape. The lighting is bright and high-key, creating sharp contrasts and a premium editorial atmosphere. The overall style is modern brutalism meeting sophisticated Silicon Hills tech culture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3YofxhdT5jLZDvv8wsfS49KIuwiM54UW_t3elWtuakCo6EXtmHjZlGTHs3dUnSwnBOGUBM7CLcyXgxi5nAJKGVgov5QY2jzvAMUvxtCGfreOMSEDZ5CQ-MfIRSxMxySKqys3tYaDYI3r3RD18qhXlWZU38DJCnihG58SSEp39VhIyUudgZayuTOkY_iW5DzCUt7fKICQptjq9vtmUBezBL0Y0090J2Uq68c9qolzOl6juXml88IjsGgTB87w8fwBs0q3qA0xP7-pK"/>
+</div>
+<div class="p-6 flex-grow flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-4">
+<p class="font-label-mono-sm text-label-mono-sm text-tertiary">02 — Tarrytown</p>
+<span class="bg-primary-container text-on-primary-fixed-variant px-2 py-1 font-label-mono-sm text-label-mono-sm border border-tertiary">JUST LISTED</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-4">Villa Nova</h2>
+<div class="grid grid-cols-2 gap-4 font-label-mono-md text-label-mono-md text-on-surface-variant mb-6">
+<div>
+<span class="block text-tertiary text-[10px] uppercase mb-1">Price</span>
+<span class="text-on-surface">$5,200,000</span>
+</div>
+<div>
+<span class="block text-tertiary text-[10px] uppercase mb-1">Scale</span>
+<span class="text-on-surface">5,400 SQFT</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Offset Drop Shadow Effect -->
+<div class="absolute -bottom-2 -right-2 w-full h-full bg-secondary-container -z-10 border-2 border-tertiary"></div>
+</article>
+<!-- Listing 3: The Apex -->
+<article class="md:col-span-5 relative border-2 border-tertiary bg-surface-container-lowest group cursor-pointer hover:border-primary transition-colors duration-100 flex flex-col">
+<div class="h-80 border-b-2 border-tertiary relative overflow-hidden bg-surface-dim">
+<img alt="The Apex" class="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-500" data-alt="A sleek, modern architectural kitchen interior with brutalist accents. The design features expansive white marble islands contrasting with stark black cabinetry and raw concrete structural columns. A vibrant, fluorescent teal art installation hangs on the wall, providing a high-energy hit of color against the pristine, minimalist background. The lighting is sharp and deliberate, casting distinct shadows and emphasizing the rigid adherence to a modern grid layout." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOgVscfHqqpnYMTKW6SdoLUK9XE7O5FH4aeqs3XuHDomZbrkkKfxT3HHx_L2Bf0aw1SabwyC6waw7EToB5utxc-MjK07pFgslAgqXX1hqSfBTaznrYXZUUOf60GTMrLZiOknaPuvHW4wnvFVyCqTyPNMOTwpjU_iiur67IsFz-0Kj3Jx6hyn-5lJyebI-HpG9OLFMf8pgkK_w4iYeM8PiEbHcHTwUy6WGF8IaFfxrOD32stLdj1kVzoOlFDgPOU0YqLhvw9VcHLQ_a"/>
+</div>
+<div class="p-6 flex-grow flex flex-col justify-between">
+<div>
+<p class="font-label-mono-sm text-label-mono-sm text-tertiary mb-4">03 — Downtown Core</p>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-4">The Apex</h2>
+<div class="grid grid-cols-2 gap-4 font-label-mono-md text-label-mono-md text-on-surface-variant mb-6">
+<div>
+<span class="block text-tertiary text-[10px] uppercase mb-1">Price</span>
+<span class="text-on-surface">$3,850,000</span>
+</div>
+<div>
+<span class="block text-tertiary text-[10px] uppercase mb-1">Scale</span>
+<span class="text-on-surface">3,100 SQFT</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Offset Drop Shadow Effect -->
+<div class="absolute -bottom-2 -right-2 w-full h-full bg-surface-container-highest -z-10 border-2 border-tertiary"></div>
+</article>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-inverse-surface border-t-2 border-outline dark:border-outline-variant full-width bottom mt-auto">
+<div class="w-full px-margin-mobile md:px-margin-desktop py-margin-desktop flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="font-label-mono-md text-label-mono-md font-bold text-primary dark:text-inverse-primary">
+                © 2024 NEO-AUSTIN REALTY. METROPOLITAN RIGOR. CREATIVE IRREVERENCE.
+            </div>
+<div class="flex gap-6 font-label-mono-sm text-label-mono-sm uppercase tracking-wider">
+<a class="text-tertiary dark:text-tertiary-fixed-dim hover:text-secondary transition-colors duration-100" href="#">Privacy</a>
+<a class="text-tertiary dark:text-tertiary-fixed-dim hover:text-secondary transition-colors duration-100" href="#">Terms</a>
+<a class="text-tertiary dark:text-tertiary-fixed-dim hover:text-secondary transition-colors duration-100" href="#">Accessibility</a>
+<a class="text-tertiary dark:text-tertiary-fixed-dim hover:text-secondary transition-colors duration-100" href="#">Data Protection</a>
+</div>
+</div>
+</footer>
+</body></html>

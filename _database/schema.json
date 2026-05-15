@@ -1,0 +1,740 @@
+{
+  "_schema_version": "1.0",
+  "_schema_description": "The Agency — Master Deal Record Schema. This is the operational engine of the system. One JSON file per deal. Written by the Orchestrator only. Read by all specialists, dashboard, and reporting layer. Every field in this schema maps to data already defined in the folder system.",
+  "_write_protocol": "Orchestrator only. Append-only on events array. State fields updated on transition. Never delete records — set status to cold or closed.",
+  "_created": "2026-05-13",
+
+  "deal": {
+
+    "_id": {
+      "deal_id": "412",
+      "side": "buyer",
+      "slack_channel": "#412-buyer",
+      "file_name": "412-buyer.json"
+    },
+
+    "meta": {
+      "stage": "due_diligence",
+      "stage_history": [
+        { "stage": "draft", "entered_at": "2026-05-13T09:40:00", "exited_at": "2026-05-13T09:44:00" },
+        { "stage": "confirmed", "entered_at": "2026-05-13T09:44:00", "exited_at": "2026-05-13T10:00:00" },
+        { "stage": "active", "entered_at": "2026-05-13T10:00:00", "exited_at": "2026-05-14T17:30:00" },
+        { "stage": "under_contract", "entered_at": "2026-05-14T17:30:00", "exited_at": "2026-05-15T09:00:00" },
+        { "stage": "due_diligence", "entered_at": "2026-05-15T09:00:00", "exited_at": null }
+      ],
+      "created_at": "2026-05-13T09:44:00",
+      "updated_at": "2026-05-15T09:00:00",
+      "closed_at": null,
+      "cold_at": null,
+      "cold_reason": null,
+
+      "sop": {
+        "_note": "Tracks which SOP is currently running and where the deal is in the sequence. Written by Orchestrator only. Enables system to resume mid-SOP after restart without starting over.",
+        "active_sop": "sop_03_offer_received",
+        "current_step": 4,
+        "total_steps": 6,
+        "current_step_description": "TC activates full transaction — deadlines set, documents queued",
+        "sop_started_at": "2026-05-14T17:30:00",
+        "sop_completed_at": null,
+        "sop_history": [
+          {
+            "sop": "sop_01_new_lead",
+            "started_at": "2026-05-13T09:40:00",
+            "completed_at": "2026-05-13T10:30:00",
+            "steps_completed": 6,
+            "outcome": "success"
+          },
+          {
+            "sop": "sop_02_follow_up",
+            "started_at": "2026-05-16T08:00:00",
+            "completed_at": "2026-05-16T08:05:00",
+            "steps_completed": 3,
+            "outcome": "success",
+            "followup_number": 1
+          },
+          {
+            "sop": "sop_03_offer_received",
+            "started_at": "2026-05-14T17:30:00",
+            "completed_at": null,
+            "steps_completed": 4,
+            "outcome": "in_progress"
+          }
+        ]
+      }
+    },
+
+    "agent": {
+      "agent_id": "elena",
+      "name": "Elena Reyes",
+      "slack_handle": "@elena",
+      "role": "Senior Agent",
+      "output_mode": "operational",
+      "side_specialty": "buyer",
+      "review_required": false
+    },
+
+    "client": {
+      "name": "Robert & Maria Chen",
+      "email": "chen.family@email.com",
+      "phone": "512-555-0142",
+      "type": "buyer",
+      "origin": "referral",
+      "referred_by": "Nguyen family",
+      "relocation": true,
+      "relocation_from": "Chicago, IL",
+      "preferred_contact": "email",
+      "best_time_to_reach": "evenings"
+    },
+
+    "buyer_profile": {
+      "pre_approved": true,
+      "pre_approval_amount": 625000,
+      "lender_name": "First Republic Mortgage",
+      "lender_contact": "",
+      "lender_phone": "",
+      "budget_min": 450000,
+      "budget_max": 650000,
+      "target_neighborhoods": ["Travis Heights", "South Congress"],
+      "timeline_days": 60,
+      "must_haves": ["3 bedrooms minimum", "yard", "garage"],
+      "deal_breakers": ["backing to highway", "HOA over $300/mo"],
+      "properties_viewed": [
+        {
+          "property_id": "ATX-003",
+          "address": "2219 Bluebonnet Lane",
+          "viewed_at": "2026-05-13T14:00:00",
+          "client_reaction": "strong_interest",
+          "agent_notes": "Maria said this is it during the second showing"
+        }
+      ],
+      "properties_interested": ["ATX-003"]
+    },
+
+    "seller_profile": {
+      "property_id": null,
+      "target_price": null,
+      "bottom_line_price": "SECURE — NEVER SURFACED IN ANY OUTPUT",
+      "motivation": null,
+      "timeline": null,
+      "repairs_completed": [],
+      "disclosures_ready": false
+    },
+
+    "property": {
+      "_note": "Property data copied from catalog at deal creation. Snapshot — not a live link. Reflects property condition at time of deal.",
+      "property_id": "ATX-003",
+      "mls_number": "",
+      "address": {
+        "street": "2219 Bluebonnet Lane",
+        "city": "Austin",
+        "state": "TX",
+        "zip": "78704",
+        "neighborhood": "Travis Heights",
+        "zone": "travis_heights"
+      },
+      "status_at_deal_creation": "active",
+      "list_price_at_deal_creation": 649000,
+      "attributes": {
+        "property_type": "Single Family Residence",
+        "year_built": 1968,
+        "square_feet": 1510,
+        "acres": 0.14,
+        "stories": 1,
+        "bedrooms": 3,
+        "bathrooms_full": 2,
+        "bathrooms_half": 0,
+        "garages": 1,
+        "hoa_monthly": 0
+      },
+      "features": {
+        "interior": ["original hardwood floors", "updated kitchen", "open living area"],
+        "exterior": ["fenced yard", "covered porch", "mature oak trees"]
+      },
+      "pre_1978": true,
+      "lead_paint_disclosure_required": true
+    },
+
+    "transaction": {
+      "contract_date": "2026-05-14",
+      "offer_price": 612000,
+      "final_sale_price": null,
+      "earnest_money": 12000,
+      "earnest_money_due": "2026-05-16",
+      "earnest_money_status": "pending",
+      "down_payment": 122400,
+      "down_payment_percentage": 20,
+      "financing_type": "conventional",
+      "closing_date": "2026-05-28",
+      "possession_date": "2026-05-28",
+      "escrow_company": "Austin Title Company",
+      "escrow_officer": "",
+      "escrow_phone": "",
+      "title_company": "Austin Title Company",
+      "title_officer": "",
+      "title_phone": "",
+      "cooperating_agent": "James Whitfield",
+      "cooperating_agent_phone": "512-555-0291",
+      "cooperating_brokerage": "",
+      "special_provisions": "",
+      "inclusions": "",
+      "exclusions": ""
+    },
+
+    "contingencies": {
+      "inspection": {
+        "active": true,
+        "deadline": "2026-05-15T17:00:00",
+        "status": "in_progress",
+        "resolution": null,
+        "credit_offered": 8000,
+        "credit_accepted": null,
+        "repairs_requested": [],
+        "alert_48hr_sent": true,
+        "alert_24hr_sent": false
+      },
+      "appraisal": {
+        "active": true,
+        "deadline": "2026-05-20T17:00:00",
+        "status": "pending",
+        "appraised_value": 589000,
+        "appraised_at": "2026-05-15",
+        "gap_amount": 23000,
+        "gap_resolution": null,
+        "alert_48hr_sent": false,
+        "alert_24hr_sent": false
+      },
+      "financing": {
+        "active": true,
+        "deadline": "2026-05-23T17:00:00",
+        "status": "pending",
+        "lender_status": "in_review",
+        "commitment_received": false,
+        "alert_48hr_sent": false,
+        "alert_24hr_sent": false
+      }
+    },
+
+    "deadlines": [
+      {
+        "name": "Earnest Money Due",
+        "datetime": "2026-05-16T17:00:00",
+        "priority": "critical",
+        "status": "pending",
+        "owner": "elena",
+        "alert_48hr_sent": true,
+        "alert_48hr_sent_at": "2026-05-14T17:00:00",
+        "alert_24hr_sent": false,
+        "alert_24hr_sent_at": null,
+        "completed_at": null,
+        "notes": ""
+      },
+      {
+        "name": "Inspection Period Ends",
+        "datetime": "2026-05-15T17:00:00",
+        "priority": "critical",
+        "status": "in_progress",
+        "owner": "elena",
+        "alert_48hr_sent": true,
+        "alert_48hr_sent_at": "2026-05-13T17:00:00",
+        "alert_24hr_sent": true,
+        "alert_24hr_sent_at": "2026-05-14T17:00:00",
+        "completed_at": null,
+        "notes": "Roof issue flagged. Seller offered $8k credit. Response pending."
+      },
+      {
+        "name": "Appraisal Deadline",
+        "datetime": "2026-05-20T17:00:00",
+        "priority": "important",
+        "status": "pending",
+        "owner": "elena",
+        "alert_48hr_sent": false,
+        "alert_48hr_sent_at": null,
+        "alert_24hr_sent": false,
+        "alert_24hr_sent_at": null,
+        "completed_at": null,
+        "notes": "Gap $23,000. Decision pending."
+      },
+      {
+        "name": "Loan Commitment Deadline",
+        "datetime": "2026-05-23T17:00:00",
+        "priority": "important",
+        "status": "pending",
+        "owner": "elena",
+        "alert_48hr_sent": false,
+        "alert_48hr_sent_at": null,
+        "alert_24hr_sent": false,
+        "alert_24hr_sent_at": null,
+        "completed_at": null,
+        "notes": ""
+      },
+      {
+        "name": "Closing Disclosure 3-Day Rule",
+        "datetime": "2026-05-25T00:00:00",
+        "priority": "scheduled",
+        "status": "pending",
+        "owner": "lender",
+        "alert_48hr_sent": false,
+        "alert_48hr_sent_at": null,
+        "alert_24hr_sent": false,
+        "alert_24hr_sent_at": null,
+        "completed_at": null,
+        "notes": "Lender must deliver CD by May 25 for May 28 closing"
+      },
+      {
+        "name": "Final Walkthrough",
+        "datetime": "2026-05-27T10:00:00",
+        "priority": "scheduled",
+        "status": "pending",
+        "owner": "elena",
+        "alert_48hr_sent": false,
+        "alert_48hr_sent_at": null,
+        "alert_24hr_sent": false,
+        "alert_24hr_sent_at": null,
+        "completed_at": null,
+        "notes": ""
+      },
+      {
+        "name": "Closing",
+        "datetime": "2026-05-28T10:00:00",
+        "priority": "scheduled",
+        "status": "pending",
+        "owner": "elena",
+        "alert_48hr_sent": false,
+        "alert_48hr_sent_at": null,
+        "alert_24hr_sent": false,
+        "alert_24hr_sent_at": null,
+        "completed_at": null,
+        "notes": ""
+      }
+    ],
+
+    "documents": {
+      "firm_generated": [
+        {
+          "doc_id": "412-001",
+          "name": "Agency Disclosure",
+          "template": "04_transaction_coordinator/templates/_legaldocs/agency_disclosure.md",
+          "status": "signed",
+          "generated_at": "2026-05-13T10:00:00",
+          "confirmed_by": "elena",
+          "confirmed_at": "2026-05-13T10:05:00",
+          "signed_at": "2026-05-13T11:00:00",
+          "vault_path": "vault/412-buyer/412-001-agency-disclosure.md"
+        },
+        {
+          "doc_id": "412-002",
+          "name": "Wire Fraud Advisory",
+          "template": "04_transaction_coordinator/templates/_legaldocs/wire_fraud_advisory.md",
+          "status": "signed",
+          "generated_at": "2026-05-13T10:00:00",
+          "confirmed_by": "elena",
+          "confirmed_at": "2026-05-13T10:05:00",
+          "signed_at": "2026-05-13T11:00:00",
+          "vault_path": "vault/412-buyer/412-002-wire-fraud-advisory.md"
+        },
+        {
+          "doc_id": "412-003",
+          "name": "Buyer Representation Agreement",
+          "template": "04_transaction_coordinator/templates/_legaldocs/purchase_agreement.md",
+          "status": "signed",
+          "generated_at": "2026-05-13T10:00:00",
+          "confirmed_by": "elena",
+          "confirmed_at": "2026-05-13T10:10:00",
+          "signed_at": "2026-05-13T11:00:00",
+          "vault_path": "vault/412-buyer/412-003-buyer-rep-agreement.md"
+        },
+        {
+          "doc_id": "412-004",
+          "name": "Lead-Based Paint Disclosure",
+          "template": "04_transaction_coordinator/templates/_legaldocs/lead_based_paint_disclosure.md",
+          "status": "signed",
+          "generated_at": "2026-05-14T09:00:00",
+          "confirmed_by": "elena",
+          "confirmed_at": "2026-05-14T09:05:00",
+          "signed_at": "2026-05-14T10:00:00",
+          "vault_path": "vault/412-buyer/412-004-lead-paint-disclosure.md",
+          "note": "Required — property built 1968"
+        },
+        {
+          "doc_id": "412-005",
+          "name": "Purchase Agreement / Offer Summary",
+          "template": "04_transaction_coordinator/templates/_legaldocs/purchase_agreement.md",
+          "status": "executed",
+          "generated_at": "2026-05-14T12:00:00",
+          "confirmed_by": "elena",
+          "confirmed_at": "2026-05-14T12:15:00",
+          "signed_at": "2026-05-14T17:00:00",
+          "vault_path": "vault/412-buyer/412-005-purchase-agreement.md"
+        },
+        {
+          "doc_id": "412-006",
+          "name": "Inspection Response",
+          "template": "04_transaction_coordinator/templates/_legaldocs/inspection_response.md",
+          "status": "draft",
+          "generated_at": "2026-05-15T08:00:00",
+          "confirmed_by": null,
+          "confirmed_at": null,
+          "signed_at": null,
+          "vault_path": null,
+          "note": "Awaiting agent confirmation — deadline tomorrow 5pm"
+        },
+        {
+          "doc_id": "412-007",
+          "name": "Contingency Removal",
+          "template": "04_transaction_coordinator/templates/_legaldocs/contingency_removal.md",
+          "status": "not_started",
+          "generated_at": null,
+          "confirmed_by": null,
+          "confirmed_at": null,
+          "signed_at": null,
+          "vault_path": null
+        },
+        {
+          "doc_id": "412-008",
+          "name": "Final Walkthrough Attestation",
+          "template": "04_transaction_coordinator/templates/_legaldocs/final_walkthrough_attestation.md",
+          "status": "not_started",
+          "generated_at": null,
+          "confirmed_by": null,
+          "confirmed_at": null,
+          "signed_at": null,
+          "vault_path": null
+        }
+      ],
+      "third_party": [
+        {
+          "name": "Pre-Approval Letter",
+          "expected_from": "First Republic Mortgage",
+          "status": "received",
+          "received_at": "2026-05-13T09:00:00",
+          "vault_path": "vault/412-buyer/pre-approval-letter.pdf"
+        },
+        {
+          "name": "Home Inspection Report",
+          "expected_from": "Inspector",
+          "status": "received",
+          "received_at": "2026-05-15T08:00:00",
+          "vault_path": "vault/412-buyer/inspection-report.pdf",
+          "key_findings": "Roof issues noted. Estimated repair $8,000-$12,000."
+        },
+        {
+          "name": "Appraisal Report",
+          "expected_from": "First Republic Mortgage",
+          "status": "received",
+          "received_at": "2026-05-15T07:00:00",
+          "vault_path": "vault/412-buyer/appraisal-report.pdf",
+          "appraised_value": 589000
+        },
+        {
+          "name": "Loan Estimate",
+          "expected_from": "First Republic Mortgage",
+          "status": "received",
+          "received_at": "2026-05-14T09:00:00",
+          "vault_path": "vault/412-buyer/loan-estimate.pdf"
+        },
+        {
+          "name": "Preliminary Title Report",
+          "expected_from": "Austin Title Company",
+          "status": "pending",
+          "received_at": null,
+          "vault_path": null
+        },
+        {
+          "name": "Natural Hazard Disclosure",
+          "expected_from": "Third-party provider",
+          "status": "pending",
+          "received_at": null,
+          "vault_path": null
+        },
+        {
+          "name": "Closing Disclosure",
+          "expected_from": "First Republic Mortgage",
+          "status": "not_started",
+          "received_at": null,
+          "vault_path": null
+        },
+        {
+          "name": "ALTA Settlement Statement",
+          "expected_from": "Austin Title Company",
+          "status": "not_started",
+          "received_at": null,
+          "vault_path": null
+        }
+      ]
+    },
+
+    "checklists": {
+      "buyer_checklist": {
+        "template": "04_transaction_coordinator/templates/_checklists/buyer_checklist.md",
+        "activated_at": "2026-05-13T09:44:00",
+        "total_items": 40,
+        "completed_items": 12,
+        "completion_percentage": 30,
+        "last_updated": "2026-05-15T09:00:00"
+      },
+      "closing_checklist": {
+        "template": "04_transaction_coordinator/templates/_checklists/closing_checklist.md",
+        "activated_at": null,
+        "total_items": 35,
+        "completed_items": 0,
+        "completion_percentage": 0,
+        "last_updated": null
+      }
+    },
+
+    "communications": [
+      {
+        "comm_id": "COMM-001",
+        "type": "email",
+        "situation": "buyer_welcome",
+        "drafted_by": "03_client_communication",
+        "drafted_at": "2026-05-13T10:00:00",
+        "agent_id": "elena",
+        "sent_by": "elena",
+        "sent_at": "2026-05-13T10:30:00",
+        "recipient": "chen.family@email.com",
+        "subject": "Welcome — and a few things to know before we start",
+        "status": "sent"
+      },
+      {
+        "comm_id": "COMM-002",
+        "type": "email",
+        "situation": "competing_offer",
+        "drafted_by": "03_client_communication",
+        "drafted_at": "2026-05-13T16:42:00",
+        "agent_id": "elena",
+        "option_selected": "Option A — Urgent",
+        "sent_by": "elena",
+        "sent_at": "2026-05-13T17:00:00",
+        "recipient": "chen.family@email.com",
+        "subject": "Update on Bluebonnet — We Need to Move",
+        "status": "sent"
+      },
+      {
+        "comm_id": "COMM-003",
+        "type": "email",
+        "situation": "offer_accepted",
+        "drafted_by": "03_client_communication",
+        "drafted_at": "2026-05-14T17:35:00",
+        "agent_id": "elena",
+        "sent_by": "elena",
+        "sent_at": "2026-05-14T18:00:00",
+        "recipient": "chen.family@email.com",
+        "subject": "We're Under Contract — 2219 Bluebonnet is Yours",
+        "status": "sent"
+      }
+    ],
+
+    "risk_flags": [
+      {
+        "flag_id": "FLAG-001",
+        "type": "appraisal_gap",
+        "detected_at": "2026-05-15T08:30:00",
+        "detected_by": "04_transaction_coordinator",
+        "severity": "high",
+        "detail": "Property appraised at $589,000. Contract $612,000. Gap $23,000.",
+        "deadline": "2026-05-20T17:00:00",
+        "status": "open",
+        "acknowledged_by": null,
+        "acknowledged_at": null,
+        "resolution": null,
+        "escalated_to_diana": false,
+        "escalated_at": null
+      },
+      {
+        "flag_id": "FLAG-002",
+        "type": "inspection_deadline",
+        "detected_at": "2026-05-14T17:00:00",
+        "detected_by": "04_transaction_coordinator",
+        "severity": "critical",
+        "detail": "Inspection deadline tomorrow 5pm. Roof issue. $8k credit offered. No response yet.",
+        "deadline": "2026-05-15T17:00:00",
+        "status": "open",
+        "acknowledged_by": "elena",
+        "acknowledged_at": "2026-05-14T17:30:00",
+        "resolution": null,
+        "escalated_to_diana": false,
+        "escalated_at": null
+      }
+    ],
+
+    "research": [
+      {
+        "research_id": "RES-001",
+        "type": "neighborhood_brief",
+        "zone": "travis_heights",
+        "generated_by": "02_property_research",
+        "generated_at": "2026-05-13T10:05:00",
+        "data_date": "May 2026",
+        "delivered_to": "elena",
+        "vault_path": "vault/412-buyer/research/travis-heights-brief.md"
+      },
+      {
+        "research_id": "RES-002",
+        "type": "property_snapshot",
+        "property_id": "ATX-003",
+        "generated_by": "02_property_research",
+        "generated_at": "2026-05-13T13:00:00",
+        "data_date": "May 2026",
+        "delivered_to": "elena",
+        "vault_path": "vault/412-buyer/research/atx-003-snapshot.md"
+      },
+      {
+        "research_id": "RES-003",
+        "type": "appraisal_support",
+        "property_id": "ATX-003",
+        "generated_by": "02_property_research",
+        "generated_at": "2026-05-15T09:00:00",
+        "data_date": "May 2026",
+        "delivered_to": "elena",
+        "vault_path": "vault/412-buyer/research/appraisal-support-brief.md"
+      }
+    ],
+
+    "reporting": {
+      "_note": "Reporting fields are used for Diana's dashboard analytics and monthly reports. Populated progressively as deal advances.",
+      "deal_side": "buyer",
+      "neighborhood": "travis_heights",
+      "price_range_bucket": "450k-650k",
+      "lead_source": "referral",
+      "referred_by": "Nguyen family",
+      "agent_id": "elena",
+      "days_to_contract": 2,
+      "days_to_close": null,
+      "dom_at_offer": 34,
+      "list_price_at_offer": 629000,
+      "offer_price": 612000,
+      "final_sale_price": null,
+      "list_to_sale_ratio": null,
+      "above_below_ask": -17000,
+      "above_below_ask_percentage": -2.7,
+      "contingencies_exercised": [],
+      "inspection_credit_received": null,
+      "appraisal_gap_amount": 23000,
+      "appraisal_gap_resolved": false,
+      "financing_type": "conventional",
+      "deal_outcome": "active",
+      "close_month": null,
+      "close_year": null,
+      "total_communications_sent": 3,
+      "total_documents_generated": 6,
+      "risk_flags_raised": 2,
+      "risk_flags_resolved": 0,
+      "client_relocation": true,
+      "relocation_origin": "Chicago, IL"
+    },
+
+    "events": [
+      {
+        "event_id": "EVT-001",
+        "timestamp": "2026-05-13T09:40:00",
+        "actor_type": "ai",
+        "actor_id": "lead_qualifier",
+        "agent_id": "elena",
+        "action": "deal_draft_created",
+        "detail": "Buyer lead extracted from Elena's Slack message. Robert & Maria Chen. Travis Heights. $450k-$650k. Relocating Chicago.",
+        "outcome": "success",
+        "next_triggered": "confirmation_gate"
+      },
+      {
+        "event_id": "EVT-002",
+        "timestamp": "2026-05-13T09:44:00",
+        "actor_type": "human",
+        "actor_id": "elena",
+        "agent_id": "elena",
+        "action": "deal_confirmed",
+        "detail": "Agent confirmed deal record. Added: 3br minimum, yard, garage as must-haves. No HOA over $300 as deal-breaker.",
+        "outcome": "success",
+        "next_triggered": "property_research_auto"
+      },
+      {
+        "event_id": "EVT-003",
+        "timestamp": "2026-05-13T10:00:00",
+        "actor_type": "ai",
+        "actor_id": "property_research",
+        "agent_id": "elena",
+        "action": "neighborhood_brief_generated",
+        "detail": "Travis Heights brief generated for $450k-$650k buyer profile. Key finding: budget is tight for neighborhood. Entry at $615k realistic.",
+        "outcome": "success",
+        "next_triggered": "client_communication_suggested"
+      },
+      {
+        "event_id": "EVT-004",
+        "timestamp": "2026-05-13T10:30:00",
+        "actor_type": "human",
+        "actor_id": "elena",
+        "agent_id": "elena",
+        "action": "welcome_email_sent",
+        "detail": "Buyer welcome email sent to Chens. COMM-001.",
+        "outcome": "success",
+        "next_triggered": null
+      },
+      {
+        "event_id": "EVT-005",
+        "timestamp": "2026-05-13T16:42:00",
+        "actor_type": "ai",
+        "actor_id": "03_client_communication",
+        "agent_id": "elena",
+        "action": "competing_offer_draft_generated",
+        "detail": "Two competing offer options drafted for Elena. Deadline 8pm.",
+        "outcome": "success",
+        "next_triggered": null
+      },
+      {
+        "event_id": "EVT-006",
+        "timestamp": "2026-05-13T17:00:00",
+        "actor_type": "human",
+        "actor_id": "elena",
+        "agent_id": "elena",
+        "action": "competing_offer_email_sent",
+        "detail": "Option A selected and sent to Chens. COMM-002.",
+        "outcome": "success",
+        "next_triggered": null
+      },
+      {
+        "event_id": "EVT-007",
+        "timestamp": "2026-05-14T17:30:00",
+        "actor_type": "human",
+        "actor_id": "elena",
+        "agent_id": "elena",
+        "action": "offer_accepted_reported",
+        "detail": "Offer accepted at $612,000. Deal transitions to under_contract.",
+        "outcome": "success",
+        "next_triggered": "tc_deadline_tracker_activated"
+      },
+      {
+        "event_id": "EVT-008",
+        "timestamp": "2026-05-14T17:35:00",
+        "actor_type": "ai",
+        "actor_id": "04_transaction_coordinator",
+        "agent_id": "elena",
+        "action": "deadline_tracker_activated",
+        "detail": "All 7 deadlines set from contract terms. Earnest money due May 16. Inspection May 15 5pm. Close May 28.",
+        "outcome": "success",
+        "next_triggered": "offer_accepted_email_suggested"
+      },
+      {
+        "event_id": "EVT-009",
+        "timestamp": "2026-05-15T08:00:00",
+        "actor_type": "ai",
+        "actor_id": "04_transaction_coordinator",
+        "agent_id": "elena",
+        "action": "risk_flag_raised",
+        "detail": "Appraisal gap detected. Appraised $589k. Contract $612k. Gap $23k. FLAG-001.",
+        "outcome": "flagged",
+        "next_triggered": "appraisal_support_research_requested"
+      },
+      {
+        "event_id": "EVT-010",
+        "timestamp": "2026-05-15T09:00:00",
+        "actor_type": "ai",
+        "actor_id": "04_transaction_coordinator",
+        "agent_id": "elena",
+        "action": "inspection_deadline_alert_24hr",
+        "detail": "24hr alert sent. Inspection period ends tomorrow 5pm. Roof issue. $8k credit offered. Response pending.",
+        "outcome": "delivered",
+        "next_triggered": null
+      }
+    ]
+  }
+}

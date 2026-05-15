@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Agent Network Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&amp;family=Geist:wght@100..900&amp;family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-bright": "#f9f9f9",
+                      "on-background": "#1a1c1c",
+                      "on-error": "#ffffff",
+                      "inverse-surface": "#2f3131",
+                      "on-primary-container": "#00725c",
+                      "on-secondary-container": "#5b6900",
+                      "surface-variant": "#e2e2e2",
+                      "surface-container-high": "#e8e8e8",
+                      "on-surface-variant": "#3a4a44",
+                      "on-error-container": "#93000a",
+                      "secondary-fixed": "#d2f000",
+                      "primary-fixed": "#15ffd1",
+                      "on-primary-fixed-variant": "#005141",
+                      "surface-container-lowest": "#ffffff",
+                      "outline": "#6a7b74",
+                      "on-surface": "#1a1c1c",
+                      "surface-container-low": "#f3f3f4",
+                      "surface-dim": "#dadada",
+                      "primary-container": "#00ffd1",
+                      "primary": "#006b57",
+                      "inverse-on-surface": "#f0f1f1",
+                      "on-tertiary-container": "#656463",
+                      "tertiary-container": "#e4e1e1",
+                      "inverse-primary": "#00e0b7",
+                      "tertiary": "#5f5e5e",
+                      "surface": "#f9f9f9",
+                      "error": "#ba1a1a",
+                      "primary-fixed-dim": "#00e0b7",
+                      "surface-container": "#eeeeee",
+                      "surface-container-highest": "#e2e2e2",
+                      "on-primary-fixed": "#002019",
+                      "outline-variant": "#b9cbc3",
+                      "tertiary-fixed-dim": "#c9c6c5",
+                      "secondary-container": "#d0ed00",
+                      "error-container": "#ffdad6",
+                      "on-tertiary-fixed-variant": "#474646",
+                      "on-secondary-fixed-variant": "#414c00",
+                      "on-primary": "#ffffff",
+                      "tertiary-fixed": "#e5e2e1",
+                      "on-secondary": "#ffffff",
+                      "background": "#f9f9f9",
+                      "secondary-fixed-dim": "#b8d300",
+                      "on-tertiary-fixed": "#1c1b1b",
+                      "on-tertiary": "#ffffff",
+                      "secondary": "#576500",
+                      "on-secondary-fixed": "#191e00",
+                      "surface-tint": "#006b57"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "24px",
+                      "unit": "8px",
+                      "container-max": "1440px",
+                      "margin-desktop": "64px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "label-mono-sm": [
+                              "Geist"
+                      ],
+                      "headline-md": [
+                              "Bodoni Moda"
+                      ],
+                      "headline-lg-mobile": [
+                              "Bodoni Moda"
+                      ],
+                      "display-lg": [
+                              "Bodoni Moda"
+                      ],
+                      "label-mono-md": [
+                              "Geist"
+                      ],
+                      "body-lg": [
+                              "Manrope"
+                      ],
+                      "headline-lg": [
+                              "Bodoni Moda"
+                      ],
+                      "body-md": [
+                              "Manrope"
+                      ]
+              },
+              "fontSize": {
+                      "label-mono-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "letterSpacing": "0.1em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "36px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "80px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "letterSpacing": "-0.04em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-mono-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md text-body-md">
+<div class="flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<nav class="bg-surface dark:bg-surface-dim h-screen sticky top-0 left-0 w-64 border-r-2 border-outline dark:border-outline-variant hidden lg:flex flex-col justify-between py-margin-desktop px-gutter z-50">
+<div>
+<div class="mb-12">
+<h1 class="font-headline-md text-headline-md text-on-surface dark:text-inverse-on-surface tracking-tighter">OPERATIONS</h1>
+<p class="font-label-mono-sm text-label-mono-sm uppercase tracking-widest text-on-surface-variant mt-2">V 1.0.4-BETA</p>
+</div>
+<ul class="space-y-2">
+<li>
+<a class="flex items-center gap-4 text-on-surface-variant dark:text-on-surface-variant p-4 hover:bg-surface-container-high hover:translate-x-1 hover:bg-primary-container dark:hover:bg-on-primary-fixed-variant transition-all duration-150 font-label-mono-md text-label-mono-md uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+                        Dashboard
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-4 text-on-surface-variant dark:text-on-surface-variant p-4 hover:bg-surface-container-high hover:translate-x-1 hover:bg-primary-container dark:hover:bg-on-primary-fixed-variant transition-all duration-150 font-label-mono-md text-label-mono-md uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined">house</span>
+                        Portfolio
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-4 text-on-surface-variant dark:text-on-surface-variant p-4 hover:bg-surface-container-high hover:translate-x-1 hover:bg-primary-container dark:hover:bg-on-primary-fixed-variant transition-all duration-150 font-label-mono-md text-label-mono-md uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined">insights</span>
+                        Analytics
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-4 bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary border-2 border-outline p-4 font-label-mono-md text-label-mono-md uppercase tracking-widest transition-none" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+                        Agents
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-4 text-on-surface-variant dark:text-on-surface-variant p-4 hover:bg-surface-container-high hover:translate-x-1 hover:bg-primary-container dark:hover:bg-on-primary-fixed-variant transition-all duration-150 font-label-mono-md text-label-mono-md uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined">terminal</span>
+                        System
+                    </a>
+</li>
+</ul>
+</div>
+<div>
+<button class="w-full bg-primary text-on-primary border-2 border-tertiary p-4 font-label-mono-md text-label-mono-md uppercase tracking-widest hover:bg-secondary hover:text-on-secondary transition-colors duration-100 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add</span>
+                NEW LISTING
+            </button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto w-full">
+<!-- TopNavBar (Mobile Only Fallback) -->
+<header class="bg-surface-container-lowest dark:bg-inverse-surface border-b-2 border-outline dark:border-outline-variant lg:hidden sticky top-0 z-40">
+<div class="flex justify-between items-center px-margin-mobile h-20 w-full">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile tracking-tighter text-on-surface dark:text-inverse-on-surface">NEO-ATX</h1>
+<button class="material-symbols-outlined text-primary text-3xl">menu</button>
+</div>
+</header>
+<div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop py-12 lg:py-24">
+<!-- Page Header -->
+<div class="mb-16 flex flex-col md:flex-row justify-between items-start md:items-end border-b-2 border-outline pb-8">
+<div>
+<span class="font-label-mono-sm text-label-mono-sm bg-secondary text-on-secondary px-2 py-1 mb-4 inline-block uppercase">Network Metrics</span>
+<h2 class="font-display-lg text-display-lg text-on-surface mt-2 tracking-tighter">Agent Performance</h2>
+</div>
+<div class="mt-8 md:mt-0 flex gap-4">
+<div class="text-right">
+<p class="font-label-mono-sm text-label-mono-sm text-on-surface-variant uppercase">Total Volume YTD</p>
+<p class="font-headline-md text-headline-md text-primary">$4.2B</p>
+</div>
+<div class="text-right">
+<p class="font-label-mono-sm text-label-mono-sm text-on-surface-variant uppercase">Active Agents</p>
+<p class="font-headline-md text-headline-md text-on-surface">142</p>
+</div>
+</div>
+</div>
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-24">
+<!-- Market Dominance Chart -->
+<div class="md:col-span-8 border border-outline bg-surface-bright relative">
+<div class="absolute top-0 right-0 w-full h-full bg-secondary-fixed -z-10 translate-x-2 translate-y-2"></div>
+<div class="p-6 border-b border-outline flex justify-between items-center">
+<h3 class="font-label-mono-md text-label-mono-md uppercase">Market Dominance [Q3]</h3>
+<span class="material-symbols-outlined text-primary">monitoring</span>
+</div>
+<div class="p-6 h-64 flex items-end justify-between gap-4">
+<div class="w-1/6 bg-tertiary h-[30%] border border-outline relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 font-label-mono-sm text-label-mono-sm opacity-0 group-hover:opacity-100 transition-opacity">7042</div>
+</div>
+<div class="w-1/6 bg-surface-variant h-[45%] border border-outline relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 font-label-mono-sm text-label-mono-sm opacity-0 group-hover:opacity-100 transition-opacity">78701</div>
+</div>
+<div class="w-1/6 bg-primary-container h-[80%] border border-outline relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 font-label-mono-sm text-label-mono-sm opacity-0 group-hover:opacity-100 transition-opacity">78703</div>
+</div>
+<div class="w-1/6 bg-tertiary h-[55%] border border-outline relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 font-label-mono-sm text-label-mono-sm opacity-0 group-hover:opacity-100 transition-opacity">78704</div>
+</div>
+<div class="w-1/6 bg-surface-variant h-[35%] border border-outline relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 font-label-mono-sm text-label-mono-sm opacity-0 group-hover:opacity-100 transition-opacity">78746</div>
+</div>
+</div>
+</div>
+<!-- Client Success KPI -->
+<div class="md:col-span-4 flex flex-col gap-gutter">
+<div class="flex-1 border border-outline bg-surface-bright p-6 flex flex-col justify-center items-center text-center relative group hover:bg-primary-container transition-colors duration-150">
+<h4 class="font-label-mono-sm text-label-mono-sm uppercase text-on-surface-variant mb-2 group-hover:text-on-primary-container">Client Success Rate</h4>
+<p class="font-display-lg text-display-lg text-primary group-hover:text-on-primary-container">98.4%</p>
+<div class="w-full h-2 bg-surface-variant mt-4">
+<div class="h-full bg-primary w-[98.4%]"></div>
+</div>
+</div>
+<div class="flex-1 border border-outline bg-tertiary text-on-tertiary p-6 flex flex-col justify-center items-center text-center relative">
+<h4 class="font-label-mono-sm text-label-mono-sm uppercase mb-2">Average Days on Market</h4>
+<p class="font-display-lg text-display-lg text-primary-container">12</p>
+</div>
+</div>
+</div>
+<!-- Agent List -->
+<div class="mb-8 flex justify-between items-center border-b border-outline pb-4">
+<h3 class="font-headline-md text-headline-md text-on-surface">Top Producers</h3>
+<button class="font-label-mono-sm text-label-mono-sm border border-outline px-4 py-2 hover:bg-secondary hover:text-on-secondary transition-colors uppercase">View All</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Agent Card 1 -->
+<div class="border border-outline bg-surface-bright relative group">
+<div class="absolute top-0 left-0 w-full h-1 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200"></div>
+<div class="p-6 border-b border-outline flex items-center gap-4">
+<img alt="Agent Portrait" class="w-16 h-16 object-cover grayscale border border-outline" data-alt="A high-contrast, black and white portrait of a confident female real estate agent in a modern architectural setting. The lighting is harsh and directional, emphasizing sharp geometric shadows. The aesthetic is editorial and brutalist, with a high-end luxury feel. Pristine white background with deep black shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3V_azyqZv2w3W5yHajuQIKicSrz8nvhix8-IG-jEWHsSkxEEIiO-9cQ26YgsfAPZlh-RZFszz1VSSdag4xUMnnCgaOwAj13d0JO6f8brvrdf5AGGgl2b3xcl3rzGwlXM1MRvliNTZMB0a-IHer_ym_cgYID7BhLjJ3n6a3EH0vxW938N2EuB-Efyd23izQ3QB8OTv9GZ__HDGagJ0CuGSnCAA-7wrm0FJO21k5ho-xIwOdkbtB9y391uwL0NjtHlKZ3wSXP7k4uF1"/>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface text-2xl">Elena Rostova</h4>
+<p class="font-label-mono-sm text-label-mono-sm text-on-surface-variant uppercase">Senior Partner</p>
+</div>
+</div>
+<div class="p-6 space-y-4 font-label-mono-md text-label-mono-md">
+<div class="flex justify-between border-b border-surface-variant pb-2">
+<span class="text-on-surface-variant">YTD Volume</span>
+<span class="text-primary">$142.5M</span>
+</div>
+<div class="flex justify-between border-b border-surface-variant pb-2">
+<span class="text-on-surface-variant">Active Listings</span>
+<span>14</span>
+</div>
+<div class="flex justify-between border-b border-surface-variant pb-2">
+<span class="text-on-surface-variant">Avg. Sale Price</span>
+<span>$3.2M</span>
+</div>
+</div>
+<div class="px-6 pb-6">
+<button class="w-full bg-surface text-on-surface border border-outline py-3 font-label-mono-sm text-label-mono-sm uppercase hover:bg-primary hover:text-on-primary transition-colors">View Profile</button>
+</div>
+</div>
+<!-- Agent Card 2 -->
+<div class="border border-outline bg-surface-bright relative group">
+<div class="absolute top-0 left-0 w-full h-1 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200"></div>
+<div class="p-6 border-b border-outline flex items-center gap-4">
+<img alt="Agent Portrait" class="w-16 h-16 object-cover grayscale border border-outline" data-alt="A high-contrast, black and white portrait of a confident male real estate agent in a modern architectural setting. The lighting is harsh and directional, emphasizing sharp geometric shadows. The aesthetic is editorial and brutalist, with a high-end luxury feel. Pristine white background with deep black shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4tXmi11_GtNfbLLn5dYfjbNJwAoXzMfi0BdgZXV1UkZiXBeKPiNT1eflJ6jntRU3fnsu8AvZXbihekzxW93xbSbfglVLgV1asCYr648bwcs4Bgs3L1pwcz0TAHHDFkHMJMgAaZ0r0pXFYgSgeNwuDmXCnWbhvwhE7keSd1p2Sh4gDJiykVjQG3CobDgv_jeldNGluoNq14QN_umvVBba0i-xNv3GmTvl8ac7udRl9wN6DquntVGJqP5ZIjtfREXgIVMqtdKx1HIdX"/>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface text-2xl">Marcus Vance</h4>
+<p class="font-label-mono-sm text-label-mono-sm text-on-surface-variant uppercase">Lead Broker</p>
+</div>
+</div>
+<div class="p-6 space-y-4 font-label-mono-md text-label-mono-md">
+<div class="flex justify-between border-b border-surface-variant pb-2">
+<span class="text-on-surface-variant">YTD Volume</span>
+<span class="text-primary">$118.0M</span>
+</div>
+<div class="flex justify-between border-b border-surface-variant pb-2">
+<span class="text-on-surface-variant">Active Listings</span>
+<span>9</span>
+</div>
+<div class="flex justify-between border-b border-surface-variant pb-2">
+<span class="text-on-surface-variant">Avg. Sale Price</span>
+<span>$4.5M</span>
+</div>
+</div>
+<div class="px-6 pb-6">
+<button class="w-full bg-surface text-on-surface border border-outline py-3 font-label-mono-sm text-label-mono-sm uppercase hover:bg-primary hover:text-on-primary transition-colors">View Profile</button>
+</div>
+</div>
+<!-- Agent Card 3 -->
+<div class="border border-outline bg-surface-bright relative group">
+<div class="absolute top-0 left-0 w-full h-1 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-200"></div>
+<div class="p-6 border-b border-outline flex items-center gap-4">
+<img alt="Agent Portrait" class="w-16 h-16 object-cover grayscale border border-outline" data-alt="A high-contrast, black and white portrait of a confident female real estate agent in a modern architectural setting. The lighting is harsh and directional, emphasizing sharp geometric shadows. The aesthetic is editorial and brutalist, with a high-end luxury feel. Pristine white background with deep black shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBs0sF0-e1omgSPmO8-LLtSyczV_yoek1z3TJ7R0Qz1hwi-MreG5UxSFmfUpUdYlxZNgKdxD30tGvG3TSSeIT65D20f44vwySa8h31xW5027sozjWgq6jFXBqqUXTaoTnEJtC5B-3XzxFL1R0Vkf3QtI3bTc6rF0yWKgwF9AdKbDA8vo7Qu6RRMjYZwi3YozHHFlppetn5VCpyAebQsODzT-nHfSTbdXGN-3-pgoA0R25Npm5rvvz63UWN1Idl3uKiAGIBqMrezARXf"/>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface text-2xl">Sarah Jenkins</h4>
+<p class="font-label-mono-sm text-label-mono-sm text-on-surface-variant uppercase">Associate Broker</p>
+</div>
+</div>
+<div class="p-6 space-y-4 font-label-mono-md text-label-mono-md">
+<div class="flex justify-between border-b border-surface-variant pb-2">
+<span class="text-on-surface-variant">YTD Volume</span>
+<span class="text-primary">$95.2M</span>
+</div>
+<div class="flex justify-between border-b border-surface-variant pb-2">
+<span class="text-on-surface-variant">Active Listings</span>
+<span>18</span>
+</div>
+<div class="flex justify-between border-b border-surface-variant pb-2">
+<span class="text-on-surface-variant">Avg. Sale Price</span>
+<span>$1.8M</span>
+</div>
+</div>
+<div class="px-6 pb-6">
+<button class="w-full bg-surface text-on-surface border border-outline py-3 font-label-mono-sm text-label-mono-sm uppercase hover:bg-primary hover:text-on-primary transition-colors">View Profile</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-inverse-surface border-t-2 border-outline dark:border-outline-variant w-full px-margin-desktop py-margin-desktop mt-gutter flex flex-col md:flex-row justify-between items-center gap-4 font-label-mono-sm text-label-mono-sm uppercase tracking-wider">
+<div class="font-label-mono-md text-label-mono-md font-bold text-primary dark:text-inverse-primary">
+                © 2024 NEO-AUSTIN REALTY. METROPOLITAN RIGOR. CREATIVE IRREVERENCE.
+            </div>
+<div class="flex gap-6">
+<a class="text-tertiary dark:text-tertiary-fixed-dim hover:text-secondary transition-colors duration-100" href="#">Privacy</a>
+<a class="text-tertiary dark:text-tertiary-fixed-dim hover:text-secondary transition-colors duration-100" href="#">Terms</a>
+<a class="text-tertiary dark:text-tertiary-fixed-dim hover:text-secondary transition-colors duration-100" href="#">Accessibility</a>
+<a class="text-tertiary dark:text-tertiary-fixed-dim hover:text-secondary transition-colors duration-100" href="#">Data Protection</a>
+</div>
+</footer>
+</main>
+</div>
+</body></html>

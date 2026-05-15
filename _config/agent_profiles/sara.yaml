@@ -1,0 +1,108 @@
+agent_profile:
+  # IDENTITY
+  agent_id: "sara"
+  name: "Sara Kim"
+  role: "New Agent"
+  slack_handle: "@sara"
+  experience_level: "junior"
+  experience_years: 0
+  side_specialty: "both"
+  dashboard_access: "junior"
+  output_mode: "guided"
+
+  # MARKET
+  market:
+    neighborhoods:
+      - "East Austin"
+      - "North Austin"
+    price_range_min: 300000
+    price_range_max: 550000
+    specialty_notes: >
+      Day 1 onboarding. Guided mode active on all outputs.
+      Market focus limited to entry-level segments while building expertise.
+      All client communications should be reviewed by Diana or Elena
+      before sending until Sara has 3 closed deals.
+
+  # COMMUNICATION TONE
+  communication_tone:
+    formality: "warm-professional"
+    pace: "measured-careful"
+    style_notes: >
+      Sara comes from a customer service background — she is naturally
+      warm, attentive, and client-focused. She is careful and thorough,
+      sometimes over-explains, but clients feel genuinely cared for.
+      She is developing her professional voice — drafts should be
+      warm and professional without being overly formal or stiff.
+      Her instinct to over-explain should be gently corrected toward
+      clarity without losing her warmth.
+
+    signature_phrases:
+      - "I want to make sure you have everything you need."
+      - "Happy to walk you through it."
+      - "Please don't hesitate to reach out — I'm here."
+      - "I'll follow up as soon as I have more information."
+
+    avoid_phrases:
+      - "I apologize for any confusion"
+      - "As per our conversation"
+      - "Please be advised"
+      - "Thank you for your patience" (overused customer service phrase)
+      - Overly formal language that sounds like a form letter
+
+    sign_off: "Warmly, Sara"
+
+    bad_news_approach: "gentle-then-clear"
+    # Sara's instinct is to be very gentle — which is good.
+    # She needs to ensure the actual fact lands despite the gentleness.
+    # Drafts should acknowledge difficulty, state clearly, offer support.
+
+    good_news_approach: "warm-genuine"
+    # Genuinely warm celebration. Less energetic than Marco
+    # but sincere and personal.
+
+    text_style: "warm-professional"
+    # More professional than Marco in texts. Warmer than Carlos.
+    # She has not yet developed a casual text style for business —
+    # drafts should be professional but never cold.
+
+    email_style: "thorough-warm"
+    # She tends to be thorough — sometimes over-thorough.
+    # Drafts should be complete but edited for concision.
+    # Warmth is the defining characteristic.
+
+  # ONBOARDING QUALIFIER ANSWERS
+  qualifier_answers:
+    q1_bad_deal: >
+      I'm just getting started so I haven't had that experience yet.
+      But in my previous work in customer service I had to deliver
+      difficult news to clients regularly. What I learned was that
+      people don't need you to fix everything — they need to feel
+      like you're in it with them. I try to bring that to every
+      conversation.
+    q2_late_offer: >
+      "Hi! I want to make sure you have the full picture before
+      making any changes. Can we talk in the morning? I'll have
+      everything ready to walk you through. Try to rest tonight
+      and we'll figure it out together."
+    q3_cringe: >
+      When agents disappear after the offer is accepted. That's
+      when clients need you most and a lot of agents check out.
+      I want to be more present at the harder parts, not less.
+    q4_ideal_client: >
+      Someone who feels genuinely supported throughout the whole
+      process — not just at the beginning and the end.
+    q5_closing_text: >
+      "Congratulations! This is such an exciting moment —
+      I'm so glad I got to be part of it with you.
+      Welcome home!"
+
+  # REVIEW REQUIREMENT
+  review_required: true
+  review_notes: >
+    All client-facing communications must be reviewed by Diana or Elena
+    before sending until Sara has 3 closed deals. System will flag
+    this requirement on every communication draft.
+
+  created_at: "2026-05-13"
+  updated_at: "2026-05-13"
+  profile_version: "1.0"

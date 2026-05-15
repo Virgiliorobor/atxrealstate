@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Diana Estates - Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..900&amp;family=Geist:wght@100..900&amp;family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-container": "#00725c",
+                        "inverse-primary": "#00e0b7",
+                        "on-primary-fixed-variant": "#005141",
+                        "surface-container-highest": "#e2e2e2",
+                        "outline-variant": "#b9cbc3",
+                        "background": "#f9f9f9",
+                        "tertiary-container": "#e4e1e1",
+                        "outline": "#6a7b74",
+                        "primary-container": "#00ffd1",
+                        "inverse-on-surface": "#f0f1f1",
+                        "tertiary-fixed": "#e5e2e1",
+                        "surface-bright": "#f9f9f9",
+                        "on-primary-fixed": "#002019",
+                        "error-container": "#ffdad6",
+                        "secondary": "#576500",
+                        "surface-container-high": "#e8e8e8",
+                        "secondary-fixed": "#d2f000",
+                        "inverse-surface": "#2f3131",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#c9c6c5",
+                        "secondary-fixed-dim": "#b8d300",
+                        "surface-dim": "#dadada",
+                        "surface": "#ffffff",
+                        "on-secondary-container": "#5b6900",
+                        "on-surface": "#1a1c1c",
+                        "surface-container-low": "#f3f3f4",
+                        "surface-variant": "#e2e2e2",
+                        "surface-container": "#eeeeee",
+                        "on-secondary-fixed": "#191e00",
+                        "secondary-container": "#d0ed00",
+                        "primary": "#00ffd1",
+                        "primary-fixed": "#15ffd1",
+                        "on-secondary-fixed-variant": "#414c00",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-container": "#656463",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "primary-fixed-dim": "#00e0b7",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#3a4a44",
+                        "tertiary": "#1a1c1c",
+                        "on-background": "#1a1c1c",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "on-primary": "#1a1c1c",
+                        "surface-tint": "#006b57",
+                        "on-tertiary-fixed-variant": "#474646"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0rem",
+                        "lg": "0rem",
+                        "xl": "0rem",
+                        "full": "0rem"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "margin-mobile": "24px",
+                        "margin-desktop": "64px",
+                        "container-max": "1440px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Bodoni Moda"],
+                        "label-mono-sm": ["Geist"],
+                        "headline-md": ["Bodoni Moda"],
+                        "headline-lg-mobile": ["Bodoni Moda"],
+                        "label-mono-md": ["Geist"],
+                        "headline-lg": ["Bodoni Moda"],
+                        "body-lg": ["Manrope"],
+                        "body-md": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["80px", { "lineHeight": "1.0", "letterSpacing": "-0.04em", "fontWeight": "700" }],
+                        "label-mono-sm": ["12px", { "lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "500" }],
+                        "headline-md": ["32px", { "lineHeight": "1.2", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["36px", { "lineHeight": "1.1", "fontWeight": "600" }],
+                        "label-mono-md": ["14px", { "lineHeight": "1.0", "fontWeight": "600" }],
+                        "headline-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface flex w-full min-h-screen">
+<!-- SideNavBar Component -->
+<nav class="hidden lg:flex flex-col justify-between py-margin-desktop px-gutter h-screen sticky top-0 left-0 w-64 border-r-2 border-tertiary bg-surface">
+<div>
+<div class="mb-12">
+<span class="font-headline-md text-headline-md text-on-surface">OPERATIONS</span>
+<p class="font-label-mono-sm text-label-mono-sm text-tertiary mt-2">V 1.0.4-BETA</p>
+</div>
+<ul class="space-y-4">
+<li>
+<a class="flex items-center gap-4 bg-primary text-on-primary border-2 border-tertiary p-4 font-label-mono-md text-label-mono-md uppercase tracking-widest transition-none" href="#">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+                        Dashboard
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-4 text-on-surface-variant p-4 hover:bg-primary hover:text-on-primary hover:translate-x-1 border-2 border-transparent hover:border-tertiary transition-all duration-150 font-label-mono-md text-label-mono-md uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined">house</span>
+                        Portfolio
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-4 text-on-surface-variant p-4 hover:bg-primary hover:text-on-primary hover:translate-x-1 border-2 border-transparent hover:border-tertiary transition-all duration-150 font-label-mono-md text-label-mono-md uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined">insights</span>
+                        Analytics
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-4 text-on-surface-variant p-4 hover:bg-primary hover:text-on-primary hover:translate-x-1 border-2 border-transparent hover:border-tertiary transition-all duration-150 font-label-mono-md text-label-mono-md uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined">group</span>
+                        Agents
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-4 text-on-surface-variant p-4 hover:bg-primary hover:text-on-primary hover:translate-x-1 border-2 border-transparent hover:border-tertiary transition-all duration-150 font-label-mono-md text-label-mono-md uppercase tracking-widest" href="#">
+<span class="material-symbols-outlined">terminal</span>
+                        System
+                    </a>
+</li>
+</ul>
+</div>
+<button class="w-full bg-surface border-2 border-tertiary text-tertiary font-label-mono-md text-label-mono-md uppercase tracking-widest py-4 hover:bg-primary hover:text-on-primary transition-colors duration-100 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add</span> NEW LISTING
+        </button>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 max-w-container-max mx-auto w-full">
+<!-- Top Navigation Area (Mobile Only) -->
+<header class="lg:hidden flex justify-between items-center px-margin-mobile py-6 border-b-2 border-tertiary bg-surface">
+<span class="font-headline-md text-headline-md text-on-surface">NEO-ATX</span>
+<button class="text-tertiary hover:text-primary transition-colors duration-100">
+<span class="material-symbols-outlined text-3xl">menu</span>
+</button>
+</header>
+<div class="px-margin-mobile md:px-margin-desktop py-margin-desktop">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-8">
+<div>
+<h1 class="font-display-lg text-display-lg text-on-surface uppercase leading-none">Command<br/>Center</h1>
+<p class="font-label-mono-sm text-label-mono-sm text-tertiary mt-6 uppercase tracking-widest">Diana Estates • Executive Overview</p>
+</div>
+<div class="flex gap-4">
+<button class="px-6 py-3 border-2 border-tertiary bg-surface text-tertiary font-label-mono-md text-label-mono-md uppercase hover:bg-primary hover:text-on-primary transition-colors duration-100">Generate Report</button>
+<button class="px-6 py-3 border-2 border-tertiary bg-primary text-on-primary font-label-mono-md text-label-mono-md uppercase hover:bg-surface hover:text-tertiary transition-colors duration-100">System Config</button>
+</div>
+</div>
+<!-- Metrics Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-16">
+<!-- Metric Card 1 -->
+<div class="border-2 border-tertiary bg-surface p-6 relative group">
+<div class="absolute top-4 right-4 text-tertiary group-hover:text-primary transition-colors duration-100">
+<span class="material-symbols-outlined text-3xl">real_estate_agent</span>
+</div>
+<span class="font-label-mono-sm text-label-mono-sm text-tertiary uppercase tracking-widest block mb-4">Active Listings</span>
+<span class="font-headline-lg text-headline-lg text-on-surface block mb-2">24</span>
+<div class="flex items-center gap-2 text-primary font-label-mono-sm text-label-mono-sm">
+<span class="material-symbols-outlined text-sm">arrow_upward</span>
+<span>+12% vs LY</span>
+</div>
+</div>
+<!-- Metric Card 2 -->
+<div class="border-2 border-tertiary bg-surface p-6 relative group">
+<div class="absolute top-4 right-4 text-tertiary group-hover:text-primary transition-colors duration-100">
+<span class="material-symbols-outlined text-3xl">pending_actions</span>
+</div>
+<span class="font-label-mono-sm text-label-mono-sm text-tertiary uppercase tracking-widest block mb-4">Pending Contracts</span>
+<span class="font-headline-lg text-headline-lg text-on-surface block mb-2">08</span>
+<div class="flex items-center gap-2 text-primary font-label-mono-sm text-label-mono-sm">
+<span class="material-symbols-outlined text-sm">arrow_upward</span>
+<span>+3 this week</span>
+</div>
+</div>
+<!-- Metric Card 3 -->
+<div class="border-2 border-tertiary bg-primary p-6 relative group">
+<div class="absolute top-4 right-4 text-on-primary">
+<span class="material-symbols-outlined text-3xl">account_balance</span>
+</div>
+<span class="font-label-mono-sm text-label-mono-sm text-on-primary uppercase tracking-widest block mb-4">Firm Volume (YTD)</span>
+<span class="font-headline-lg text-headline-lg text-on-primary block mb-2">$142.5M</span>
+<div class="flex items-center gap-2 text-on-primary font-label-mono-sm text-label-mono-sm opacity-80">
+<span>On track to exceed target</span>
+</div>
+</div>
+</div>
+<!-- Main Content Area: Priority Transactions -->
+<div class="border-2 border-tertiary bg-surface mb-16 relative">
+<!-- Drop shadow block -->
+<div class="absolute top-2 left-2 w-full h-full bg-tertiary -z-10 hidden md:block"></div>
+<div class="p-6 border-b-2 border-tertiary flex justify-between items-center bg-surface">
+<h2 class="font-headline-md text-headline-md text-on-surface">PRIORITY TRANSACTIONS</h2>
+<span class="bg-secondary text-on-secondary px-3 py-1 font-label-mono-sm text-label-mono-sm uppercase tracking-widest">Action Required</span>
+</div>
+<div class="overflow-x-auto bg-surface">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b-2 border-tertiary bg-surface-container-lowest">
+<th class="p-6 font-label-mono-sm text-label-mono-sm text-tertiary uppercase tracking-widest">Client</th>
+<th class="p-6 font-label-mono-sm text-label-mono-sm text-tertiary uppercase tracking-widest">Property</th>
+<th class="p-6 font-label-mono-sm text-label-mono-sm text-tertiary uppercase tracking-widest">Value</th>
+<th class="p-6 font-label-mono-sm text-label-mono-sm text-tertiary uppercase tracking-widest">Status</th>
+<th class="p-6 font-label-mono-sm text-label-mono-sm text-tertiary uppercase tracking-widest text-right">Action</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md">
+<!-- Row 1 -->
+<tr class="border-b border-outline hover:bg-primary hover:text-on-primary group transition-colors duration-100">
+<td class="p-6 font-bold">E. Vance</td>
+<td class="p-6 font-label-mono-md text-label-mono-md uppercase">1400 Congress Ave. Penthouse</td>
+<td class="p-6 font-label-mono-md text-label-mono-md">$8.5M</td>
+<td class="p-6">
+<span class="inline-flex items-center gap-2 border border-tertiary px-2 py-1 group-hover:border-on-primary">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-label-mono-sm text-label-mono-sm uppercase">In Escrow</span>
+</span>
+</td>
+<td class="p-6 text-right">
+<button class="material-symbols-outlined text-tertiary group-hover:text-on-primary">arrow_forward</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="border-b border-outline hover:bg-primary hover:text-on-primary group transition-colors duration-100">
+<td class="p-6 font-bold">M. Priestly</td>
+<td class="p-6 font-label-mono-md text-label-mono-md uppercase">The Independent #4402</td>
+<td class="p-6 font-label-mono-md text-label-mono-md">$5.2M</td>
+<td class="p-6">
+<span class="inline-flex items-center gap-2 border border-tertiary px-2 py-1 group-hover:border-on-primary">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="font-label-mono-sm text-label-mono-sm uppercase">Contingency Risk</span>
+</span>
+</td>
+<td class="p-6 text-right">
+<button class="material-symbols-outlined text-tertiary group-hover:text-on-primary">arrow_forward</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-primary hover:text-on-primary group transition-colors duration-100">
+<td class="p-6 font-bold italic opacity-60 group-hover:opacity-100">[Confidential]</td>
+<td class="p-6 font-label-mono-md text-label-mono-md uppercase">Tarrytown Estate Acquisition</td>
+<td class="p-6 font-label-mono-md text-label-mono-md">$12.0M+</td>
+<td class="p-6">
+<span class="inline-flex items-center gap-2 border border-tertiary px-2 py-1 group-hover:border-on-primary">
+<span class="w-2 h-2 rounded-full bg-tertiary group-hover:bg-on-primary"></span>
+<span class="font-label-mono-sm text-label-mono-sm uppercase">Pre-Market</span>
+</span>
+</td>
+<td class="p-6 text-right">
+<button class="material-symbols-outlined text-tertiary group-hover:text-on-primary">arrow_forward</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Secondary Grid: Quick Actions & Recent Activity -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Quick Actions (Spans 4 cols) -->
+<div class="md:col-span-4 border-2 border-tertiary bg-surface p-6 flex flex-col gap-4">
+<h3 class="font-label-mono-sm text-label-mono-sm text-tertiary uppercase tracking-widest mb-4">Command Actions</h3>
+<button class="w-full flex items-center justify-between p-4 border border-tertiary hover:bg-primary hover:text-on-primary hover:border-primary transition-colors duration-100 group">
+<span class="font-label-mono-md text-label-mono-md uppercase">Review Contracts</span>
+<span class="material-symbols-outlined text-tertiary group-hover:text-on-primary">description</span>
+</button>
+<button class="w-full flex items-center justify-between p-4 border border-tertiary hover:bg-primary hover:text-on-primary hover:border-primary transition-colors duration-100 group">
+<span class="font-label-mono-md text-label-mono-md uppercase">Agent Briefing</span>
+<span class="material-symbols-outlined text-tertiary group-hover:text-on-primary">meeting_room</span>
+</button>
+<button class="w-full flex items-center justify-between p-4 border border-tertiary hover:bg-primary hover:text-on-primary hover:border-primary transition-colors duration-100 group">
+<span class="font-label-mono-md text-label-mono-md uppercase">Market Analysis</span>
+<span class="material-symbols-outlined text-tertiary group-hover:text-on-primary">monitoring</span>
+</button>
+</div>
+<!-- Recent Activity (Spans 8 cols) -->
+<div class="md:col-span-8 border-2 border-tertiary bg-surface p-6">
+<h3 class="font-label-mono-sm text-label-mono-sm text-tertiary uppercase tracking-widest mb-6">Activity Log</h3>
+<div class="space-y-4">
+<!-- Log Item -->
+<div class="flex items-start gap-4 pb-4 border-b border-outline">
+<span class="font-label-mono-sm text-label-mono-sm text-tertiary min-w-[60px] pt-1">09:42</span>
+<div>
+<p class="font-body-md text-body-md text-on-surface">Offer accepted on <strong>Zilker Park Residence</strong>.</p>
+<p class="font-label-mono-sm text-label-mono-sm text-tertiary mt-1 uppercase">Agent: S. Reynolds</p>
+</div>
+</div>
+<!-- Log Item -->
+<div class="flex items-start gap-4 pb-4 border-b border-outline">
+<span class="font-label-mono-sm text-label-mono-sm text-tertiary min-w-[60px] pt-1">08:15</span>
+<div>
+<p class="font-body-md text-body-md text-on-surface">New listing agreement signed for <strong>Rainey Street Penthouse</strong>.</p>
+<p class="font-label-mono-sm text-label-mono-sm text-tertiary mt-1 uppercase">Agent: L. Chen</p>
+</div>
+</div>
+<!-- Log Item -->
+<div class="flex items-start gap-4">
+<span class="font-label-mono-sm text-label-mono-sm text-tertiary min-w-[60px] pt-1">07:30</span>
+<div>
+<p class="font-body-md text-body-md text-on-surface">Daily market index report generated. Tech sector impact noted.</p>
+<p class="font-label-mono-sm text-label-mono-sm text-tertiary mt-1 uppercase">System Auto-Gen</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Component -->
+<footer class="w-full px-margin-desktop py-margin-desktop mt-gutter flex flex-col md:flex-row justify-between items-center gap-4 bg-surface-container-lowest border-t-2 border-outline">
+<div class="font-label-mono-md text-label-mono-md font-bold text-primary">
+                © 2024 NEO-AUSTIN REALTY. METROPOLITAN RIGOR. CREATIVE IRREVERENCE.
+            </div>
+<div class="flex gap-6">
+<a class="font-label-mono-sm text-label-mono-sm uppercase tracking-wider text-tertiary hover:text-secondary transition-colors duration-100" href="#">Privacy</a>
+<a class="font-label-mono-sm text-label-mono-sm uppercase tracking-wider text-tertiary hover:text-secondary transition-colors duration-100" href="#">Terms</a>
+<a class="font-label-mono-sm text-label-mono-sm uppercase tracking-wider text-tertiary hover:text-secondary transition-colors duration-100" href="#">Accessibility</a>
+<a class="font-label-mono-sm text-label-mono-sm uppercase tracking-wider text-tertiary hover:text-secondary transition-colors duration-100" href="#">Data Protection</a>
+</div>
+</footer>
+</main>
+</body></html>
