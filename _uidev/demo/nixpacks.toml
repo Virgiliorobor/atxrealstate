@@ -1,0 +1,8 @@
+[phases.install]
+cmds = ["npm ci"]
+
+[phases.build]
+cmds = ["npm run build:demo"]
+
+[start]
+cmd = "node dist/server/index.js"
