@@ -3,6 +3,8 @@ import ReactMarkdown from "react-markdown";
 import "./App.css";
 
 const CHANNELS = ["#team-general", "#412-buyer", "#327-seller", "#open-entry"] as const;
+const AGENCY_WEBSITE_URL =
+  import.meta.env.VITE_AGENCY_WEBSITE_URL || "/the_agency_website/";
 
 type ChannelId = (typeof CHANNELS)[number];
 
@@ -186,6 +188,9 @@ function Onboarding({ onEnter }: { onEnter: () => void }) {
           This browser demo simulates that experience so you can type real commands and get real Claude
           responses with the folder system loaded as context — no Claude Projects setup required.
         </p>
+        <a className="agency-site-link" href={AGENCY_WEBSITE_URL} target="_blank" rel="noreferrer">
+          Visit the agency website ↗
+        </a>
       </section>
 
       <h2 className="headline-md" style={{ marginTop: "2.5rem" }}>
@@ -428,6 +433,9 @@ export default function App() {
             <div>
               <div className="brand-mark">ATX Boutique Real Estate</div>
               <div className="brand-sub">The Agency · Live demo · Diana Castellano, Principal</div>
+              <a className="brand-site-link" href={AGENCY_WEBSITE_URL} target="_blank" rel="noreferrer">
+                Agency website ↗
+              </a>
             </div>
             <button type="button" className="nav-home-btn" onClick={goHome} title="Back to intro">
               Home

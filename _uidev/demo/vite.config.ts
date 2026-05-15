@@ -7,6 +7,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       "/api": { target: "http://127.0.0.1:19877", changeOrigin: true },
+      "/the_agency_website": { target: "http://127.0.0.1:19877", changeOrigin: true },
     },
   },
   build: { outDir: "dist/client", emptyOutDir: true },

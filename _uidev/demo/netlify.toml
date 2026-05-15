@@ -8,3 +8,8 @@
   to = "/.netlify/functions/:splat"
   status = 200
 
+[[redirects]]
+  from = "/the_agency_website/*"
+  to = "/the_agency_website/index.html"
+  status = 200
+

@@ -8,7 +8,10 @@
     "dev": "concurrently -k \"npm run dev:server\" \"npm run dev:client\"",
     "dev:client": "vite",
     "dev:server": "cross-env PORT=19877 tsx watch server/index.ts",
-    "build": "tsc -p tsconfig.server.json && vite build",
+    "build:demo": "tsc -p tsconfig.server.json && vite build",
+    "build:agency-website": "npm --prefix ../the_agency_website run build",
+    "sync:agency-website": "node scripts/sync-agency-website.mjs",
+    "build": "npm run build:demo && npm run build:agency-website && npm run sync:agency-website",
     "start": "node dist/server/index.js",
     "preview": "vite preview"
   },

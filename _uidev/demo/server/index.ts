@@ -115,6 +115,14 @@ app.post("/api/apply-property", async (req, res) => {
 /** Dev: default 19877; `npm run dev` sets PORT via cross-env. Override in `.env`. */
 const port = Number(process.env.PORT) || 19877;
 
+const agencyWebsiteDistDir = path.join(ensureBoot().agencyRoot, "_uidev", "the_agency_website", "dist");
+if (fs.existsSync(path.join(agencyWebsiteDistDir, "index.html"))) {
+  app.use("/the_agency_website", express.static(agencyWebsiteDistDir));
+  app.get(/^\/the_agency_website(?:\/.*)?$/, (_req, res) => {
+    res.sendFile(path.join(agencyWebsiteDistDir, "index.html"));
+  });
+}
+
 const clientDir = path.join(__dirname, "..", "dist", "client");
 if (fs.existsSync(path.join(clientDir, "index.html"))) {
   app.use(express.static(clientDir));
