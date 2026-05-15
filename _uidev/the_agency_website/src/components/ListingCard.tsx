@@ -1,14 +1,29 @@
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import type { Listing } from "../types";
 import { formatPrice, formatPricePerSqft, streetOnly } from "../lib/format";
+import { LISTING_IMAGE_PLACEHOLDER, resolveListingImage } from "../lib/media";
 
 type Props = { listing: Listing };
 
 export function ListingCard({ listing }: Props) {
+  const imageUrl = useMemo(() => resolveListingImage(listing.hero_image), [listing.hero_image]);
+  const [imgSrc, setImgSrc] = useState(imageUrl);
+  useEffect(() => {
+    setImgSrc(imageUrl);
+  }, [imageUrl]);
+
   return (
     <Link to={`/listing/${listing.property_id}`} className="listing-card card">
       <div className="listing-card__media">
-        <img src={listing.hero_image} alt="" loading="lazy" width={800} height={520} />
+        <img
+          src={imgSrc}
+          alt=""
+          loading="lazy"
+          width={800}
+          height={520}
+          onError={() => setImgSrc(LISTING_IMAGE_PLACEHOLDER)}
+        />
       </div>
       <div className="listing-card__body">
         <p className="mono-eyebrow listing-card__eyebrow">{listing.neighborhood}</p>

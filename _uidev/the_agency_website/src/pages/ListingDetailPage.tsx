@@ -1,8 +1,10 @@
+import { useEffect, useMemo, useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { AGENT_NAMES, ZONE_DESCRIPTORS, ZONE_LABELS } from "../lib/constants";
 import { listingsData } from "../lib/data";
 import { findListing } from "../lib/listings";
 import { formatPrice, formatPricePerSqft, zipFromAddress } from "../lib/format";
+import { LISTING_IMAGE_PLACEHOLDER, resolveListingImage } from "../lib/media";
 
 export function ListingDetailPage() {
   const { propertyId } = useParams<{ propertyId: string }>();
@@ -16,11 +18,17 @@ export function ListingDetailPage() {
   const zip = zipFromAddress(listing.address);
   const zoneLine = `${listing.neighborhood} · Austin, TX${zip ? ` · ${zip}` : ""}`;
   const zoneDescriptor = ZONE_DESCRIPTORS[listing.zone];
+  const heroUrl = useMemo(() => resolveListingImage(listing.hero_image), [listing.hero_image]);
+  const [heroSrc, setHeroSrc] = useState(heroUrl);
+  const galleryUrls = useMemo(() => listing.gallery.map((src) => resolveListingImage(src)), [listing.gallery]);
+  useEffect(() => {
+    setHeroSrc(heroUrl);
+  }, [heroUrl]);
 
   return (
     <article className="detail">
       <div className="detail__hero">
-        <img src={listing.hero_image} alt="" width={1600} height={900} />
+        <img src={heroSrc} alt="" width={1600} height={900} onError={() => setHeroSrc(LISTING_IMAGE_PLACEHOLDER)} />
         <div className="detail__hero-cap container">
           <h1 className="headline-lg detail__hero-title">{listing.headline}</h1>
         </div>
@@ -66,9 +74,19 @@ export function ListingDetailPage() {
         <section className="detail__section">
           <h2 className="headline-md detail__section-title">Gallery</h2>
           <div className="detail__gallery">
-            {listing.gallery.map((src) => (
+            {galleryUrls.map((src) => (
               <div key={src} className="detail__gallery-cell">
-                <img src={src} alt="" loading="lazy" width={800} height={600} />
+                <img
+                  src={src}
+                  alt=""
+                  loading="lazy"
+                  width={800}
+                  height={600}
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = LISTING_IMAGE_PLACEHOLDER;
+                  }}
+                />
               </div>
             ))}
           </div>
