@@ -123,7 +123,7 @@ The demo is **agentic**: Claude is **not** spoon-fed a giant pre-loaded system p
 
 | File | Role |
 |------|------|
-| `server/tools.ts` | Defines three tools sent to Claude: `read_file(path)`, `list_directory(path)`, `search_files(pattern, path?, glob?)`. All paths are sandboxed to `AGENCY_ROOT` (no `..` escapes, no absolute paths). Writes are intentionally **not** exposed as tools. |
+| `server/tools.ts` | Defines three tools sent to Claude: `read_file(path)`, `list_directory(path)`, `search_files(pattern, path?, glob?)`. Has **two backends** selected by `STORAGE_MODE`: local filesystem (sandboxed to `AGENCY_ROOT`) for `npm run dev`, and the GitHub Contents API (same auth as `memoryStore.ts`) for the Netlify deployment. Writes are intentionally **not** exposed as tools. |
 | `server/context.ts` | Tiny per-turn bootstrap — only channel, active deal file pointer, and session persona (Marco vs Diana). No file content is pre-loaded. |
 | `server/claude.ts` | Runs the tool-use loop: send messages with `tools`, when `stop_reason === "tool_use"` execute the calls and feed `tool_result` blocks back, repeat until `end_turn` (or `ANTHROPIC_MAX_TOOL_ITERATIONS`). |
 
@@ -179,8 +179,11 @@ The **DEMO_UI_SPEC** originally described a dark Slack-like theme. This implemen
   - Redirects:
     - `/api/*` → `/.netlify/functions/:splat`
     - `/the_agency_website/*` → `/the_agency_website/index.html`
-  - Persistence is handled by `server/memoryStore.ts` using GitHub Contents API when `STORAGE_MODE=github`.
+  - **All file access** goes through the GitHub Contents API when `STORAGE_MODE=github`:
+    - `server/tools.ts` reads instructions, specialists, SOPs, deal JSON, property catalog — via the live repo at request time (file content + recursive tree are cached for the lifetime of the warm Lambda container, keyed by branch).
+    - `server/memoryStore.ts` handles deal `state_patch` merges and property markdown writes through the same API.
   - `AGENCY_ROOT` is not needed in this mode.
+  - Required env vars in the Netlify site config: `ANTHROPIC_API_KEY`, `STORAGE_MODE=github`, `GITHUB_OWNER`, `GITHUB_REPO`, `GITHUB_TOKEN` (PAT with repo contents read+write), optionally `GITHUB_BRANCH` and `GITHUB_BASE_PATH`.
 
 - **Node host + local filesystem (dev/self-host path):**
   - Run `npm run build && npm start` on a machine with full repo checkout.
@@ -225,4 +228,4 @@ The **DEMO_UI_SPEC** originally described a dark Slack-like theme. This implemen
 
 ---
 
-*Document version: 1.2 — agentic tool-use loop (Claude reads the agency folder itself via `server/tools.ts`); shrunk `server/context.ts` to a per-turn bootstrap; previous pre-loaded-prompt design removed.*
+*Document version: 1.3 — agentic tool-use loop with dual-backend tools (local filesystem for dev, GitHub Contents API for the Netlify deployment). Claude now reads the live repo at request time in production.*

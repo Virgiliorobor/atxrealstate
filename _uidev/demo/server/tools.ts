@@ -9,15 +9,24 @@ import { getAgencyRoot } from "./paths.js";
  * agent or Claude Projects session would: discover folders, read instruction
  * files, load deal JSON, browse the property catalog, search for content.
  *
- * All paths are sandboxed to AGENCY_ROOT. No `..` escapes, no absolute paths.
- * Writes are intentionally NOT exposed here — deal updates flow through the
- * `state_patch` envelope and property writes flow through `/api/apply-property`
- * (UI confirm gate), preserving the existing safety model.
+ * Two backends, selected by STORAGE_MODE:
+ *   - "local"  → reads from the local filesystem under AGENCY_ROOT.
+ *   - "github" → reads from the GitHub Contents API (same repo configuration
+ *                used by memoryStore.ts for deal/property writes). Used by the
+ *                Netlify deployment so the live demo always reads the canonical
+ *                repository at request time, regardless of what got bundled
+ *                into the Lambda artifact.
+ *
+ * All local paths are sandboxed to AGENCY_ROOT. Writes are intentionally NOT
+ * exposed here — deal updates flow through the `state_patch` envelope and
+ * property writes flow through `/api/apply-property` (UI confirm gate),
+ * preserving the existing safety model.
  */
 
 const MAX_READ_BYTES = 200_000;
 const MAX_LIST_ENTRIES = 200;
 const MAX_SEARCH_HITS = 50;
+const MAX_SEARCH_FILES = 120; // soft cap on files scanned per search call
 const SEARCH_SKIP_DIRS = new Set([
   ".git",
   "node_modules",
@@ -26,6 +35,15 @@ const SEARCH_SKIP_DIRS = new Set([
   "build",
   ".next",
   ".cache",
+]);
+const SEARCH_TEXT_EXT = new Set([
+  ".md",
+  ".markdown",
+  ".json",
+  ".yaml",
+  ".yml",
+  ".txt",
+  ".csv",
 ]);
 
 /** Tool schema sent to Anthropic (matches their tool_use spec). */
@@ -65,7 +83,7 @@ export const AGENCY_TOOLS = [
   {
     name: "search_files",
     description:
-      "Search text files in the agency repo for a regex pattern. Returns a small snippet per match. Use this when you don't know the exact filename (e.g. 'which property is in Travis Heights', 'where is the appraisal SOP step').",
+      "Search text files in the agency repo for a regex pattern. Returns a small snippet per match. Prefer narrowing with `path` (e.g. '_catalog/properties') and `glob` (e.g. '*.md') so the search stays fast.",
     input_schema: {
       type: "object" as const,
       properties: {
@@ -96,6 +114,17 @@ export type ToolCallRecord = {
   summary: string;
 };
 
+type StorageMode = "local" | "github";
+
+function storageMode(): StorageMode {
+  const m = (process.env.STORAGE_MODE ?? "local").trim().toLowerCase();
+  return m === "github" ? "github" : "local";
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LOCAL BACKEND
+// ─────────────────────────────────────────────────────────────────────────────
+
 function safeJoin(root: string, rel: string): string {
   const normalized = path
     .normalize(rel.replace(/^[/\\]+/, ""))
@@ -121,7 +150,8 @@ function relToRepo(root: string, abs: string): string {
   return path.relative(root, abs).replace(/\\/g, "/") || ".";
 }
 
-function doReadFile(root: string, rel: string): { result: string; record: ToolCallRecord } {
+function localReadFile(rel: string): { result: string; record: ToolCallRecord } {
+  const root = getAgencyRoot();
   const abs = safeJoin(root, rel);
   if (!fs.existsSync(abs)) {
     const msg = `file not found: ${rel}`;
@@ -152,7 +182,8 @@ function doReadFile(root: string, rel: string): { result: string; record: ToolCa
   };
 }
 
-function doListDirectory(root: string, rel: string): { result: string; record: ToolCallRecord } {
+function localListDirectory(rel: string): { result: string; record: ToolCallRecord } {
+  const root = getAgencyRoot();
   const abs = safeJoin(root, rel || ".");
   if (!fs.existsSync(abs) || !fs.statSync(abs).isDirectory()) {
     const msg = `not a directory: ${rel}`;
@@ -188,12 +219,12 @@ function doListDirectory(root: string, rel: string): { result: string; record: T
   };
 }
 
-function doSearchFiles(
-  root: string,
+function localSearchFiles(
   pattern: string,
   searchPath: string,
   glob: string
 ): { result: string; record: ToolCallRecord } {
+  const root = getAgencyRoot();
   const abs = safeJoin(root, searchPath || ".");
   if (!fs.existsSync(abs)) {
     const msg = `search path not found: ${searchPath}`;
@@ -259,25 +290,392 @@ function doSearchFiles(
   };
 }
 
-export function executeAgencyTool(
+// ─────────────────────────────────────────────────────────────────────────────
+// GITHUB BACKEND
+// ─────────────────────────────────────────────────────────────────────────────
+
+interface GithubConfig {
+  owner: string;
+  repo: string;
+  branch: string;
+  token: string;
+  basePath: string;
+}
+
+function githubConfig(): GithubConfig {
+  const owner = process.env.GITHUB_OWNER?.trim();
+  const repo = process.env.GITHUB_REPO?.trim();
+  const branch = process.env.GITHUB_BRANCH?.trim() || "main";
+  const token = process.env.GITHUB_TOKEN?.trim();
+  const basePath = (process.env.GITHUB_BASE_PATH?.trim() || "").replace(/\/+$/, "");
+  if (!owner || !repo || !token) {
+    throw new Error(
+      "STORAGE_MODE=github requires GITHUB_OWNER, GITHUB_REPO, GITHUB_TOKEN"
+    );
+  }
+  return { owner, repo, branch, token, basePath };
+}
+
+function normalizeRel(rel: string): string {
+  // Strip leading slashes, normalize separators, reject parent escapes.
+  const t = rel.replace(/^[/\\]+/, "").replace(/\\/g, "/");
+  if (t === "." || t === "") return "";
+  if (t.split("/").some((seg) => seg === "..")) {
+    throw new Error(`unsafe path: ${rel}`);
+  }
+  return t;
+}
+
+function withBase(rel: string, basePath: string): string {
+  if (!basePath) return rel;
+  return rel ? `${basePath}/${rel}` : basePath;
+}
+
+function ghEncode(p: string): string {
+  return encodeURIComponent(p).replace(/%2F/g, "/");
+}
+
+async function ghFetch(url: string): Promise<Response> {
+  const c = githubConfig();
+  return fetch(url, {
+    headers: {
+      Authorization: `Bearer ${c.token}`,
+      Accept: "application/vnd.github+json",
+      "User-Agent": "agency-demo-tools",
+    },
+  });
+}
+
+type GhContentsItem = {
+  name: string;
+  path: string;
+  type: "file" | "dir" | "symlink" | "submodule";
+};
+
+type GhContentsFile = {
+  type: "file";
+  name: string;
+  path: string;
+  size: number;
+  content: string;
+  encoding: "base64";
+};
+
+// File content cache (warm-Lambda lifetime). Keyed by `branch:relPath`.
+const fileCache = new Map<string, { body: string; size: number }>();
+
+async function ghReadFileBody(rel: string): Promise<{ body: string; size: number } | null> {
+  const c = githubConfig();
+  const key = `${c.branch}:${rel}`;
+  const cached = fileCache.get(key);
+  if (cached) return cached;
+  const url = `https://api.github.com/repos/${c.owner}/${c.repo}/contents/${ghEncode(
+    withBase(rel, c.basePath)
+  )}?ref=${encodeURIComponent(c.branch)}`;
+  const res = await ghFetch(url);
+  if (res.status === 404) return null;
+  if (!res.ok) {
+    throw new Error(`github read failed ${res.status}: ${await res.text()}`);
+  }
+  const data = (await res.json()) as Partial<GhContentsFile>;
+  if (data.type !== "file" || data.encoding !== "base64" || typeof data.content !== "string") {
+    return null;
+  }
+  const body = Buffer.from(data.content.replace(/\n/g, ""), "base64").toString("utf8");
+  const entry = { body, size: typeof data.size === "number" ? data.size : body.length };
+  fileCache.set(key, entry);
+  return entry;
+}
+
+async function ghListDirEntries(rel: string): Promise<GhContentsItem[] | null> {
+  const c = githubConfig();
+  const url = `https://api.github.com/repos/${c.owner}/${c.repo}/contents/${ghEncode(
+    withBase(rel, c.basePath)
+  )}?ref=${encodeURIComponent(c.branch)}`;
+  const res = await ghFetch(url);
+  if (res.status === 404) return null;
+  if (!res.ok) {
+    throw new Error(`github list failed ${res.status}: ${await res.text()}`);
+  }
+  const data = await res.json();
+  if (!Array.isArray(data)) return null;
+  return data.map((e) => ({
+    name: String(e?.name ?? ""),
+    path: String(e?.path ?? ""),
+    type:
+      e?.type === "dir"
+        ? "dir"
+        : e?.type === "symlink"
+          ? "symlink"
+          : e?.type === "submodule"
+            ? "submodule"
+            : "file",
+  }));
+}
+
+// Recursive tree cache (warm-Lambda lifetime). Lets us enumerate files for
+// search_files without paginating contents calls. Keyed by `branch`.
+let treeCache: { branch: string; entries: Array<{ path: string; type: string }> } | null = null;
+
+async function ghTree(): Promise<Array<{ path: string; type: string }>> {
+  const c = githubConfig();
+  if (treeCache && treeCache.branch === c.branch) return treeCache.entries;
+  const url = `https://api.github.com/repos/${c.owner}/${c.repo}/git/trees/${encodeURIComponent(
+    c.branch
+  )}?recursive=1`;
+  const res = await ghFetch(url);
+  if (!res.ok) {
+    throw new Error(`github tree failed ${res.status}: ${await res.text()}`);
+  }
+  const data = (await res.json()) as {
+    tree?: Array<{ path: string; type: string }>;
+    truncated?: boolean;
+  };
+  const raw = data.tree ?? [];
+  const stripped = c.basePath
+    ? raw
+        .filter((e) => e.path === c.basePath || e.path.startsWith(c.basePath + "/"))
+        .map((e) => ({
+          ...e,
+          path: e.path === c.basePath ? "" : e.path.slice(c.basePath.length + 1),
+        }))
+        .filter((e) => e.path)
+    : raw;
+  treeCache = { branch: c.branch, entries: stripped };
+  return stripped;
+}
+
+function ghReadFile(rel: string): Promise<{ result: string; record: ToolCallRecord }> {
+  const normalized = (() => {
+    try {
+      return normalizeRel(rel);
+    } catch (e) {
+      const msg = `unsafe path: ${rel}`;
+      return { error: msg } as const;
+    }
+  })();
+  if (typeof normalized === "object" && "error" in normalized) {
+    return Promise.resolve({
+      result: normalized.error,
+      record: { name: "read_file", input: { path: rel }, ok: false, summary: normalized.error },
+    });
+  }
+  return (async () => {
+    try {
+      const entry = await ghReadFileBody(normalized);
+      if (!entry) {
+        const msg = `file not found: ${rel}`;
+        return {
+          result: msg,
+          record: { name: "read_file", input: { path: rel }, ok: false, summary: msg },
+        };
+      }
+      const truncated = entry.body.length > MAX_READ_BYTES;
+      const body = truncated ? entry.body.slice(0, MAX_READ_BYTES) : entry.body;
+      const result = truncated
+        ? `${body}\n\n[…truncated; original ${entry.size} bytes]`
+        : body;
+      return {
+        result,
+        record: {
+          name: "read_file",
+          input: { path: rel },
+          ok: true,
+          summary: `read ${rel} (${entry.size}b)`,
+        },
+      };
+    } catch (e) {
+      const msg = `github read error: ${e instanceof Error ? e.message : String(e)}`;
+      return {
+        result: msg,
+        record: { name: "read_file", input: { path: rel }, ok: false, summary: msg },
+      };
+    }
+  })();
+}
+
+async function ghListDirectory(
+  rel: string
+): Promise<{ result: string; record: ToolCallRecord }> {
+  let normalized: string;
+  try {
+    normalized = normalizeRel(rel);
+  } catch {
+    const msg = `unsafe path: ${rel}`;
+    return {
+      result: msg,
+      record: { name: "list_directory", input: { path: rel }, ok: false, summary: msg },
+    };
+  }
+  try {
+    const entries = await ghListDirEntries(normalized);
+    if (!entries) {
+      const msg = `not a directory: ${rel}`;
+      return {
+        result: msg,
+        record: { name: "list_directory", input: { path: rel }, ok: false, summary: msg },
+      };
+    }
+    const sorted = entries.sort((a, b) => a.name.localeCompare(b.name));
+    const limited = sorted.slice(0, MAX_LIST_ENTRIES);
+    const formatted = limited
+      .map((e) => (e.type === "dir" ? `${e.name}/` : e.name))
+      .join("\n");
+    const note =
+      sorted.length > MAX_LIST_ENTRIES
+        ? `\n\n[…truncated; showing ${MAX_LIST_ENTRIES} of ${sorted.length} entries]`
+        : "";
+    return {
+      result: (formatted || "(empty)") + note,
+      record: {
+        name: "list_directory",
+        input: { path: rel },
+        ok: true,
+        summary: `list ${rel || "."} (${sorted.length} items)`,
+      },
+    };
+  } catch (e) {
+    const msg = `github list error: ${e instanceof Error ? e.message : String(e)}`;
+    return {
+      result: msg,
+      record: { name: "list_directory", input: { path: rel }, ok: false, summary: msg },
+    };
+  }
+}
+
+function fileExt(p: string): string {
+  const i = p.lastIndexOf(".");
+  return i >= 0 ? p.slice(i).toLowerCase() : "";
+}
+
+function shouldSkipPath(p: string): boolean {
+  const segments = p.split("/");
+  return segments.some((seg) => SEARCH_SKIP_DIRS.has(seg));
+}
+
+async function ghSearchFiles(
+  pattern: string,
+  searchPath: string,
+  glob: string
+): Promise<{ result: string; record: ToolCallRecord }> {
+  let normalizedPath: string;
+  try {
+    normalizedPath = normalizeRel(searchPath || ".");
+  } catch {
+    const msg = `unsafe search path: ${searchPath}`;
+    return {
+      result: msg,
+      record: { name: "search_files", input: { pattern, path: searchPath, glob }, ok: false, summary: msg },
+    };
+  }
+  let regex: RegExp;
+  try {
+    regex = new RegExp(pattern, "im");
+  } catch (e) {
+    const msg = `invalid regex: ${e instanceof Error ? e.message : String(e)}`;
+    return {
+      result: msg,
+      record: { name: "search_files", input: { pattern, path: searchPath, glob }, ok: false, summary: msg },
+    };
+  }
+
+  let tree: Array<{ path: string; type: string }>;
+  try {
+    tree = await ghTree();
+  } catch (e) {
+    const msg = `github tree error: ${e instanceof Error ? e.message : String(e)}`;
+    return {
+      result: msg,
+      record: { name: "search_files", input: { pattern, path: searchPath, glob }, ok: false, summary: msg },
+    };
+  }
+
+  // Filter candidate files by search path + glob + extension + skip-dirs.
+  const prefix = normalizedPath ? normalizedPath + "/" : "";
+  const candidates = tree.filter((e) => {
+    if (e.type !== "blob") return false;
+    if (prefix && !e.path.startsWith(prefix) && e.path !== normalizedPath) return false;
+    if (shouldSkipPath(e.path)) return false;
+    const name = e.path.split("/").pop() ?? "";
+    if (glob && !matchGlob(name, glob)) return false;
+    if (!glob && !SEARCH_TEXT_EXT.has(fileExt(name))) return false;
+    return true;
+  });
+
+  const toScan = candidates.slice(0, MAX_SEARCH_FILES);
+  const hits: string[] = [];
+  for (const entry of toScan) {
+    if (hits.length >= MAX_SEARCH_HITS) break;
+    let body: string;
+    try {
+      const fetched = await ghReadFileBody(entry.path);
+      if (!fetched) continue;
+      body = fetched.body;
+    } catch {
+      continue;
+    }
+    const match = regex.exec(body);
+    if (!match) continue;
+    const idx = match.index;
+    const start = Math.max(0, idx - 80);
+    const end = Math.min(body.length, idx + match[0].length + 120);
+    const snippet = body.slice(start, end).replace(/\s+/g, " ").trim();
+    hits.push(`${entry.path} :: …${snippet}…`);
+  }
+
+  const truncatedNote =
+    candidates.length > MAX_SEARCH_FILES
+      ? ` (scanned ${MAX_SEARCH_FILES} of ${candidates.length} candidate files — narrow path/glob for full coverage)`
+      : "";
+  return {
+    result: hits.length ? hits.join("\n") + truncatedNote : "(no matches)" + truncatedNote,
+    record: {
+      name: "search_files",
+      input: { pattern, path: searchPath, glob },
+      ok: true,
+      summary: `search /${pattern}/ in ${searchPath || "."} → ${hits.length} hit(s)`,
+    },
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DISPATCH
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function executeAgencyTool(
   name: string,
   input: Record<string, unknown>
-): { result: string; record: ToolCallRecord } {
-  const root = getAgencyRoot();
+): Promise<{ result: string; record: ToolCallRecord }> {
   try {
-    if (name === "read_file") {
-      return doReadFile(root, String(input.path ?? ""));
-    }
-    if (name === "list_directory") {
-      return doListDirectory(root, String(input.path ?? "."));
-    }
-    if (name === "search_files") {
-      return doSearchFiles(
-        root,
-        String(input.pattern ?? ""),
-        String(input.path ?? "."),
-        String(input.glob ?? "")
-      );
+    const mode = storageMode();
+    if (mode === "github") {
+      if (name === "read_file") {
+        return await ghReadFile(String(input.path ?? ""));
+      }
+      if (name === "list_directory") {
+        return await ghListDirectory(String(input.path ?? "."));
+      }
+      if (name === "search_files") {
+        return await ghSearchFiles(
+          String(input.pattern ?? ""),
+          String(input.path ?? "."),
+          String(input.glob ?? "")
+        );
+      }
+    } else {
+      if (name === "read_file") {
+        return localReadFile(String(input.path ?? ""));
+      }
+      if (name === "list_directory") {
+        return localListDirectory(String(input.path ?? "."));
+      }
+      if (name === "search_files") {
+        return localSearchFiles(
+          String(input.pattern ?? ""),
+          String(input.path ?? "."),
+          String(input.glob ?? "")
+        );
+      }
     }
     const msg = `unknown tool: ${name}`;
     return { result: msg, record: { name, input, ok: false, summary: msg } };

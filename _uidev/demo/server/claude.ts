@@ -179,26 +179,31 @@ export async function runClaudeTurn(
       const assistantBlocks = msg.content as AnthropicContentBlock[];
       messages.push({ role: "assistant", content: assistantBlocks });
 
+      const toolUseBlocks = assistantBlocks.filter(
+        (b): b is Extract<AnthropicContentBlock, { type: "tool_use" }> =>
+          b.type === "tool_use"
+      );
+      // Execute tool calls in parallel — local fs is sync, GitHub API is I/O-bound.
+      const executed = await Promise.all(
+        toolUseBlocks.map((b) =>
+          executeAgencyTool(b.name, (b.input as Record<string, unknown>) ?? {})
+        )
+      );
       const toolResults: Array<{
         type: "tool_result";
         tool_use_id: string;
         content: string;
         is_error?: boolean;
       }> = [];
-      for (const block of assistantBlocks) {
-        if (block.type !== "tool_use") continue;
-        const { result, record } = executeAgencyTool(
-          block.name,
-          (block.input as Record<string, unknown>) ?? {}
-        );
+      executed.forEach(({ result, record }, i) => {
         toolRecords.push(record);
         toolResults.push({
           type: "tool_result",
-          tool_use_id: block.id,
+          tool_use_id: toolUseBlocks[i].id,
           content: result,
           is_error: !record.ok,
         });
-      }
+      });
       messages.push({ role: "user", content: toolResults });
       continue;
     }
