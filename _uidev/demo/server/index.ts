@@ -112,6 +112,14 @@ app.post("/api/apply-property", async (req, res) => {
   }
 });
 
+// Slack webhook stub — Phase 2 implementation
+app.post("/api/slack/events", (req, res) => {
+  if (req.body && req.body.type === "url_verification") {
+    return res.json({ challenge: req.body.challenge });
+  }
+  res.status(200).json({ status: "received" });
+});
+
 /** Dev: default 19877; `npm run dev` sets PORT via cross-env. Override in `.env`. */
 const port = Number(process.env.PORT) || 19877;
 
