@@ -1,0 +1,8 @@
+[phases.install]
+cmds = ["cd _uidev/demo && npm ci --prefer-offline"]
+
+[phases.build]
+cmds = ["cd _uidev/demo && npm run build:demo"]
+
+[start]
+cmd = "cd _uidev/demo && node dist/server/index.js"
