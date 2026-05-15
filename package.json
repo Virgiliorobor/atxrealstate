@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "cd _uidev/demo && npm install && npm run build",
+    "build": "cd _uidev/demo && npm install && npm run build:demo",
     "start": "cd _uidev/demo && node dist/server/index.js"
   },
   "engines": {
