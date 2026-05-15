@@ -1,0 +1,12 @@
+{
+  "name": "atxrealstate",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "cd _uidev/demo && npm install && npm run build",
+    "start": "cd _uidev/demo && node dist/server/index.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
