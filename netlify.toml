@@ -1,0 +1,16 @@
+[build]
+  base = "_uidev/demo"
+  command = "npm run build"
+  publish = "dist/client"
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/the_agency_website/*"
+  to = "/the_agency_website/index.html"
+  status = 200
+
