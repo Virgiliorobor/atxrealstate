@@ -50,9 +50,18 @@ Realstateagency/                 ← AGENCY_ROOT (repo root)
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `ANTHROPIC_API_KEY` | **Yes** (for chat) | Server-side only; never exposed to the browser. |
-| `AGENCY_ROOT` | No | Absolute path to repo root containing `AI_README.md`. If empty, inferred when `cwd` is `_uidev/demo` as **two levels up** (`…/Realstateagency`). |
+| `AGENCY_ROOT` | No | Local filesystem mode only. Absolute path to repo root containing `AI_README.md`. If empty, inferred when `cwd` is `_uidev/demo` as **two levels up** (`…/Realstateagency`). |
 | `PORT` | No | API listen port. **`npm run dev`** sets **19877** via `cross-env` in `dev:server`. **`npm start`** defaults to **19877** if unset. |
 | `ANTHROPIC_MODEL` | No | Override model id (default in code matches the spec’s Sonnet id). |
+| `ANTHROPIC_MAX_TOKENS` | No | Max output tokens for Anthropic calls (default currently `8192`). |
+| `ANTHROPIC_MAX_TOOL_ITERATIONS` | No | Cap on tool-use rounds per chat turn (default `25`). Raise if Claude legitimately needs to read more files; lower if you want stricter budget control. |
+| `STORAGE_MODE` | No | `local` or `github`. For Netlify production use `github`. |
+| `GITHUB_OWNER` | Required if `STORAGE_MODE=github` | GitHub owner/org containing the repo. |
+| `GITHUB_REPO` | Required if `STORAGE_MODE=github` | Repository name (e.g. `atxrealstate`). |
+| `GITHUB_BRANCH` | No | Target branch for reads/writes (default `main`). |
+| `GITHUB_TOKEN` | Required if `STORAGE_MODE=github` | GitHub PAT with repo contents write permission. **Secret.** |
+| `GITHUB_BASE_PATH` | No | Optional subdirectory root for agency files inside the repo. |
+| `VITE_AGENCY_WEBSITE_URL` | No | Link target shown in demo UI (default `/the_agency_website/`). |
 
 Copy `.env.example` → `.env` and fill at least `ANTHROPIC_API_KEY`.
 
@@ -64,7 +73,10 @@ Copy `.env.example` → `.env` and fill at least `ANTHROPIC_API_KEY`.
 |--------|----------|
 | `npm run dev` | Runs **`predev`** then **`concurrently`**: API (`tsx watch server/index.ts`) + Vite. |
 | `predev` | `node scripts/free-ports.mjs` — frees **19877, 9777, 8787, 5173–5175** so stuck Node processes do not block a fresh dev session. |
-| `npm run build` | `tsc` for `server/` → `dist/server/`, Vite build → `dist/client/`. |
+| `npm run build` | Builds demo app + installs/builds `_uidev/the_agency_website` + copies website output into `dist/client/the_agency_website`. |
+| `npm run build:demo` | Builds demo API and client (`dist/server`, `dist/client`). |
+| `npm run build:agency-website` | Builds `_uidev/the_agency_website` with `--base=/the_agency_website/` for subpath hosting. |
+| `npm run sync:agency-website` | Copies `_uidev/the_agency_website/dist` into demo publish folder. |
 | `npm start` | Node serves `dist/client` + `/api` on `PORT` (default **19877**). |
 
 **Vite dev:** UI is usually **`http://localhost:5173`**. `/api/*` is **proxied** to **`http://127.0.0.1:19877`** (`vite.config.ts` must match `dev:server`’s `PORT`).
@@ -82,7 +94,8 @@ On server startup, `server/bootstrap.ts` ensures:
 1. **`_database/deals/`** exists.  
 2. **`412-buyer.json`** — if missing, copied from `_database/schema.json` with `deal.agent` set to **Marco** (demo persona).  
 3. **`327-seller.json`** — if missing, copied from `server/fixtures/327-seller.json` (Hoffman seller narrative).  
-4. **`_catalog/properties/ATX-003.md`** — if missing, a minimal property stub for the Chen / Bluebonnet story.
+4. **`_catalog/properties/ATX-016.md`** — if missing, seeded as the Chen / Bluebonnet contract property.
+5. **`_catalog/properties/ATX-003.md`** — if missing, seeded as a separate demo-only listing (not the Chen home).
 
 This keeps the demo functional without hand-seeding files, while matching the structure described in `_database/README.md` and `_catalog/schema.md`.
 
@@ -92,7 +105,7 @@ This keeps the demo functional without hand-seeding files, while matching the st
 
 | Method | Path | Purpose |
 |--------|------|---------|
-| `GET` | `/api/health` | `{ ok, agencyRoot }` sanity check. |
+| `GET` | `/api/health` | `{ ok, agencyRoot, storageMode }` sanity check. |
 | `POST` | `/api/chat` | Body: `{ "message": string, "channel": string }`. Builds system context from `AGENCY_ROOT`, calls Claude, returns JSON (`chat_response`, `activity_log`, optional `ui_blocks`, `state_patch`, etc.). If the channel maps to a deal file, applies **`state_patch`** via `server/memoryStore.ts`. |
 | `GET` | `/api/deal?channel=%23412-buyer` | Raw deal JSON for debugging. |
 | `GET` | `/api/channel-memory?channel=%23412-buyer` | Synthesized persisted timeline (`events`, `communications`, `risk_flags`, `deadlines`) for the “Workspace feed” view. |
@@ -102,12 +115,50 @@ Channel → deal file mapping: `#412-buyer` → `412-buyer.json`, `#327-seller` 
 
 ---
 
-## Claude integration
+## Claude integration — agentic tool-use loop
 
-- **System prompt** concatenates folder context (`server/context.ts`): orchestrator pack, `slack_commands`, Marco profile, specialist identity/rules (truncated when very large), and the **active deal JSON** when applicable.  
-- **User message** is prefixed with `[Channel: …]`.  
-- **Response** is expected to be **JSON** (see `server/claude.ts` — `JSON_INSTRUCTION` + parser). If parsing fails, raw text is shown and the activity log notes it.  
-- **`state_patch`**: optional `{ append_events?, meta_updates? }` merged into the deal file only for deal channels; paths are validated (no arbitrary file access).
+The demo is **agentic**: Claude is **not** spoon-fed a giant pre-loaded system prompt. Instead, the server gives Claude **file-system tools** and lets it navigate the agency repo itself — exactly like a Claude Projects session or a Cursor agent. The folder IS the system; Claude reads `AI_README.md` first and follows its instructions to the relevant orchestrator / specialist / SOP / deal / property files.
+
+**Pieces:**
+
+| File | Role |
+|------|------|
+| `server/tools.ts` | Defines three tools sent to Claude: `read_file(path)`, `list_directory(path)`, `search_files(pattern, path?, glob?)`. All paths are sandboxed to `AGENCY_ROOT` (no `..` escapes, no absolute paths). Writes are intentionally **not** exposed as tools. |
+| `server/context.ts` | Tiny per-turn bootstrap — only channel, active deal file pointer, and session persona (Marco vs Diana). No file content is pre-loaded. |
+| `server/claude.ts` | Runs the tool-use loop: send messages with `tools`, when `stop_reason === "tool_use"` execute the calls and feed `tool_result` blocks back, repeat until `end_turn` (or `ANTHROPIC_MAX_TOOL_ITERATIONS`). |
+
+**Per-turn flow (typical):**
+
+```
+User: "brief ATX-016 for the Chen buyer"
+  ↓
+read_file("AI_README.md")
+read_file("00_orchestrator/identity.md")
+read_file("00_orchestrator/rules.md")
+read_file("00_orchestrator/handoff.md")
+read_file("00_orchestrator/examples.md")
+read_file("02_property_research/identity.md")
+read_file("02_property_research/rules.md")
+read_file("02_property_research/examples.md")
+read_file("_catalog/properties/ATX-016.md")
+read_file("_database/deals/412-buyer.json")
+  ↓
+final assistant turn = JSON envelope (chat_response, activity_log, ui_blocks, state_patch, …)
+```
+
+**Activity log:** the server prepends every real tool call (file read / dir list / search) to whatever narrative log Claude returns, so the UI's right-hand "Activity" panel reflects actual file operations. `_meta.tool_iterations` and `_meta.tool_calls` are also returned for debugging.
+
+**Final JSON envelope:** Claude's **last** turn (after `stop_reason: "end_turn"`) must be a single JSON object — same schema as before (`chat_response`, `activity_log`, `specialist_activated`, `sop_active`, `sop_step`, `deal_stage`, optional `ui_blocks`, optional `state_patch`). The bootstrap instruction in `server/claude.ts` documents this contract for Claude.
+
+**`state_patch`:** still optional `{ append_events?, meta_updates? }` — merged into the deal JSON only for deal channels. This is the **only** write path from Claude; the tools layer is intentionally read-only.
+
+**Property markdown writes:** still gated by `/api/apply-property` after a UI "Confirm" on a `listing_preview` ui_block.
+
+**Tradeoffs you should know:**
+
+- A chat turn now makes **multiple** Claude API calls (typically 5–12, capped at 25). Latency per user message is ~5–25s depending on how many files Claude needs to read.
+- Per-call context is much smaller (no giant prompt), so total tokens are often **similar or lower** than the previous pre-load design.
+- If you see "stopped after N tool iterations without a final response" in `chat_response`, raise `ANTHROPIC_MAX_TOOL_ITERATIONS`.
 
 ---
 
@@ -117,10 +168,24 @@ The **DEMO_UI_SPEC** originally described a dark Slack-like theme. This implemen
 
 ---
 
-## Deployment (short)
+## Deployment
 
-- **Recommended for “real files on disk”:** run the **Node** app (`npm run build` + `npm start`) on a host with the **full repo** checked out (Railway, Render, Fly, VPS). Set `AGENCY_ROOT` if the working directory is not the repo root.  
-- **Netlify / GitHub Pages alone:** static hosting cannot hold secrets or a writable clone of your repo. You would add **Netlify Functions** (or another backend) and persist changes via **GitHub API**, a database, or object storage — out of scope for this first iteration; see `README.md` for a pointer.
+- **Netlify + GitHub (current production path):**
+  - Root `netlify.toml` sets:
+    - `base = "_uidev/demo"`
+    - `command = "npm run build"`
+    - `publish = "dist/client"`
+    - `functions = "netlify/functions"`
+  - Redirects:
+    - `/api/*` → `/.netlify/functions/:splat`
+    - `/the_agency_website/*` → `/the_agency_website/index.html`
+  - Persistence is handled by `server/memoryStore.ts` using GitHub Contents API when `STORAGE_MODE=github`.
+  - `AGENCY_ROOT` is not needed in this mode.
+
+- **Node host + local filesystem (dev/self-host path):**
+  - Run `npm run build && npm start` on a machine with full repo checkout.
+  - Use `STORAGE_MODE=local`.
+  - Set `AGENCY_ROOT` if app is not started from `_uidev/demo`.
 
 ---
 
@@ -133,6 +198,10 @@ The **DEMO_UI_SPEC** originally described a dark Slack-like theme. This implemen
 | Empty / wrong context | Wrong `AGENCY_ROOT` or server not started from `_uidev/demo` (auto root wrong). Set `AGENCY_ROOT` explicitly to the repo root. |
 | Vite works, `/api` 502 / network error | API not on **19877** or proxy `target` in `vite.config.ts` does not match `PORT`. |
 | `brief ATX-003` vs Chen home | Per **DEMO_UI_UPDATE_SPEC**, Chen’s home is **ATX-016**. Delete `_database/deals/412-buyer.json` once if it was bootstrapped before ATX-016 (it will be recreated from `schema.json` with `ATX-003` → `ATX-016` substitution), or edit JSON manually. Ensure `_catalog/properties/ATX-016.md` exists (run the server bootstrap). |
+| Netlify shows 404 “Page not found” at site root | Netlify is building from wrong directory. Ensure root `netlify.toml` is present and deployment uses `base = "_uidev/demo"` and `publish = "dist/client"`. |
+| Netlify `build.command` exit code 2 | Website sibling app dependencies missing during CI. `npm run build` now includes `install:agency-website`; redeploy on latest commit. |
+| `/the_agency_website/` is blank | Subpath mismatch. Website must be built with `--base=/the_agency_website/` and router basename from `import.meta.env.BASE_URL` (already wired). |
+| Listings show no photos | Source image files are not in repo at referenced paths (`/Images/properties/...`). UI now shows placeholders instead of broken media. Add real files under website public assets to restore photos. |
 
 ---
 
@@ -142,13 +211,18 @@ The **DEMO_UI_SPEC** originally described a dark Slack-like theme. This implemen
 |------|---------|
 | `server/index.ts` | Express routes, static production fallback. |
 | `server/bootstrap.ts` | Deal / property file bootstrap. |
-| `server/context.ts` | Agency markdown/YAML → system context string. |
-| `server/claude.ts` | Anthropic call + JSON parse. |
+| `server/context.ts` | Tiny per-turn bootstrap (channel, deal pointer, persona). No file pre-loading — Claude reads via tools. |
+| `server/tools.ts` | Agentic file-system tools (`read_file`, `list_directory`, `search_files`) exposed to Claude, sandboxed to `AGENCY_ROOT`. |
+| `server/claude.ts` | Anthropic tool-use loop + final JSON envelope parse. |
 | `server/memoryStore.ts` | Centralized read/write service for deals/properties, channel-memory timeline builder, and `state_patch` merge logic. |
 | `server/paths.ts` | `AGENCY_ROOT`, path safety helpers. |
+| `scripts/sync-agency-website.mjs` | Copies website build output into demo publish folder. |
 | `src/App.tsx` | Layout, chat, activity log, listing confirm. |
 | `src/App.css` + `src/index.css` | Neo-Austin layout tokens. |
+| `../the_agency_website/src/main.tsx` | Router basename for subpath deployment (`/the_agency_website/`). |
+| `../the_agency_website/src/lib/media.ts` | Image URL normalization + placeholder fallback for missing media. |
+| `../../netlify.toml` | Root Netlify build/publish config used in production deployment. |
 
 ---
 
-*Document version: 1.0 — matches demo package as of first iteration.*
+*Document version: 1.2 — agentic tool-use loop (Claude reads the agency folder itself via `server/tools.ts`); shrunk `server/context.ts` to a per-turn bootstrap; previous pre-loaded-prompt design removed.*
