@@ -7,13 +7,20 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const demoRoot = path.resolve(__dirname, "..");
 const websiteRoot = path.resolve(demoRoot, "..", "the_agency_website");
 const outDir = path.join(demoRoot, "dist", "client", "the_agency_website");
-const viteBin = path.join(websiteRoot, "node_modules", ".bin", "vite");
 
 if (!fs.existsSync(websiteRoot)) {
-  throw new Error(`Agency website directory not found: ${websiteRoot}`);
+  throw new Error(`Agency website directory not found: ${websiteRoot}\nConfirm Railway Root Directory includes _uidev/the_agency_website.`);
 }
+
+// Install deps here (not in nixpacks install phase) because nixpacks copies
+// only the root package files into the install layer for caching — the sibling
+// the_agency_website/ directory is only available in the build layer.
+console.log("Installing agency website dependencies...");
+execSync("npm ci --no-audit --no-fund", { cwd: websiteRoot, stdio: "inherit" });
+
+const viteBin = path.join(websiteRoot, "node_modules", ".bin", "vite");
 if (!fs.existsSync(viteBin)) {
-  throw new Error(`vite not found at ${viteBin} — did npm ci run in the_agency_website?`);
+  throw new Error(`vite not found at ${viteBin} after npm ci — check the_agency_website/package.json`);
 }
 
 console.log(`Building agency website → ${outDir}`);
