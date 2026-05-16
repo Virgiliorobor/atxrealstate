@@ -2,10 +2,17 @@
 nixPkgs = ["nodejs_20"]
 
 [phases.install]
-cmds = ["npm ci"]
+cmds = [
+  "npm ci",
+  "npm --prefix ../the_agency_website ci --include=dev --no-audit --no-fund",
+]
 
 [phases.build]
-cmds = ["npm run build:demo"]
+cmds = [
+  "npm run build:demo",
+  "npm --prefix ../the_agency_website run build -- --base=/the_agency_website/",
+  "node scripts/sync-agency-website.mjs",
+]
 
 [start]
 cmd = "node dist/server/index.js"
