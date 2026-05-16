@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 import { bootstrapAgencyFiles } from "./bootstrap.js";
 import { buildContextPackage } from "./context.js";
 import { runClaudeTurn } from "./claude.js";
+import { renderBriefPdf } from "./briefPdf.js";
 import {
   applyDealStatePatch,
   buildChannelMemory,
@@ -112,6 +113,26 @@ app.post("/api/apply-property", async (req, res) => {
   }
 });
 
+app.post("/api/brief-pdf", async (req, res) => {
+  try {
+    const title = String(req.body?.title ?? "Property brief").trim().slice(0, 200);
+    const markdown = String(req.body?.markdown ?? "");
+    if (!markdown.trim()) {
+      res.status(400).json({ error: "markdown required" });
+      return;
+    }
+    const buf = await renderBriefPdf(title, markdown);
+    const safeName = title.replace(/[^a-z0-9-_ ]/gi, "_").trim() || "brief";
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `attachment; filename="${safeName}.pdf"`);
+    res.setHeader("Content-Length", buf.length.toString());
+    res.send(buf);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: String(e) });
+  }
+});
+
 // Slack webhook stub — Phase 2 implementation
 app.post("/api/slack/events", (req, res) => {
   if (req.body && req.body.type === "url_verification") {
@@ -123,15 +144,26 @@ app.post("/api/slack/events", (req, res) => {
 /** Dev: default 19877; `npm run dev` sets PORT via cross-env. Override in `.env`. */
 const port = Number(process.env.PORT) || 19877;
 
-const agencyWebsiteDistDir = path.join(ensureBoot().agencyRoot, "_uidev", "the_agency_website", "dist");
-if (fs.existsSync(path.join(agencyWebsiteDistDir, "index.html"))) {
+const agencyWebsiteCandidates = [
+  path.join(ensureBoot().agencyRoot, "_uidev", "the_agency_website", "dist"),
+  path.join(process.cwd(), "dist", "client", "the_agency_website"),
+];
+const agencyWebsiteDistDir = agencyWebsiteCandidates.find((d) =>
+  fs.existsSync(path.join(d, "index.html"))
+);
+if (agencyWebsiteDistDir) {
+  console.log(`Agency website served from ${agencyWebsiteDistDir}`);
   app.use("/the_agency_website", express.static(agencyWebsiteDistDir));
   app.get(/^\/the_agency_website(?:\/.*)?$/, (_req, res) => {
     res.sendFile(path.join(agencyWebsiteDistDir, "index.html"));
   });
+} else {
+  console.warn(
+    `Agency website dist not found. Checked: ${agencyWebsiteCandidates.join(", ")}`
+  );
 }
 
-const clientDir = path.join(__dirname, "..", "dist", "client");
+const clientDir = path.join(process.cwd(), "dist", "client");
 if (fs.existsSync(path.join(clientDir, "index.html"))) {
   app.use(express.static(clientDir));
   app.get(/^(?!\/api).*/, (_req, res) => {
