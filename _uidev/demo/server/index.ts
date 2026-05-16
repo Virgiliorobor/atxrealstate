@@ -131,7 +131,7 @@ if (fs.existsSync(path.join(agencyWebsiteDistDir, "index.html"))) {
   });
 }
 
-const clientDir = path.join(__dirname, "..", "dist", "client");
+const clientDir = path.join(process.cwd(), "dist", "client");
 if (fs.existsSync(path.join(clientDir, "index.html"))) {
   app.use(express.static(clientDir));
   app.get(/^(?!\/api).*/, (_req, res) => {
