@@ -236,7 +236,12 @@ function Onboarding({ onEnter }: { onEnter: () => void }) {
           Six AI specialists working alongside a boutique Austin team — across the full transaction
           lifecycle, grounded in live deal data and persistent memory.
         </p>
-        <a className="agency-site-link" href={AGENCY_WEBSITE_URL} target="_blank" rel="noreferrer">
+        <a
+          className="agency-site-link"
+          href={`${AGENCY_WEBSITE_URL}listings`}
+          target="_blank"
+          rel="noreferrer"
+        >
           View the property catalog ↗
         </a>
       </div>
