@@ -2,10 +2,7 @@
 nixPkgs = ["nodejs_20"]
 
 [phases.install]
-cmds = [
-  "npm ci",
-  "cd ../the_agency_website && npm ci --no-audit --no-fund",
-]
+cmds = ["npm ci"]
 
 [phases.build]
 cmds = [
