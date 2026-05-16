@@ -148,25 +148,35 @@ const agencyWebsiteCandidates = [
   path.join(ensureBoot().agencyRoot, "_uidev", "the_agency_website", "dist"),
   path.join(process.cwd(), "dist", "client", "the_agency_website"),
 ];
-const agencyWebsiteDistDir = agencyWebsiteCandidates.find((d) =>
-  fs.existsSync(path.join(d, "index.html"))
+const agencyWebsiteDistDir =
+  agencyWebsiteCandidates.find((d) => fs.existsSync(path.join(d, "index.html"))) ??
+  agencyWebsiteCandidates[1];
+
+console.log(`Agency website mount path: ${agencyWebsiteDistDir}`);
+console.log(
+  `  exists at this path? ${fs.existsSync(path.join(agencyWebsiteDistDir, "index.html"))}`
 );
-if (agencyWebsiteDistDir) {
-  console.log(`Agency website served from ${agencyWebsiteDistDir}`);
-  app.use("/the_agency_website", express.static(agencyWebsiteDistDir));
-  app.get(/^\/the_agency_website(?:\/.*)?$/, (_req, res) => {
-    res.sendFile(path.join(agencyWebsiteDistDir, "index.html"));
-  });
-} else {
-  console.warn(
-    `Agency website dist not found. Checked: ${agencyWebsiteCandidates.join(", ")}`
-  );
-}
+app.use("/the_agency_website", express.static(agencyWebsiteDistDir));
+// SPA fallback for agency-website client-side routes (e.g. /the_agency_website/listings).
+// Registered unconditionally so /the_agency_website/* never falls through to the demo SPA.
+app.get(/^\/the_agency_website(?:\/.*)?$/, (_req, res) => {
+  const indexPath = path.join(agencyWebsiteDistDir, "index.html");
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    res.status(503).type("text/plain").send(
+      `Agency website build not found at ${agencyWebsiteDistDir}. ` +
+        `Check Railway build logs — the sync-agency-website.mjs step may have failed.`
+    );
+  }
+});
 
 const clientDir = path.join(process.cwd(), "dist", "client");
 if (fs.existsSync(path.join(clientDir, "index.html"))) {
   app.use(express.static(clientDir));
-  app.get(/^(?!\/api).*/, (_req, res) => {
+  // Demo SPA catchall — excludes /api/* and /the_agency_website/* so those routes
+  // are handled by their dedicated middleware above.
+  app.get(/^(?!\/(?:api|the_agency_website)(?:\/|$)).*/, (_req, res) => {
     res.sendFile(path.join(clientDir, "index.html"));
   });
 }
