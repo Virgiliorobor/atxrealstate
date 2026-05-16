@@ -10,8 +10,7 @@ cmds = [
 [phases.build]
 cmds = [
   "npm run build:demo",
-  "cd ../the_agency_website && npm run build -- --base=/the_agency_website/",
-  "node scripts/sync-agency-website.mjs",
+  "cd ../the_agency_website && ./node_modules/.bin/vite build --base=/the_agency_website/ --outDir ../demo/dist/client/the_agency_website",
 ]
 
 [start]
