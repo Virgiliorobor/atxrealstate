@@ -101,8 +101,11 @@ export function ListingDetailPage() {
           <p className="mono-eyebrow">Listing agent</p>
           <h2 className="headline-md">{agentName}</h2>
           <p className="body-lg">Listing Agent · ATX Boutique Real Estate</p>
-          <a className="btn btn--primary detail__showing" href={`mailto:hello@atxboutique.example?subject=Showing%20${listing.property_id}`}>
-            Schedule a Showing
+          <a
+            className="btn btn--primary detail__showing"
+            href={`/?inquiry=${listing.property_id}&addr=${encodeURIComponent(listing.address)}&price=${listing.list_price}&headline=${encodeURIComponent(listing.headline)}`}
+          >
+            Inquire via The Agency ↗
           </a>
         </section>
 

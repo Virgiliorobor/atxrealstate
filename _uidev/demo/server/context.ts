@@ -30,22 +30,43 @@ export function buildContextPackage(opts: {
   if (isOpenEntry) {
     lines.push(
       "SESSION_MODE: OPEN_ENTRY — the human is Diana Castellano (principal). " +
-        "She may ask anything (firm strategy, system behavior, cross-deal questions, " +
-        "hypotheticals, free-form instructions). Load her profile from " +
-        "`_config/agent_profiles/diana.yaml` and `_config/agent_profiles/diana.md`. " +
+        "She may ask anything. Load her profile from `_config/agent_profiles/diana.yaml` " +
+        "and `_config/agent_profiles/diana.md`. " +
         "Answer in a principal-appropriate direct voice; do not assume guided-mode Marco."
+    );
+  } else if (ch.includes("327") || (ch.includes("seller") && !ch.includes("inbound"))) {
+    lines.push(
+      "SESSION_MODE: GUIDED — the human is Carlos Mendoza (senior agent, listing/seller specialist). " +
+        "Load his profile from `_config/agent_profiles/carlos.yaml` and `_config/agent_profiles/carlos.md`. " +
+        "SELLER_CONTEXT: this is a seller-side listing deal. " +
+        "Read the deal file to understand current stage, listing status, and any offers received."
+    );
+  } else if (ch.includes("412")) {
+    lines.push(
+      "SESSION_MODE: GUIDED — the human is Elena Reyes (senior agent, buyer specialist). " +
+        "Load her profile from `_config/agent_profiles/elena.yaml` and `_config/agent_profiles/elena.md`. " +
+        "Deal #412 (Chen family) is in due diligence — two risk flags are open (appraisal gap $23K, inspection response pending). " +
+        "Read the deal file before advising."
+    );
+  } else if (ch.includes("inbound-lead")) {
+    lines.push(
+      "SESSION_MODE: GUIDED — this is a NEW INBOUND LEAD from the agency website. " +
+        "Load Marco's profile from `_config/agent_profiles/marco.yaml` as the default handler. " +
+        "Run `sop_01_new_lead` step by step, explaining each action as you go (guided mode). " +
+        "Help the agent qualify the lead, verify pre-approval, and create a deal record."
+    );
+  } else if (ch.includes("019") || ch.includes("team-general")) {
+    lines.push(
+      "SESSION_MODE: GUIDED — the human is Marco Reyes (junior agent, output_mode=guided). " +
+        "Load his profile from `_config/agent_profiles/marco.yaml` and `_config/agent_profiles/marco.md`. " +
+        "Deal #019 (Jordan Kim, buyer, draft stage) is active in this channel. " +
+        "Read `_database/deals/019-buyer.json` for context before advising. " +
+        "Walk Marco through each step of the intake SOP, explaining what you are checking and why."
     );
   } else {
     lines.push(
       "SESSION_MODE: GUIDED — the human is Marco Reyes (junior agent, output_mode=guided). " +
         "Load his profile from `_config/agent_profiles/marco.yaml` and `_config/agent_profiles/marco.md`."
-    );
-  }
-
-  if (ch.includes("327") || ch.includes("seller")) {
-    lines.push(
-      "SELLER_CONTEXT: this is a seller-side deal. Also load `_config/agent_profiles/carlos.yaml` " +
-        "(the seller/listing agent persona) when relevant."
     );
   }
 

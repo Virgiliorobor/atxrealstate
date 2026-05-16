@@ -1,0 +1,98 @@
+{
+  "deal": {
+    "_id": {
+      "deal_id": "019",
+      "side": "buyer",
+      "slack_channel": "#019-buyer",
+      "file_name": "019-buyer.json"
+    },
+    "meta": {
+      "stage": "draft",
+      "stage_history": [
+        {
+          "stage": "draft",
+          "entered_at": "2026-05-16T09:15:00",
+          "entered_by": "lead_qualifier"
+        }
+      ],
+      "created_at": "2026-05-16T09:15:00",
+      "last_updated": "2026-05-16T09:15:00",
+      "sop_active": "sop_01_new_lead",
+      "sop_step": 1,
+      "sop_started_at": "2026-05-16T09:15:00",
+      "sop_history": []
+    },
+    "agent": {
+      "agent_id": "marco",
+      "name": "Marco Reyes",
+      "role": "Junior Agent",
+      "specialty": "buyer",
+      "mode": "guided"
+    },
+    "client": {
+      "name": "Jordan Kim",
+      "type": "buyer",
+      "email": "jordan.kim@gmail.com",
+      "phone": "512-555-0198",
+      "best_time_to_reach": "afternoons",
+      "lead_source": "direct",
+      "notes": "First-time buyer. Texted Marco directly. Seems motivated and ready to act fast. Pre-approval status not yet verified."
+    },
+    "buyer_profile": {
+      "pre_approved": false,
+      "pre_approval_limit": null,
+      "budget_min": 450000,
+      "budget_max": 500000,
+      "timeline_days": 45,
+      "target_neighborhoods": ["north_austin"],
+      "must_haves": ["4 bedrooms", "good school district", "garage"],
+      "deal_breakers": ["HOA over $200/mo", "busy arterial street"],
+      "properties_viewed": [],
+      "offer_intent": {
+        "property_id": "ATX-012",
+        "offer_price": 475000,
+        "list_price": 480000,
+        "notes": "Jordan texted Marco saying he wants to offer $475K on ATX-012. Has not seen the property in person yet. Pre-approval status unverified — first step is to confirm financing."
+      }
+    },
+    "transaction": {
+      "contract_date": null,
+      "offer_price": null,
+      "list_price_at_offer": null,
+      "earnest_money": null,
+      "down_payment_pct": null,
+      "financing_type": null,
+      "lender": null,
+      "closing_date": null,
+      "escrow_title_company": null,
+      "cooperating_agent": null,
+      "contingencies": {
+        "inspection": { "active": false, "deadline": null, "status": null },
+        "appraisal": { "active": false, "deadline": null, "status": null },
+        "financing": { "active": false, "deadline": null, "status": null }
+      }
+    },
+    "deadlines": [],
+    "documents": {
+      "firm_generated": [],
+      "third_party": []
+    },
+    "communications": [],
+    "risk_flags": [],
+    "research": [],
+    "events": [
+      {
+        "event_id": "EVT-019-001",
+        "timestamp": "2026-05-16T09:15:00",
+        "actor_type": "human",
+        "actor_id": "marco",
+        "agent_id": "marco",
+        "action": "lead_received",
+        "detail": "Jordan Kim texted Marco directly. Interested in ATX-012 — 4BR, Parmer Village, listed at $480K. Wants to offer $475K. Pre-approval not yet verified. First-time buyer, guided mode.",
+        "outcome": "pending",
+        "next_triggered": "sop_01_new_lead"
+      }
+    ],
+    "reporting": {}
+  }
+}

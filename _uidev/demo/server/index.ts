@@ -144,12 +144,23 @@ app.post("/api/slack/events", (req, res) => {
 /** Dev: default 19877; `npm run dev` sets PORT via cross-env. Override in `.env`. */
 const port = Number(process.env.PORT) || 19877;
 
-const agencyWebsiteDistDir = path.join(ensureBoot().agencyRoot, "_uidev", "the_agency_website", "dist");
-if (fs.existsSync(path.join(agencyWebsiteDistDir, "index.html"))) {
+const agencyWebsiteCandidates = [
+  path.join(ensureBoot().agencyRoot, "_uidev", "the_agency_website", "dist"),
+  path.join(process.cwd(), "dist", "client", "the_agency_website"),
+];
+const agencyWebsiteDistDir = agencyWebsiteCandidates.find((d) =>
+  fs.existsSync(path.join(d, "index.html"))
+);
+if (agencyWebsiteDistDir) {
+  console.log(`Agency website served from ${agencyWebsiteDistDir}`);
   app.use("/the_agency_website", express.static(agencyWebsiteDistDir));
   app.get(/^\/the_agency_website(?:\/.*)?$/, (_req, res) => {
     res.sendFile(path.join(agencyWebsiteDistDir, "index.html"));
   });
+} else {
+  console.warn(
+    `Agency website dist not found. Checked: ${agencyWebsiteCandidates.join(", ")}`
+  );
 }
 
 const clientDir = path.join(process.cwd(), "dist", "client");
