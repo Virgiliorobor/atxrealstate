@@ -114,7 +114,13 @@ function stripFence(raw: string): string {
   if (t.startsWith("```")) {
     t = t.replace(/^```(?:json)?\s*/i, "");
     t = t.replace(/\s*```$/i, "");
+    t = t.trim();
   }
+  // Claude sometimes emits narrative text before the JSON envelope — find the object.
+  const start = t.indexOf("{");
+  if (start > 0) t = t.slice(start);
+  const end = t.lastIndexOf("}");
+  if (end >= 0 && end < t.length - 1) t = t.slice(0, end + 1);
   return t.trim();
 }
 
