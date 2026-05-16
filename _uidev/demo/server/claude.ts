@@ -151,13 +151,23 @@ export async function runClaudeTurn(
   if (!apiKey) {
     throw new Error("Missing ANTHROPIC_API_KEY");
   }
-  const model = process.env.ANTHROPIC_MODEL?.trim() || "claude-sonnet-4-20250514";
+  const model = process.env.ANTHROPIC_MODEL?.trim() || "claude-haiku-4-5";
   const maxTokens = Number(process.env.ANTHROPIC_MAX_TOKENS ?? "8192") || 8192;
   const maxIterations =
     Number(process.env.ANTHROPIC_MAX_TOOL_ITERATIONS ?? "25") || 25;
   const client = new Anthropic({ apiKey });
 
-  const system = `${BOOTSTRAP_INSTRUCTION}\n\n=== TURN CONTEXT ===\n\n${channelContext}`;
+  const system: Anthropic.TextBlockParam[] = [
+    {
+      type: "text",
+      text: BOOTSTRAP_INSTRUCTION,
+      cache_control: { type: "ephemeral" },
+    },
+    {
+      type: "text",
+      text: `=== TURN CONTEXT ===\n\n${channelContext}`,
+    },
+  ];
   const messages: AnthropicMessageParam[] = [
     { role: "user", content: userMessage },
   ];

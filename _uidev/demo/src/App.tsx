@@ -402,6 +402,32 @@ export default function App() {
     }
   };
 
+  const downloadBrief = async (title: string, markdown: string) => {
+    setError(null);
+    try {
+      const res = await fetch("/api/brief-pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, markdown }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({ error: res.statusText }));
+        throw new Error(data.error || res.statusText);
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${title.replace(/[^a-z0-9-_ ]/gi, "_").trim() || "brief"}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    }
+  };
+
   const goHome = useCallback(() => {
     setOnboarded(false);
     setChannel("#team-general");
@@ -589,6 +615,15 @@ export default function App() {
                           {bl.title}
                         </div>
                         <ReactMarkdown>{bl.markdown}</ReactMarkdown>
+                        <div className="apply-row" style={{ marginTop: 12 }}>
+                          <button
+                            type="button"
+                            className="apply-btn"
+                            onClick={() => downloadBrief(bl.title, bl.markdown)}
+                          >
+                            Download PDF
+                          </button>
+                        </div>
                       </div>
                     ) : (
                       <div key={i} className="brief-card">

@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 import { bootstrapAgencyFiles } from "./bootstrap.js";
 import { buildContextPackage } from "./context.js";
 import { runClaudeTurn } from "./claude.js";
+import { renderBriefPdf } from "./briefPdf.js";
 import {
   applyDealStatePatch,
   buildChannelMemory,
@@ -108,6 +109,26 @@ app.post("/api/apply-property", async (req, res) => {
     const p = await writePropertyMarkdown(propertyId, markdown);
     res.json({ ok: true, path: p });
   } catch (e) {
+    res.status(500).json({ error: String(e) });
+  }
+});
+
+app.post("/api/brief-pdf", async (req, res) => {
+  try {
+    const title = String(req.body?.title ?? "Property brief").trim().slice(0, 200);
+    const markdown = String(req.body?.markdown ?? "");
+    if (!markdown.trim()) {
+      res.status(400).json({ error: "markdown required" });
+      return;
+    }
+    const buf = await renderBriefPdf(title, markdown);
+    const safeName = title.replace(/[^a-z0-9-_ ]/gi, "_").trim() || "brief";
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `attachment; filename="${safeName}.pdf"`);
+    res.setHeader("Content-Length", buf.length.toString());
+    res.send(buf);
+  } catch (e) {
+    console.error(e);
     res.status(500).json({ error: String(e) });
   }
 });
