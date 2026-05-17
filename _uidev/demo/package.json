@@ -9,10 +9,7 @@
     "dev:client": "vite",
     "dev:server": "cross-env PORT=19877 tsx watch server/index.ts",
     "build:demo": "tsc -p tsconfig.server.json && vite build",
-    "install:agency-website": "npm --prefix ../the_agency_website install --include=dev --no-audit --no-fund",
-    "build:agency-website": "npm --prefix ../the_agency_website run build -- --base=/the_agency_website/",
-    "sync:agency-website": "node scripts/sync-agency-website.mjs",
-    "build": "npm run build:demo && npm run install:agency-website && npm run build:agency-website && npm run sync:agency-website",
+    "build": "npm run build:demo",
     "start": "node dist/server/index.js",
     "preview": "vite preview"
   },
