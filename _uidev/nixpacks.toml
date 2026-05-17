@@ -1,0 +1,11 @@
+[phases.setup]
+nixPkgs = ["nodejs_20"]
+
+[phases.install]
+cmds = ["cd demo && npm ci --no-audit --no-fund"]
+
+[phases.build]
+cmds = ["cd demo && npm run build:demo"]
+
+[start]
+cmd = "cd demo && node dist/server/index.js"
