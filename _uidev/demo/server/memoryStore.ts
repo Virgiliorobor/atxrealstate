@@ -26,6 +26,15 @@ export type MemoryEntry = {
   detail: string;
 };
 
+export type ChatLogEntry = {
+  ts: string;
+  author: string;           // agent_id of speaker: "marco" | "diana" | "ai_orchestrator"
+  author_name?: string;     // display name
+  role: "user" | "ai";
+  text: string;
+  specialist?: string | null;  // for AI entries: which specialist generated this
+};
+
 function nowIso() {
   return new Date().toISOString().slice(0, 19).replace("T", " ");
 }
@@ -291,6 +300,207 @@ export async function buildChannelMemory(channel: string): Promise<MemoryEntry[]
 
   entries.sort((a, b) => a.sortTs.localeCompare(b.sortTs));
   return entries.map(({ sortTs, ...e }) => e);
+}
+
+/**
+ * Append a chat exchange to the deal's chat_log array.
+ *
+ * Per ICM rules.md: "Always write every SOP step to the database event log."
+ * We extend this to also log every conversation exchange — preserves the full
+ * Slack-channel-equivalent history in the same JSON file the orchestrator
+ * already owns. New schema field: `deal.chat_log[]`.
+ */
+export async function appendChatLog(
+  dealFile: string,
+  entries: ChatLogEntry[]
+): Promise<void> {
+  if (!entries.length) return;
+  const doc = (await readDealFile(dealFile)) as Json;
+  const deal = doc.deal as Json | undefined;
+  if (!deal || typeof deal !== "object") {
+    throw new Error("invalid deal document — cannot append chat_log");
+  }
+  if (!Array.isArray((deal as { chat_log?: unknown }).chat_log)) {
+    (deal as { chat_log: ChatLogEntry[] }).chat_log = [];
+  }
+  const log = (deal as { chat_log: ChatLogEntry[] }).chat_log;
+  for (const e of entries) log.push(e);
+  await writeDealFile(dealFile, doc);
+}
+
+export async function readChatLog(dealFile: string): Promise<ChatLogEntry[]> {
+  assertSafeDealFile(dealFile);
+  const doc = (await readDealFile(dealFile)) as Json;
+  const deal = doc.deal as Json | undefined;
+  if (!deal || typeof deal !== "object") return [];
+  const log = (deal as { chat_log?: unknown }).chat_log;
+  return Array.isArray(log) ? (log as ChatLogEntry[]) : [];
+}
+
+/**
+ * Team channels (non-deal): #team-general, #diana-dashboard, etc.
+ * Per system_settings.yaml, team_channels are first-class. We persist their
+ * chat logs to _database/team_channels/<name>.json so Diana's open-entry
+ * sessions and other cross-deal conversations survive restarts.
+ */
+function teamChannelSafeName(channel: string): string {
+  const cleaned = channel.replace(/^#/, "").toLowerCase();
+  if (!/^[a-z0-9-]+$/.test(cleaned)) {
+    throw new Error("Invalid team channel name");
+  }
+  return cleaned;
+}
+
+function localTeamChannelPath(channel: string): string {
+  const name = teamChannelSafeName(channel);
+  return path.join(getAgencyRoot(), "_database", "team_channels", `${name}.json`);
+}
+
+function relTeamChannelPath(channel: string): string {
+  const name = teamChannelSafeName(channel);
+  return `_database/team_channels/${name}.json`;
+}
+
+async function readTeamChannelFile(channel: string): Promise<{ chat_log: ChatLogEntry[] }> {
+  if (getStorageMode() === "github") {
+    try {
+      return JSON.parse(await githubRead(relTeamChannelPath(channel))) as {
+        chat_log: ChatLogEntry[];
+      };
+    } catch {
+      return { chat_log: [] };
+    }
+  }
+  const p = localTeamChannelPath(channel);
+  if (!fs.existsSync(p)) return { chat_log: [] };
+  try {
+    return JSON.parse(fs.readFileSync(p, "utf8")) as { chat_log: ChatLogEntry[] };
+  } catch {
+    return { chat_log: [] };
+  }
+}
+
+async function writeTeamChannelFile(
+  channel: string,
+  data: { chat_log: ChatLogEntry[] }
+): Promise<void> {
+  if (getStorageMode() === "github") {
+    await githubWrite(
+      relTeamChannelPath(channel),
+      JSON.stringify(data, null, 2),
+      `demo(memory): update team_channels/${teamChannelSafeName(channel)}.json`
+    );
+    return;
+  }
+  const p = localTeamChannelPath(channel);
+  fs.mkdirSync(path.dirname(p), { recursive: true });
+  const tmp = `${p}.${process.pid}.tmp`;
+  fs.writeFileSync(tmp, JSON.stringify(data, null, 2), "utf8");
+  fs.renameSync(tmp, p);
+}
+
+export async function appendTeamChannelChatLog(
+  channel: string,
+  entries: ChatLogEntry[]
+): Promise<void> {
+  if (!entries.length) return;
+  const doc = await readTeamChannelFile(channel);
+  if (!Array.isArray(doc.chat_log)) doc.chat_log = [];
+  for (const e of entries) doc.chat_log.push(e);
+  await writeTeamChannelFile(channel, doc);
+}
+
+export async function readTeamChannelChatLog(channel: string): Promise<ChatLogEntry[]> {
+  const doc = await readTeamChannelFile(channel);
+  return Array.isArray(doc.chat_log) ? doc.chat_log : [];
+}
+
+/**
+ * Discover all deal channels by listing _database/deals/ (or the GitHub equivalent).
+ * Returns minimal deal summary for the channel sidebar / dashboard.
+ */
+export type DealChannelSummary = {
+  channel: string;            // "#019-buyer"
+  deal_file: string;          // "019-buyer.json"
+  deal_id: string;            // "019"
+  side: "buyer" | "seller";
+  agent_id: string | null;    // assigned agent
+  client_name: string | null;
+  stage: string | null;
+  updated_at: string | null;
+};
+
+function parseDealSummary(filename: string, raw: string): DealChannelSummary | null {
+  if (!/^\d+-(buyer|seller)\.json$/i.test(filename)) return null;
+  let doc: Json;
+  try {
+    doc = JSON.parse(raw) as Json;
+  } catch {
+    return null;
+  }
+  const deal = doc.deal as Json | undefined;
+  if (!deal || typeof deal !== "object") return null;
+  const idBlock = deal._id as Record<string, unknown> | undefined;
+  const meta = deal.meta as Record<string, unknown> | undefined;
+  const agent = deal.agent as Record<string, unknown> | undefined;
+  const client = deal.client as Record<string, unknown> | undefined;
+  const channelName =
+    (idBlock?.slack_channel as string | undefined) ?? `#${filename.replace(/\.json$/, "")}`;
+  return {
+    channel: channelName,
+    deal_file: filename,
+    deal_id: String(idBlock?.deal_id ?? filename.replace(/-(buyer|seller)\.json$/i, "")),
+    side: filename.toLowerCase().includes("-buyer") ? "buyer" : "seller",
+    agent_id: typeof agent?.agent_id === "string" ? (agent.agent_id as string) : null,
+    client_name: typeof client?.name === "string" ? (client.name as string) : null,
+    stage: typeof meta?.stage === "string" ? (meta.stage as string) : null,
+    updated_at: typeof meta?.updated_at === "string" ? (meta.updated_at as string) : null,
+  };
+}
+
+export async function listDealChannels(): Promise<DealChannelSummary[]> {
+  const summaries: DealChannelSummary[] = [];
+  if (getStorageMode() === "github") {
+    const c = githubConfig();
+    const base = c.basePath ? `${c.basePath}/_database/deals` : `_database/deals`;
+    const url = `https://api.github.com/repos/${c.owner}/${c.repo}/contents/${encodeURIComponent(
+      base
+    ).replace(/%2F/g, "/")}?ref=${encodeURIComponent(c.branch)}`;
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${c.token}`,
+        Accept: "application/vnd.github+json",
+        "User-Agent": "agency-demo-memory-store",
+      },
+    });
+    if (!res.ok) return summaries;
+    const entries = (await res.json()) as Array<{ name: string; type: string }>;
+    for (const entry of entries) {
+      if (entry.type !== "file") continue;
+      if (!/^\d+-(buyer|seller)\.json$/i.test(entry.name)) continue;
+      try {
+        const text = await githubRead(`${base}/${entry.name}`);
+        const s = parseDealSummary(entry.name, text);
+        if (s) summaries.push(s);
+      } catch {
+        // skip unreadable entries
+      }
+    }
+    return summaries;
+  }
+  const dir = dealsDir(getAgencyRoot());
+  if (!fs.existsSync(dir)) return summaries;
+  for (const name of fs.readdirSync(dir)) {
+    if (!/^\d+-(buyer|seller)\.json$/i.test(name)) continue;
+    try {
+      const text = fs.readFileSync(path.join(dir, name), "utf8");
+      const s = parseDealSummary(name, text);
+      if (s) summaries.push(s);
+    } catch {
+      // skip unreadable
+    }
+  }
+  return summaries;
 }
 
 export async function writePropertyMarkdown(propertyId: string, markdown: string): Promise<string> {

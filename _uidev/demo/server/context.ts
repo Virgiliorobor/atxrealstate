@@ -1,5 +1,12 @@
 import { getAgencyRoot } from "./paths.js";
 
+export type CurrentUser = {
+  agent_id: string;
+  name: string;
+  slack_handle: string;
+  role: "agent" | "principal";
+};
+
 /**
  * Builds the small per-turn context block that goes into Claude's system prompt.
  *
@@ -7,15 +14,28 @@ import { getAgencyRoot } from "./paths.js";
  * the agency repo itself via the tools defined in `tools.ts`, starting from
  * `AI_README.md`. This block only tells Claude WHERE it is (channel, deal,
  * persona) so it knows what to read.
+ *
+ * Two identity modes:
+ *  1. `currentUser` provided (production /app route): identity comes from the
+ *     authenticated session — exactly the spirit of ICM rules.md ("the Slack
+ *     handle is the identity key"). Claude is told who the speaker is and
+ *     loads their agent profile.
+ *  2. No `currentUser` (legacy /api/chat demo): identity is inferred from
+ *     the channel name (kept for backwards compatibility with the demo).
  */
 export function buildContextPackage(opts: {
   channel: string;
   dealFile: string | null;
+  currentUser?: CurrentUser | null;
 }): string {
   const root = getAgencyRoot();
   const ch = opts.channel.toLowerCase();
   const isOpenEntry =
-    ch.includes("open-entry") || ch.includes("principal-open") || ch === "#diana";
+    ch.includes("open-entry") ||
+    ch.includes("principal-open") ||
+    ch === "#diana" ||
+    ch.includes("diana-dashboard") ||
+    ch.includes("team-general");
 
   const lines: string[] = [];
   lines.push(`AGENCY_ROOT: ${root}`);
@@ -27,6 +47,32 @@ export function buildContextPackage(opts: {
     lines.push(`ACTIVE_DEAL_FILE: (none — this channel is not deal-bound)`);
   }
 
+  // PRODUCTION MODE: identity is authenticated, not inferred from channel.
+  // This mirrors ICM rules.md exactly: "Every incoming message is mapped to
+  // an agent profile before any routing decision is made."
+  if (opts.currentUser) {
+    const u = opts.currentUser;
+    const roleClause =
+      u.role === "principal"
+        ? "She is the principal — full system access, operational mode, can read all deals and override agent decisions."
+        : "Apply their output_mode and communication tone from the profile.";
+    lines.push(
+      `SPEAKER: ${u.slack_handle} (${u.name}, agent_id="${u.agent_id}", role=${u.role}). ` +
+        `Per orchestrator rules.md, load _config/agent_profiles/${u.agent_id}.yaml and ${u.agent_id}.md ` +
+        `before any routing decision. ${roleClause}`
+    );
+    if (u.role === "principal" && opts.dealFile) {
+      lines.push(
+        "NOTE: Diana is observing/posting in another agent's deal channel. " +
+          "The deal's assigned agent is recorded in the deal file's `deal.agent.agent_id` field — " +
+          "treat the assigned agent as the deal owner. Diana's posts are principal-level guidance, " +
+          "not the deal owner's voice."
+      );
+    }
+    return lines.join("\n");
+  }
+
+  // LEGACY DEMO MODE: identity inferred from channel name.
   if (isOpenEntry) {
     lines.push(
       "SESSION_MODE: OPEN_ENTRY — the human is Diana Castellano (principal). " +
