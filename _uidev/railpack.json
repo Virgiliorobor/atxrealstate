@@ -3,5 +3,21 @@
   "provider": "node",
   "packages": {
     "node": "22"
+  },
+  "steps": {
+    "install": {
+      "commands": [
+        "cd demo && npm ci --no-audit --no-fund"
+      ]
+    },
+    "build": {
+      "inputs": [{ "step": "install" }],
+      "commands": [
+        "cd demo && npm run build:demo"
+      ]
+    }
+  },
+  "deploy": {
+    "startCommand": "cd demo && node dist/server/index.js"
   }
 }
