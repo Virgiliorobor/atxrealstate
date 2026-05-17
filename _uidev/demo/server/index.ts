@@ -145,17 +145,28 @@ app.post("/api/slack/events", (req, res) => {
 const port = Number(process.env.PORT) || 19877;
 
 const agencyWebsiteCandidates = [
+  path.join(process.cwd(), "agency_site"),
   path.join(ensureBoot().agencyRoot, "_uidev", "the_agency_website", "dist"),
-  path.join(process.cwd(), "dist", "client", "the_agency_website"),
 ];
 const agencyWebsiteDistDir =
   agencyWebsiteCandidates.find((d) => fs.existsSync(path.join(d, "index.html"))) ??
-  agencyWebsiteCandidates[1];
+  agencyWebsiteCandidates[0];
 
+const agencyWebsiteImagesDir = path.join(
+  ensureBoot().agencyRoot,
+  "_uidev",
+  "the_agency_website",
+  "public",
+  "Images"
+);
 console.log(`Agency website mount path: ${agencyWebsiteDistDir}`);
+console.log(`Agency website images path: ${agencyWebsiteImagesDir}`);
 console.log(
   `  exists at this path? ${fs.existsSync(path.join(agencyWebsiteDistDir, "index.html"))}`
 );
+// Images served from source (committed in the_agency_website/public/Images),
+// not duplicated into agency_site/ to keep that committed dir small.
+app.use("/the_agency_website/Images", express.static(agencyWebsiteImagesDir));
 app.use("/the_agency_website", express.static(agencyWebsiteDistDir));
 // SPA fallback for agency-website client-side routes (e.g. /the_agency_website/listings).
 // Registered unconditionally so /the_agency_website/* never falls through to the demo SPA.
@@ -165,8 +176,8 @@ app.get(/^\/the_agency_website(?:\/.*)?$/, (_req, res) => {
     res.sendFile(indexPath);
   } else {
     res.status(503).type("text/plain").send(
-      `Agency website build not found at ${agencyWebsiteDistDir}. ` +
-        `Check Railway build logs — the sync-agency-website.mjs step may have failed.`
+      `Agency website not found at ${agencyWebsiteDistDir}. ` +
+        `Run "npm run build" in _uidev/the_agency_website and commit _uidev/demo/agency_site/.`
     );
   }
 });

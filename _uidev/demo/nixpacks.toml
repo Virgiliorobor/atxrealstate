@@ -5,10 +5,7 @@ nixPkgs = ["nodejs_20"]
 cmds = ["npm ci"]
 
 [phases.build]
-cmds = [
-  "npm run build:demo",
-  "node scripts/build-website.mjs",
-]
+cmds = ["npm run build:demo"]
 
 [start]
 cmd = "node dist/server/index.js"
