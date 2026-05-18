@@ -767,6 +767,23 @@
         "outcome": "success",
         "next_triggered": "inspection_response_execution_required"
       }
+    ],
+    "chat_log": [
+      {
+        "ts": "2026-05-18 05:34:43",
+        "author": "diana",
+        "author_name": "Diana Castellano",
+        "role": "user",
+        "text": "Generate the due diligence documents for download"
+      },
+      {
+        "ts": "2026-05-18 05:34:43",
+        "author": "ai_orchestrator",
+        "author_name": "Orchestrator",
+        "role": "ai",
+        "text": "Due diligence document package compiled for #412-buyer. Seven documents ready: Purchase Agreement, Lead Paint Disclosure, Earnest Money Receipt, Inspection Response (draft status), Agency Disclosure, Wire Fraud Advisory, Buyer Rep Agreement. Third-party documents pending from title company and lender (Preliminary Title Report, Closing Disclosure due May 25). Full downloadable package generated with deal metadata. Appraisal gap and inspection deadline require immediate attention — both flagged in the checklist.",
+        "specialist": "04_transaction_coordinator"
+      }
     ]
   }
 }
