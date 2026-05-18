@@ -442,15 +442,19 @@ function DianaDashboard({
   openChannel: string;
   onPick: (channel: string, meta: DealChannel | null) => void;
 }) {
+  const isPrincipal = user.role === "principal";
   return (
     <div className="prod-dashboard">
       <header className="prod-dashboard-header">
-        <p className="mono-eyebrow">{user.slack_handle} · Principal view</p>
-        <h1 className="headline-md">All channels</h1>
+        <p className="mono-eyebrow">
+          {user.slack_handle} · {isPrincipal ? "Principal view" : "Agent view"}
+        </p>
+        <h1 className="headline-md">{isPrincipal ? "All channels" : "Your channels"}</h1>
         <p className="body-md">
-          Every deal channel in <code>_database/deals/</code> appears here. Click into any
-          conversation to read the full <code>chat_log</code> from the deal JSON and post as{" "}
-          <strong>@diana</strong>.
+          {isPrincipal
+            ? <>Every deal channel in <code>_database/deals/</code> appears here. Click into any conversation to read the full <code>chat_log</code> from the deal JSON and post as <strong>@diana</strong>.</>
+            : <>Your assigned deal channels. Click into any conversation to continue working with the Orchestrator.</>
+          }
         </p>
       </header>
 
@@ -536,26 +540,13 @@ export default function ProductionApp() {
       if (chJson._channel_error) {
         console.warn("[channels] storage error:", chJson._channel_error);
       }
-      if (user.role === "agent") {
-        // Agent: go straight to assigned channel (first deal channel)
-        const meta = channels[0] ?? null;
-        const channel = meta?.channel ?? user.assigned_channel ?? user.open_channel;
-        setState({
-          stage: "authed",
-          user,
-          channels,
-          openChannel,
-          view: { type: "chat", channel, meta },
-        });
-      } else {
-        setState({
-          stage: "authed",
-          user,
-          channels,
-          openChannel,
-          view: { type: "dashboard" },
-        });
-      }
+      setState({
+        stage: "authed",
+        user,
+        channels,
+        openChannel,
+        view: { type: "dashboard" },
+      });
     } catch (e) {
       console.error(e);
       setState({ stage: "login" });
@@ -579,7 +570,6 @@ export default function ProductionApp() {
   const goBack = useCallback(() => {
     setState((s) => {
       if (s.stage !== "authed") return s;
-      if (s.user.role !== "principal") return s;
       return { ...s, view: { type: "dashboard" } };
     });
   }, []);
@@ -631,7 +621,7 @@ export default function ProductionApp() {
           user={user}
           channel={view.channel}
           channelMeta={view.meta}
-          onBack={user.role === "principal" ? goBack : null}
+          onBack={goBack}
         />
       )}
     </div>
