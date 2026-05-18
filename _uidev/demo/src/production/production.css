@@ -297,6 +297,11 @@
   color: var(--paper, #fafafa);
 }
 
+.prod-back-btn--channels {
+  font-weight: 600;
+  border-width: 2px;
+}
+
 .prod-tag {
   font-family: var(--font-mono, monospace);
   font-size: 0.68rem;

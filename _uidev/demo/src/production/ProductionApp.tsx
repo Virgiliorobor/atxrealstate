@@ -598,6 +598,11 @@ export default function ProductionApp() {
         </div>
       </div>
       <div className="prod-topbar-actions">
+        {view.type === "chat" && (
+          <button type="button" className="prod-back-btn prod-back-btn--channels" onClick={goBack}>
+            ← Channels
+          </button>
+        )}
         <a href="/" className="prod-topbar-link">Demo →</a>
         <button type="button" className="prod-back-btn" onClick={logout}>
           Sign out
