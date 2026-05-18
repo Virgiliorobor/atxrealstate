@@ -205,22 +205,27 @@ app.get("/api/auth/users", (_req, res) => {
  *  - Principal (Diana): sees all deal channels + her open channel
  */
 app.get("/api/app/channels", requireAuth, async (req, res) => {
+  const user = (req as typeof req & { user: UserRecord }).user;
+  let dealChannels: Awaited<ReturnType<typeof listDealChannels>> = [];
+  let channelError: string | undefined;
   try {
-    const user = (req as typeof req & { user: UserRecord }).user;
     const allDeals = await listDealChannels();
-    const visibleDeals =
+    dealChannels =
       user.role === "principal"
         ? allDeals
         : allDeals.filter((d) => d.agent_id === user.agent_id);
-    res.json({
-      user: { agent_id: user.agent_id, name: user.name, role: user.role },
-      deal_channels: visibleDeals,
-      open_channel: user.open_channel,
-    });
   } catch (e) {
-    console.error(e);
-    res.status(500).json({ error: String(e) });
+    // Don't fail auth on storage errors — return empty channel list so the
+    // user can still log in. The error is surfaced in the response for debugging.
+    console.error("[channels] listDealChannels failed:", e);
+    channelError = String(e);
   }
+  res.json({
+    user: { agent_id: user.agent_id, name: user.name, role: user.role },
+    deal_channels: dealChannels,
+    open_channel: user.open_channel,
+    ...(channelError ? { _channel_error: channelError } : {}),
+  });
 });
 
 /**

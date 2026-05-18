@@ -530,9 +530,12 @@ export default function ProductionApp() {
       const user = meJson.user;
       const chRes = await fetch("/api/app/channels");
       const chJson = await chRes.json();
-      if (!chRes.ok) throw new Error(chJson.error || chRes.statusText);
+      // Don't go back to login if channel loading fails — show empty list instead.
       const channels = (chJson.deal_channels || []) as DealChannel[];
       const openChannel = (chJson.open_channel || user.open_channel) as string;
+      if (chJson._channel_error) {
+        console.warn("[channels] storage error:", chJson._channel_error);
+      }
       if (user.role === "agent") {
         // Agent: go straight to assigned channel (first deal channel)
         const meta = channels[0] ?? null;
