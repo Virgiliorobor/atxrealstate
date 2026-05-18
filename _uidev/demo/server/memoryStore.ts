@@ -460,34 +460,45 @@ function parseDealSummary(filename: string, raw: string): DealChannelSummary | n
 
 export async function listDealChannels(): Promise<DealChannelSummary[]> {
   const summaries: DealChannelSummary[] = [];
+
   if (getStorageMode() === "github") {
-    const c = githubConfig();
-    const base = c.basePath ? `${c.basePath}/_database/deals` : `_database/deals`;
-    const url = `https://api.github.com/repos/${c.owner}/${c.repo}/contents/${encodeURIComponent(
-      base
-    ).replace(/%2F/g, "/")}?ref=${encodeURIComponent(c.branch)}`;
-    const res = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${c.token}`,
-        Accept: "application/vnd.github+json",
-        "User-Agent": "agency-demo-memory-store",
-      },
-    });
-    if (!res.ok) return summaries;
-    const entries = (await res.json()) as Array<{ name: string; type: string }>;
-    for (const entry of entries) {
-      if (entry.type !== "file") continue;
-      if (!/^\d+-(buyer|seller)\.json$/i.test(entry.name)) continue;
-      try {
-        const text = await githubRead(`${base}/${entry.name}`);
-        const s = parseDealSummary(entry.name, text);
-        if (s) summaries.push(s);
-      } catch {
-        // skip unreadable entries
+    try {
+      const c = githubConfig();
+      const base = c.basePath ? `${c.basePath}/_database/deals` : `_database/deals`;
+      const url = `https://api.github.com/repos/${c.owner}/${c.repo}/contents/${encodeURIComponent(
+        base
+      ).replace(/%2F/g, "/")}?ref=${encodeURIComponent(c.branch)}`;
+      const res = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${c.token}`,
+          Accept: "application/vnd.github+json",
+          "User-Agent": "agency-demo-memory-store",
+        },
+      });
+      if (!res.ok) {
+        throw new Error(`GitHub API ${res.status}: ${await res.text()}`);
       }
+      const entries = (await res.json()) as Array<{ name: string; type: string }>;
+      for (const entry of entries) {
+        if (entry.type !== "file") continue;
+        if (!/^\d+-(buyer|seller)\.json$/i.test(entry.name)) continue;
+        try {
+          const text = await githubRead(`${base}/${entry.name}`);
+          const s = parseDealSummary(entry.name, text);
+          if (s) summaries.push(s);
+        } catch (e) {
+          console.warn(`[listDealChannels] skipping ${entry.name}:`, e);
+        }
+      }
+      return summaries;
+    } catch (e) {
+      // GitHub config missing or API failed — fall through to local FS.
+      // Writes still go to GitHub; reads fall back so channels always appear.
+      console.warn("[listDealChannels] GitHub unavailable, falling back to local FS:", String(e));
     }
-    return summaries;
   }
+
+  // Local filesystem (default, or fallback when GitHub is misconfigured)
   const dir = dealsDir(getAgencyRoot());
   if (!fs.existsSync(dir)) return summaries;
   for (const name of fs.readdirSync(dir)) {
