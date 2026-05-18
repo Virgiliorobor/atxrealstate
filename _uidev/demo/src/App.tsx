@@ -2,64 +2,133 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import "./App.css";
 
-const CHANNELS = ["#team-general", "#412-buyer", "#327-seller", "#open-entry"] as const;
+const CHANNELS = ["#019-buyer", "#412-buyer", "#327-seller", "#inbound-lead", "#open-entry"] as const;
 const AGENCY_WEBSITE_URL =
   import.meta.env.VITE_AGENCY_WEBSITE_URL || "/the_agency_website/";
 
 type ChannelId = (typeof CHANNELS)[number];
 
 const CHANNEL_SUBTITLE: Record<ChannelId, string> = {
-  "#team-general": "New lead intake →",
-  "#412-buyer": "Chen · Due diligence · ⚠ 2 flags",
-  "#327-seller": "Hoffman · Active · 28 DOM",
+  "#019-buyer": "Marco · Jordan Kim · ATX-012 offer",
+  "#412-buyer": "Elena · Chen · Due diligence · ⚠ 2 flags",
+  "#327-seller": "Carlos · Hoffman · Offer received · 28 DOM",
+  "#inbound-lead": "New inquiry · ATX-004 · Website lead",
   "#open-entry": "Diana Castellano · Principal · Open sandbox",
 };
 
+const CHANNEL_AGENT: Record<ChannelId, string> = {
+  "#019-buyer": "Marco Reyes · Junior Agent · Guided mode",
+  "#412-buyer": "Elena Reyes · Senior Agent · Buyer specialist",
+  "#327-seller": "Carlos Mendoza · Senior Agent · Listing specialist",
+  "#inbound-lead": "Unassigned · Lead qualification pending",
+  "#open-entry": "Diana Castellano · Principal · Open entry",
+};
+
+const CHANNEL_USER_LABEL: Record<ChannelId, string> = {
+  "#019-buyer": "Marco Reyes",
+  "#412-buyer": "Elena Reyes",
+  "#327-seller": "Carlos Mendoza",
+  "#inbound-lead": "You",
+  "#open-entry": "Diana Castellano",
+};
+
 const CHANNEL_WELCOME: Record<ChannelId, string> = {
-  "#team-general": `You are **Marco Reyes** (guided mode — the system explains as it works).
+  "#019-buyer": `**Marco Reyes · Junior Agent · Guided Mode**
 
-This channel is for new business. Try starting a lead intake:
+Deal #019 is on file: **Jordan Kim** reached out about ATX-012 — the 4BR in Parmer Village listed at **$480K**. He texted saying he wants to offer $475K, but pre-approval hasn't been confirmed yet.
 
-The system will extract structured data from your natural language, confirm it with you, create a deal record, and trigger research automatically.`,
-  "#412-buyer": `**Chen deal** · $612,000 · Travis Heights · Due diligence stage
+The system walks you through each step of the lead intake SOP, explains what it's checking and writing, and keeps you on track. Type naturally or use a chip below.`,
 
-Two active risk flags:
-- **Appraisal gap** — $23,000 below contract price  
-- **Inspection response** — pending resolution
+  "#412-buyer": `**Elena Reyes · Senior Agent · Deal #412 — Due Diligence**
 
-This deal is pre-loaded with real data. Every command returns live AI responses based on the actual deal record.`,
-  "#327-seller": `**Hoffman listing** · $725,000 · Travis Heights · **28 DOM** · No offer yet
+**Chen deal** · ATX-016, Travis Heights · $612K contract · Closing May 28
 
-Price review threshold approaching. Market context available.
+Two open flags need attention:
+- ⚠️ **Appraisal gap** — appraised at $589K vs. $612K contract ($23K under) · deadline May 20
+- 🔴 **Inspection response** — $8K roof credit offered by seller, response still pending
 
-Pull neighborhood data, property snapshots, and draft client updates.`,
-  "#open-entry": `**Open entry** — you are **Diana Castellano**, principal.
+Earnest money ($12K) posted. Five deadlines remain before closing.`,
 
-This channel is **not** the guided Marco demo. Ask anything: strategy, team operations, how the AI system works, hypotheticals, cross-deal questions, or ad-hoc requests. The model loads **your** principal profile (diana.yaml / diana.md) and the full specialist context, without locking to a single deal unless you reference one (for example: status #412-buyer).
+  "#327-seller": `**Carlos Mendoza · Senior Agent · Deal #327 — Active Listing**
 
-Switch to another channel when you want the scripted judge flows.`,
+**Hoffman listing** · 1842 Rivercrest Drive · Listed at $849K · **28 days on market**
+
+Patricia & James Hoffman are motivated — downsizing to a downtown condo. A buyer just submitted at **$810K**. Patricia wants to counter at $835K.
+
+Draft the counter, pull comparable sales, and prep talking points for your call with Patricia.`,
+
+  "#inbound-lead": `**New Inquiry · Via Agency Website** · Just now
+
+A buyer submitted through the listing page.
+
+**Sarah Martinez** · sarah.m@email.com
+*"I've been pre-approved up to $900K and I'm ready to move in 60 days. ATX-004 caught my eye — can we schedule a showing this week?"*
+
+**ATX-004** · Modern Urban · East Austin · $895,000 · 1,500 sqft
+
+This lead hasn't been qualified or assigned yet. The lead intake SOP is ready to run.`,
+
+  "#open-entry": `**Diana Castellano · Principal · Open Sandbox**
+
+No active deal loaded. Ask anything — strategy, how the system works, cross-deal questions, market analysis, or hypotheticals.
+
+Reference any deal (#412-buyer, #327-seller, #019-buyer) or property (ATX-001 through ATX-016) to load live context. Switch to another channel for the scripted agent scenarios.`,
 };
 
 const CHANNEL_START_CHIPS: Record<ChannelId, string[]> = {
-  "#team-general": ["new buyer", "new seller", "help"],
-  "#412-buyer": ["status #412-buyer", "deadlines #412-buyer", "draft inspection #412-buyer"],
-  "#327-seller": ["comps travis_heights", "brief ATX-016", "status #327-seller"],
-  "#open-entry": [
-    "Summarize how The Agency routes a new lead",
-    "What are the risks on #412-buyer?",
+  "#019-buyer": [
+    "Jordan Kim texted me — he wants to offer $475K on ATX-012. What do I do first?",
+    "status #019-buyer",
+    "brief ATX-012",
     "help",
+  ],
+  "#412-buyer": [
+    "How do we handle the $23K appraisal gap?",
+    "Draft the inspection response for #412-buyer",
+    "What's still open before closing?",
+    "status #412-buyer",
+  ],
+  "#327-seller": [
+    "Draft a counter-offer at $835K on the Hoffman listing",
+    "What do 28 DOM comps look like in this price range?",
+    "Draft talking points for my call with Patricia Hoffman",
+    "status #327-seller",
+  ],
+  "#inbound-lead": [
+    "Qualify Sarah Martinez for ATX-004",
+    "Create a deal record for Sarah",
+    "What other East Austin properties match a $900K budget?",
+    "brief ATX-004",
+  ],
+  "#open-entry": [
+    "What's the status across all active deals?",
+    "How does the system route a new lead?",
+    "What are the risks on #412-buyer?",
+    "Generate a brief for ATX-002",
   ],
 };
 
-function followUpChips(lastUserText: string): string[] {
+function followUpChips(lastUserText: string, ch: ChannelId): string[] {
   const t = lastUserText.trim().toLowerCase();
-  if (t.includes("status #412-buyer")) {
-    return ["draft inspection #412-buyer", "deadlines #412-buyer"];
+  if (t.includes("atx-012") || t.includes("#019")) {
+    return ["brief ATX-012", "What documents do I need from Jordan?"];
   }
-  if (t.includes("new buyer")) {
-    return ["brief east_austin", "help"];
+  if (t.includes("intake") || t.includes("sop") || (ch === "#019-buyer" && t.includes("first"))) {
+    return ["What's the next step?", "Is Jordan pre-approved?"];
   }
-  if (t.includes("comps travis_heights")) {
+  if (t.includes("appraisal gap") || t.includes("appraisal")) {
+    return ["Draft the inspection response for #412-buyer", "What's left before closing?"];
+  }
+  if (t.includes("status #412")) {
+    return ["How do we handle the $23K appraisal gap?", "Draft inspection response"];
+  }
+  if (t.includes("counter") || t.includes("hoffman")) {
+    return ["Draft talking points for my call with Patricia", "What do comps say at 28 DOM?"];
+  }
+  if (t.includes("sarah") || t.includes("atx-004") || t.includes("qualify")) {
+    return ["Create a deal record for Sarah", "brief ATX-004"];
+  }
+  if (t.includes("comps") || t.includes("travis_heights")) {
     return ["brief ATX-016", "draft seller_update #327-seller"];
   }
   return [];
@@ -161,78 +230,98 @@ function Onboarding({ onEnter }: { onEnter: () => void }) {
   return (
     <div className="onboarding">
       <div className="onboarding-hero">
-        <p className="mono-eyebrow">The Agency · Competition demo</p>
-        <h1 className="headline-lg">ATX Boutique Real Estate</h1>
-        <p className="body-lg" style={{ maxWidth: "52ch", marginTop: "1rem" }}>
-          Diana Castellano, Principal · Austin, TX — live AI operating system preview. Neo-Austin editorial
-          shell; production team chat runs in Slack.
+        <p className="mono-eyebrow">The Agency · AI Operating System</p>
+        <h1 className="headline-lg">Diana Castellano Real Estate</h1>
+        <p className="body-lg" style={{ maxWidth: "56ch", marginTop: "1rem" }}>
+          Six AI specialists working alongside a boutique Austin team — across the full transaction
+          lifecycle, grounded in live deal data and persistent memory.
         </p>
+        <a
+          className="agency-site-link"
+          href={`${AGENCY_WEBSITE_URL}listings`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          View the property catalog ↗
+        </a>
       </div>
 
       <hr className="neo-rule" />
 
       <section>
-        <h2 className="headline-md">What this is</h2>
-        <p className="body-lg" style={{ maxWidth: "65ch" }}>
-          The Agency is an AI operating system for a boutique residential team. Six AI specialists work
-          together — orchestrator, lead qualifier, property research, client communication, transaction
-          coordinator, and listing manager — across the transaction workflow, grounded in the same markdown
-          and JSON files the production system uses.
-        </p>
-      </section>
-
-      <section style={{ marginTop: "2rem" }}>
-        <h2 className="headline-md">Why it feels like Slack</h2>
-        <p className="body-lg" style={{ maxWidth: "65ch" }}>
-          Diana&apos;s team does not want another platform to learn. In production this runs in real Slack.
-          This browser demo simulates that experience so you can type real commands and get real Claude
-          responses with the folder system loaded as context — no Claude Projects setup required.
-        </p>
-        <a className="agency-site-link" href={AGENCY_WEBSITE_URL} target="_blank" rel="noreferrer">
-          Visit the agency website ↗
-        </a>
+        <h2 className="headline-md">What it does</h2>
+        <ul className="onboarding-caps">
+          <li>
+            <strong>Reads &amp; writes deal JSON</strong> — persistent memory that survives sessions, not
+            just conversation history
+          </li>
+          <li>
+            <strong>SOP-guided workflows</strong> — walks new agents through each step, explaining what
+            it&apos;s checking and why
+          </li>
+          <li>
+            <strong>Briefs &amp; documents on demand</strong> — property snapshots, offer responses,
+            client emails — downloadable as PDF
+          </li>
+          <li>
+            <strong>Full transaction pipeline</strong> — inbound lead → qualification → offer → due
+            diligence → close
+          </li>
+          <li>
+            <strong>Live risk tracking</strong> — appraisal gaps, inspection deadlines, financing flags —
+            surfaced before they become problems
+          </li>
+        </ul>
       </section>
 
       <h2 className="headline-md" style={{ marginTop: "2.5rem" }}>
-        Channels to try
+        Four scenarios to explore
       </h2>
       <div className="onboarding-grid onboarding-grid--channels">
         <div className="neo-card onboarding-card">
-          <div className="onboarding-card-title">#team-general</div>
-          <h3>New lead intake</h3>
-          <p>Type naturally about a new buyer. The system extracts, structures, and creates a deal record.</p>
+          <div className="onboarding-card-title">#019-buyer · Marco · Guided</div>
+          <h3>New agent + lead intake</h3>
+          <p>
+            Marco just got a text from Jordan Kim wanting to offer $475K on ATX-012. The system walks
+            him through the intake SOP step by step, explains every action, and writes the deal record
+            to disk.
+          </p>
           <button type="button" className="chip" disabled>
-            new buyer
+            "Jordan texted me about ATX-012…"
           </button>
         </div>
         <div className="neo-card onboarding-card">
-          <div className="onboarding-card-title">#412-buyer</div>
+          <div className="onboarding-card-title">#412-buyer · Elena · Due Diligence</div>
           <h3>Active deal management</h3>
           <p>
-            The Chen deal is live at due diligence with an appraisal gap and inspection tension — real JSON on
-            disk.
+            Chen deal — $612K under contract with two open flags: a $23K appraisal gap and an
+            inspection response still pending. Real JSON on disk, real deadlines, real risk flags.
           </p>
           <button type="button" className="chip" disabled>
-            status #412-buyer
+            "Handle the appraisal gap"
           </button>
         </div>
         <div className="neo-card onboarding-card">
-          <div className="onboarding-card-title">#327-seller</div>
-          <h3>Listing intelligence</h3>
-          <p>Hoffman listing — Travis Heights, 28 DOM, no offer. Pull comps and briefs from catalog + research files.</p>
-          <button type="button" className="chip" disabled>
-            comps travis_heights
-          </button>
-        </div>
-        <div className="neo-card onboarding-card">
-          <div className="onboarding-card-title">#open-entry</div>
-          <h3>Principal sandbox</h3>
+          <div className="onboarding-card-title">#327-seller · Carlos · Listing</div>
+          <h3>Seller-side + offer strategy</h3>
           <p>
-            Open conversation as Diana Castellano — strategy, system questions, or anything else. Loads your
-            principal profile instead of the guided-agent demo.
+            Hoffman listing, 28 DOM, just received a $810K offer on their $849K list. Draft the
+            counter at $835K, pull comparable sales, prep Patricia&apos;s talking points for the call.
           </p>
           <button type="button" className="chip" disabled>
-            Summarize how The Agency routes a new lead
+            "Draft counter at $835K"
+          </button>
+        </div>
+        <div className="neo-card onboarding-card">
+          <div className="onboarding-card-title">#inbound-lead · New inquiry</div>
+          <h3>Website lead → deal creation</h3>
+          <p>
+            Sarah Martinez submitted an inquiry from the listing page for ATX-004 ($895K, East
+            Austin). Qualify the lead, create the deal record, assign to an agent — or trigger this
+            directly from the agency website.
+          </p>
+          <button type="button" className="chip" disabled>
+            "Qualify Sarah for ATX-004"
           </button>
         </div>
       </div>
@@ -248,7 +337,7 @@ function Onboarding({ onEnter }: { onEnter: () => void }) {
 
 export default function App() {
   const [onboarded, setOnboarded] = useState(false);
-  const [channel, setChannel] = useState<ChannelId>("#team-general");
+  const [channel, setChannel] = useState<ChannelId>("#019-buyer");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [activity, setActivity] = useState<ActivityItem[]>([]);
   const [input, setInput] = useState("");
@@ -308,6 +397,23 @@ export default function App() {
     void refreshMemory(channel);
   }, [channel, onboarded, refreshMemory]);
 
+  // Handle inquiry deep-link from agency website listing page: /?inquiry=ATX-004&addr=...&price=...
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const inquiry = params.get("inquiry");
+    if (!inquiry) return;
+    const addr = params.get("addr") || "";
+    const priceRaw = params.get("price") || "";
+    const headline = params.get("headline") || inquiry;
+    const priceStr = priceRaw ? `$${parseInt(priceRaw, 10).toLocaleString()}` : "";
+    setOnboarded(true);
+    setChannel("#inbound-lead");
+    setInput(
+      `New website inquiry: a buyer is interested in ${inquiry}${headline !== inquiry ? ` — ${headline}` : ""}${addr ? `, ${addr}` : ""}${priceStr ? `, listed at ${priceStr}` : ""}. They are pre-approved and ready to move quickly. What's the first step?`
+    );
+    window.history.replaceState({}, "", window.location.pathname);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     if (!loading || !requestStartedAt) return;
     const tick = () => {
@@ -327,7 +433,7 @@ export default function App() {
       setLastUserText(text);
       setLastResponseMeta(null);
       const uid = `u-${Date.now()}`;
-      const userLabel = channel === "#open-entry" ? "Diana Castellano" : "You";
+      const userLabel = CHANNEL_USER_LABEL[channel];
       setMessages((m) => [...m, { id: uid, role: "user", who: userLabel, text }]);
       setLoading(true);
       setThinkingSeconds(0);
@@ -430,7 +536,7 @@ export default function App() {
 
   const goHome = useCallback(() => {
     setOnboarded(false);
-    setChannel("#team-general");
+    setChannel("#019-buyer");
     setMessages([]);
     setActivity([]);
     setInput("");
@@ -444,7 +550,7 @@ export default function App() {
     setMemoryEntries([]);
   }, []);
 
-  const followUps = followUpChips(lastUserText);
+  const followUps = followUpChips(lastUserText, channel);
   const recentMemory = useMemo(() => memoryEntries.slice(-6).reverse(), [memoryEntries]);
 
   if (!onboarded) {
@@ -510,11 +616,7 @@ export default function App() {
             </div>
           )}
         </div>
-        <div className="agent-strip">
-          {channel === "#open-entry"
-            ? "Diana Castellano · Principal · Open entry"
-            : "Marco Reyes · Guided mode"}
-        </div>
+        <div className="agent-strip">{CHANNEL_AGENT[channel]}</div>
       </aside>
 
       <main className="chat">

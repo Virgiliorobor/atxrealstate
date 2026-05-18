@@ -86,7 +86,16 @@ You do NOT write files via tools. To persist changes:
 
 ## FINAL OUTPUT (REQUIRED)
 
-When you have enough context, your FINAL assistant turn must be a **single JSON object** with no markdown fences, no commentary, no preface. Schema:
+Your FINAL assistant turn must be **exactly one JSON object** and nothing else. Forbidden:
+- Markdown fences (no \`\`\`json)
+- Any text before the opening \`{\`
+- Any text after the closing \`}\`
+- "Let me reconsider", "Wait,", "Actually,", or any meta-commentary
+- Multiple JSON objects
+
+If you catch yourself reconsidering, just emit the final JSON once. Do NOT show your reasoning. The user sees only \`chat_response\` from the JSON — any leaked thought becomes a bug in the UI.
+
+Schema:
 
 \`\`\`
 {
@@ -110,18 +119,32 @@ When you have enough context, your FINAL assistant turn must be a **single JSON 
 Never invent file paths outside \`_database/deals/\` or \`_catalog/properties/\` for writes. If you're unsure, omit \`state_patch\`.`;
 
 function stripFence(raw: string): string {
-  let t = raw.trim();
-  if (t.startsWith("```")) {
-    t = t.replace(/^```(?:json)?\s*/i, "");
-    t = t.replace(/\s*```$/i, "");
-    t = t.trim();
+  const trimmed = raw.trim();
+
+  // Claude sometimes outputs multiple ```json``` blocks (reconsidering itself).
+  // Take the LAST fenced block — that's the model's final answer.
+  const fenceRegex = /```(?:json)?\s*([\s\S]*?)```/gi;
+  const fences = [...trimmed.matchAll(fenceRegex)];
+  if (fences.length > 0) {
+    return fences[fences.length - 1][1].trim();
   }
-  // Claude sometimes emits narrative text before the JSON envelope — find the object.
-  const start = t.indexOf("{");
-  if (start > 0) t = t.slice(start);
-  const end = t.lastIndexOf("}");
-  if (end >= 0 && end < t.length - 1) t = t.slice(0, end + 1);
-  return t.trim();
+
+  // No fence: try to isolate the last balanced JSON object.
+  // Scan from the end for "}" and try to find a matching "{".
+  const lastClose = trimmed.lastIndexOf("}");
+  if (lastClose === -1) return trimmed;
+  let depth = 0;
+  for (let i = lastClose; i >= 0; i--) {
+    const ch = trimmed[i];
+    if (ch === "}") depth++;
+    else if (ch === "{") {
+      depth--;
+      if (depth === 0) return trimmed.slice(i, lastClose + 1).trim();
+    }
+  }
+  // Fallback to old behavior.
+  const start = trimmed.indexOf("{");
+  return start >= 0 ? trimmed.slice(start, lastClose + 1).trim() : trimmed;
 }
 
 export function parseClaudeJson(text: string): ClaudeTurnResult {
