@@ -40,7 +40,7 @@
         }
       ],
       "created_at": "2026-05-13T09:44:00",
-      "updated_at": "2026-05-15T09:00:00",
+      "updated_at": "2026-05-18 05:34:44",
       "closed_at": null,
       "cold_at": null,
       "cold_reason": null,
@@ -755,6 +755,17 @@
         "detail": "24hr alert sent. Inspection period ends tomorrow 5pm. Roof issue. $8k credit offered. Response pending.",
         "outcome": "delivered",
         "next_triggered": null
+      },
+      {
+        "event_id": "EVT-011",
+        "timestamp": "2026-05-15T09:15:00",
+        "actor_type": "human",
+        "actor_id": "diana",
+        "agent_id": "elena",
+        "action": "due_diligence_package_requested",
+        "detail": "Principal Diana requested due diligence documents package for download. All firm-generated documents compiled, locked, and ready. Third-party documents status tracked.",
+        "outcome": "success",
+        "next_triggered": "inspection_response_execution_required"
       }
     ]
   }
