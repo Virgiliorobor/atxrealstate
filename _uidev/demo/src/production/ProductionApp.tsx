@@ -47,6 +47,27 @@ type UiBlock =
   | { type: "brief"; title: string; markdown: string }
   | { type: "listing_preview"; title: string; property_id: string; markdown: string };
 
+async function downloadBriefPdf(title: string, markdown: string): Promise<void> {
+  const res = await fetch("/api/brief-pdf", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title, markdown }),
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({ error: res.statusText }));
+    throw new Error((data as { error?: string }).error || res.statusText);
+  }
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${title.replace(/[^a-z0-9-_ ]/gi, "_").trim() || "brief"}.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
 type ChatMessage = {
   id: string;
   role: "user" | "ai";
@@ -350,6 +371,19 @@ function ChatView({
                       <div className="brief-eyebrow">Brief</div>
                       <div className="brief-title">{bl.title}</div>
                       <ReactMarkdown>{bl.markdown}</ReactMarkdown>
+                      <div className="apply-row" style={{ marginTop: 12 }}>
+                        <button
+                          type="button"
+                          className="apply-btn"
+                          onClick={() =>
+                            downloadBriefPdf(bl.title, bl.markdown).catch((e) =>
+                              setError(e instanceof Error ? e.message : String(e))
+                            )
+                          }
+                        >
+                          Download PDF
+                        </button>
+                      </div>
                     </div>
                   ) : (
                     <div key={i} className="brief-card">
