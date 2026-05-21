@@ -20,7 +20,8 @@
       "sop_active": "sop_01_new_lead",
       "sop_step": 1,
       "sop_started_at": "2026-05-16T09:15:00",
-      "sop_history": []
+      "sop_history": [],
+      "updated_at": "2026-05-19 18:49:44"
     },
     "agent": {
       "agent_id": "marco",
@@ -112,6 +113,17 @@
         "detail": "Jordan Kim texted Marco directly. Interested in ATX-012 — 4BR, Parmer Village, listed at $480K. Wants to offer $475K. Pre-approval not yet verified. First-time buyer, guided mode.",
         "outcome": "pending",
         "next_triggered": "sop_01_new_lead"
+      },
+      {
+        "event_id": "EVT-019-002",
+        "timestamp": "2026-05-18T09:45:29",
+        "actor_type": "human",
+        "actor_id": "marco",
+        "agent_id": "marco",
+        "action": "offer_intent_reported",
+        "detail": "Marco reports: Jordan Kim wants to offer $475K on ATX-012. Orchestrator detected pre-approval unverified and property not yet shown — gating factors identified.",
+        "outcome": "pending",
+        "next_triggered": "sop_01_new_lead_step_1_gating"
       }
     ],
     "reporting": {},
