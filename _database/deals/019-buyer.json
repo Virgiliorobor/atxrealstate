@@ -21,7 +21,7 @@
       "sop_step": 1,
       "sop_started_at": "2026-05-16T09:15:00",
       "sop_history": [],
-      "updated_at": "2026-05-19 18:49:44"
+      "updated_at": "2026-06-20 09:31:34"
     },
     "agent": {
       "agent_id": "marco",
@@ -124,6 +124,17 @@
         "detail": "Marco reports: Jordan Kim wants to offer $475K on ATX-012. Orchestrator detected pre-approval unverified and property not yet shown — gating factors identified.",
         "outcome": "pending",
         "next_triggered": "sop_01_new_lead_step_1_gating"
+      },
+      {
+        "event_id": "EVT-019-002",
+        "timestamp": "2026-05-18T09:22:22",
+        "actor_type": "ai",
+        "actor_id": "00_orchestrator",
+        "agent_id": "marco",
+        "action": "offer_intent_flagged",
+        "detail": "Marco reports Jordan Kim wants to offer $475K on ATX-012 (list price $480K). SOP 01 Step 1 active. Pre-approval status flagged as REQUIRED before proceeding to SOP 03 (offer submission).",
+        "outcome": "pending",
+        "next_triggered": "marco_confirms_deal_record"
       }
     ],
     "reporting": {},
